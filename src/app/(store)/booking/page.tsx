@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useBookingStore } from '@/store/useBookingStore';
 import { createBrowserClient } from '@/lib/supabase/client';
@@ -15,7 +15,9 @@ import { StepPayment } from '@/components/features/booking/StepPayment';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
-export default function BookingPage() {
+export const dynamic = 'force-dynamic';
+
+function BookingPageContent() {
   const searchParams = useSearchParams();
   const carIdParam = searchParams.get('carId');
   const [cars, setCars] = useState<CarWithDetails[]>([]);
@@ -133,5 +135,17 @@ export default function BookingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BookingPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#050505] text-[#D4AF37] flex items-center justify-center font-heading text-lg">
+        Loading Luxury Booking Suite...
+      </div>
+    }>
+      <BookingPageContent />
+    </Suspense>
   );
 }

@@ -8,6 +8,8 @@ import { MetricsOverview } from '@/components/features/admin/MetricsOverview';
 import { FleetManagerTable } from '@/components/features/admin/FleetManagerTable';
 import { BookingsManagerTable } from '@/components/features/admin/BookingsManagerTable';
 
+export const dynamic = 'force-dynamic';
+
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [cars, setCars] = useState<CarWithDetails[]>([]);

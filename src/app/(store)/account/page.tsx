@@ -9,6 +9,8 @@ import { UserWishlist } from '@/components/features/account/UserWishlist';
 import { UserProfileEditor } from '@/components/features/account/UserProfileEditor';
 import { Calendar, Heart, User, ShieldCheck } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default function AccountPage() {
   const [activeTab, setActiveTab] = useState<'reservations' | 'wishlist' | 'profile'>('reservations');
   const [bookings, setBookings] = useState<(Booking & { cars?: CarWithDetails | null })[]>([]);
@@ -31,7 +33,6 @@ export default function AccountPage() {
         if (bks) setBookings(bks as any);
         if (favs) setFavorites(favs.map((f: any) => f.cars).filter(Boolean));
       } else {
-        // Fallback demo user bookings
         const { data: demoBookings } = await supabase.from('bookings').select('*, cars(*)');
         if (demoBookings) setBookings(demoBookings as any);
       }
