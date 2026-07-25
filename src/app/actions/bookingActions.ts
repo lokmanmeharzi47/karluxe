@@ -1,4 +1,4 @@
-'use me server';
+'use server';
 
 import { createServerClient } from '@/lib/supabase/server';
 import { z } from 'zod';
@@ -20,16 +20,13 @@ const bookingSchema = z.object({
 export type CreateBookingInput = z.infer<typeof bookingSchema>;
 
 export async function createBookingAction(input: CreateBookingInput) {
-  'use server';
   try {
     const validated = bookingSchema.parse(input);
     const supabase = await createServerClient();
 
-    // Generate random booking reference code (e.g. KLX-98214)
     const bookingCode = `KLX-${Math.floor(10000 + Math.random() * 90000)}`;
 
-    const { data: booking, error } = await supabase
-      .from('bookings')
+    const { data: booking, error } = await (supabase.from('bookings') as any)
       .insert({
         booking_code: bookingCode,
         car_id: validated.carId,
@@ -55,7 +52,7 @@ export async function createBookingAction(input: CreateBookingInput) {
       return { success: false, error: error.message };
     }
 
-    return { success: true, bookingCode: booking.booking_code, bookingId: booking.id };
+    return { success: true, bookingCode: (booking as any)?.booking_code || bookingCode, bookingId: (booking as any)?.id };
   } catch (err: any) {
     console.error('Server action booking error:', err);
     return { success: false, error: err?.message || 'Failed to process booking' };

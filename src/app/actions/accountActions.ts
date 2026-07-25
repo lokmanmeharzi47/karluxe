@@ -10,7 +10,6 @@ const updateProfileSchema = z.object({
 });
 
 export async function updateProfileAction(input: z.infer<typeof updateProfileSchema>) {
-  'use server';
   try {
     const validated = updateProfileSchema.parse(input);
     const supabase = await createServerClient();
@@ -20,8 +19,7 @@ export async function updateProfileAction(input: z.infer<typeof updateProfileSch
       return { success: false, error: 'User not authenticated' };
     }
 
-    const { error } = await supabase
-      .from('profiles')
+    const { error } = await (supabase.from('profiles') as any)
       .update({
         full_name: validated.fullName,
         phone: validated.phone,

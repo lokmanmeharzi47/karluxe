@@ -2,8 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Car, Mail, Phone, MapPin, ShieldCheck, ArrowRight, Instagram, Facebook, Twitter, Youtube } from 'lucide-react';
-import { LuxuryButton } from '../ui/LuxuryButton';
+import { Car, Mail, Phone, MapPin, ArrowRight, Share2, Globe, Shield } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -34,7 +33,7 @@ export const Footer: React.FC = () => {
             </p>
 
             <div className="flex items-center gap-4">
-              {[Instagram, Facebook, Twitter, Youtube].map((Icon, i) => (
+              {[Globe, Share2, Shield, Mail].map((Icon, i) => (
                 <a
                   key={i}
                   href="#"

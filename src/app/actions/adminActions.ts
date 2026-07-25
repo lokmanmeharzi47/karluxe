@@ -3,11 +3,9 @@
 import { createServerClient } from '@/lib/supabase/server';
 
 export async function toggleCarAvailabilityAction(carId: string, isAvailable: boolean) {
-  'use server';
   try {
     const supabase = await createServerClient();
-    const { error } = await supabase
-      .from('cars')
+    const { error } = await (supabase.from('cars') as any)
       .update({ is_available: isAvailable })
       .eq('id', carId);
 
@@ -19,12 +17,10 @@ export async function toggleCarAvailabilityAction(carId: string, isAvailable: bo
 }
 
 export async function updateBookingStatusAction(bookingId: string, status: string) {
-  'use server';
   try {
     const supabase = await createServerClient();
-    const { error } = await supabase
-      .from('bookings')
-      .update({ status: status as any })
+    const { error } = await (supabase.from('bookings') as any)
+      .update({ status })
       .eq('id', bookingId);
 
     if (error) return { success: false, error: error.message };
