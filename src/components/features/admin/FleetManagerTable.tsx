@@ -1,17 +1,26 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CarWithDetails } from '@/types';
+import { CarWithDetails, Brand, Category } from '@/types';
 import { toggleCarAvailabilityAction } from '@/app/actions/adminActions';
-import { CheckCircle2, XCircle, RefreshCw } from 'lucide-react';
+import { AddCarModal } from './AddCarModal';
+import { LuxuryButton } from '@/components/ui/LuxuryButton';
+import { CheckCircle2, XCircle, Plus, Car } from 'lucide-react';
 
 interface FleetManagerTableProps {
   cars: CarWithDetails[];
+  brands?: Brand[];
+  categories?: Category[];
 }
 
-export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({ cars }) => {
+export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
+  cars,
+  brands = [],
+  categories = [],
+}) => {
   const [carList, setCarList] = useState(cars);
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleToggle = async (carId: string, currentStatus: boolean) => {
     setLoadingId(carId);
@@ -27,8 +36,19 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({ cars }) =>
   };
 
   return (
-    <div className="glass-panel rounded-3xl p-6 border border-[rgba(212,175,55,0.2)] bg-[#111111]/90 space-y-4">
-      <h3 className="text-xl font-bold font-heading uppercase text-white">Fleet Availability Management</h3>
+    <div className="glass-panel rounded-3xl p-6 border border-[rgba(212,175,55,0.2)] bg-[#111111]/90 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-bold font-heading uppercase text-white flex items-center gap-2">
+            <Car className="w-5 h-5 text-[#D4AF37]" /> Fleet Availability & Supercar Controls
+          </h3>
+          <p className="text-xs text-[#B6B6B6] mt-1">Manage supercar status, location hubs, daily rates, and maintenance.</p>
+        </div>
+
+        <LuxuryButton variant="gold" size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setModalOpen(true)}>
+          Add Supercar
+        </LuxuryButton>
+      </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
@@ -49,7 +69,7 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({ cars }) =>
                   <img src={car.featured_image} alt={car.title} className="w-12 h-9 rounded-lg object-cover" />
                   {car.title}
                 </td>
-                <td className="py-4 px-4 text-[#D4AF37] font-semibold">{car.brands?.name}</td>
+                <td className="py-4 px-4 text-[#D4AF37] font-semibold">{car.brands?.name || 'Supercar'}</td>
                 <td className="py-4 px-4 font-bold text-white">€{car.daily_rate}/day</td>
                 <td className="py-4 px-4 text-[#B6B6B6]">{car.location}</td>
                 <td className="py-4 px-4">
@@ -77,6 +97,14 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({ cars }) =>
           </tbody>
         </table>
       </div>
+
+      <AddCarModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        brands={brands}
+        categories={categories}
+        onCarAdded={(newCar) => setCarList((prev) => [newCar, ...prev])}
+      />
     </div>
   );
 };

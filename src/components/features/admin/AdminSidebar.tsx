@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Car, LayoutDashboard, Calendar, ShieldCheck, Settings, Users, DollarSign, LogOut } from 'lucide-react';
+import { Car, LayoutDashboard, Calendar, MapPin, Tag, DollarSign, LogOut } from 'lucide-react';
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -11,14 +11,16 @@ interface AdminSidebarProps {
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActiveTab }) => {
   const menuItems = [
-    { id: 'overview', label: 'Executive Overview', icon: LayoutDashboard },
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'fleet', label: 'Fleet Management', icon: Car },
     { id: 'bookings', label: 'Reservations', icon: Calendar },
+    { id: 'locations', label: 'Rental Locations', icon: MapPin },
+    { id: 'coupons', label: 'Promo Coupons', icon: Tag },
     { id: 'analytics', label: 'Revenue Analytics', icon: DollarSign },
   ];
 
   return (
-    <aside className="w-64 glass-panel border-r border-[rgba(212,175,55,0.2)] bg-[#050505] min-h-screen p-6 flex flex-col justify-between">
+    <aside className="w-64 glass-panel border-r border-[rgba(212,175,55,0.2)] bg-[#050505] min-h-screen p-6 flex flex-col justify-between shrink-0">
       <div className="space-y-8">
         {/* Brand Header */}
         <Link href="/" className="flex items-center gap-3">
@@ -30,7 +32,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
               Kar<span className="text-[#D4AF37]">Luxe</span>
             </span>
             <span className="text-[8px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold">
-              Admin Suite
+              Executive Suite
             </span>
           </div>
         </Link>
