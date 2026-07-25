@@ -31,15 +31,23 @@ function AdminPageContent() {
 
   // Secure Route: Verify Admin Session
   useEffect(() => {
-    const isAuth =
-      document.cookie.includes('karluxe_admin_session=authenticated') ||
-      localStorage.getItem('karluxe_admin_token') === 'authenticated';
+    async function checkAuth() {
+      const supabase = createBrowserClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      const isAuth = !!session || 
+        document.cookie.includes('karluxe_admin_session=authenticated') ||
+        localStorage.getItem('karluxe_admin_token') === 'authenticated' ||
+        !!localStorage.getItem('karluxe_admin_user');
 
-    if (!isAuth) {
-      router.push('/admin-login');
-    } else {
-      setAuthenticated(true);
+      if (!isAuth) {
+        router.push('/admin-login');
+      } else {
+        setAuthenticated(true);
+      }
     }
+    
+    checkAuth();
   }, [router]);
 
   useEffect(() => {
@@ -177,13 +185,19 @@ function AdminPageContent() {
           {activeTab === 'overview' && (
             <div className="space-y-8">
               <RevenueAnalyticsChart />
-              <FleetManagerTable cars={cars} brands={brands} categories={categories} />
+              <FleetManagerTable cars={cars} brands={brands} categories={categories} locations={locations} />
               <BookingsManagerTable bookings={bookings} />
             </div>
           )}
 
           {activeTab === 'fleet' && (
-            <FleetManagerTable cars={cars} brands={brands} categories={categories} />
+            <FleetManagerTable 
+              cars={cars} 
+              brands={brands} 
+              categories={categories} 
+              locations={locations}
+              onCarAdded={(newCar) => setCars((prev) => [newCar, ...prev])} 
+            />
           )}
 
           {activeTab === 'bookings' && (
@@ -191,15 +205,24 @@ function AdminPageContent() {
           )}
 
           {activeTab === 'categories' && (
-            <CategoriesManagerTable categories={categories} />
+            <CategoriesManagerTable 
+              categories={categories} 
+              onCategoryAdded={(newCat) => setCategories((prev) => [newCat, ...prev])}
+            />
           )}
 
           {activeTab === 'brands' && (
-            <BrandsManagerTable brands={brands} />
+            <BrandsManagerTable 
+              brands={brands} 
+              onBrandAdded={(newBrand) => setBrands((prev) => [newBrand, ...prev])}
+            />
           )}
 
           {activeTab === 'agencies' && (
-            <AgenciesManagerTable agencies={locations} />
+            <AgenciesManagerTable 
+              agencies={locations} 
+              onAgencyAdded={(newAgency) => setLocations((prev) => [newAgency, ...prev])}
+            />
           )}
 
           {activeTab === 'analytics' && (

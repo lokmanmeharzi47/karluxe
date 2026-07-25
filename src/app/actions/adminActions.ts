@@ -33,8 +33,8 @@ export async function updateBookingStatusAction(bookingId: string, status: strin
 
 const addCarSchema = z.object({
   title: z.string().min(2),
-  brandId: z.string().uuid(),
-  categoryId: z.string().uuid(),
+  brandId: z.string(),
+  categoryId: z.string(),
   year: z.number().int().min(2010),
   dailyRate: z.number().positive(),
   securityDeposit: z.number().positive(),
@@ -48,7 +48,9 @@ const addCarSchema = z.object({
   location: z.string(),
   description: z.string(),
   featuredImage: z.string().url(),
+  additionalImages: z.array(z.string().url()).optional(),
   isFeatured: z.boolean().optional(),
+  agentName: z.string().optional(),
 });
 
 export async function addCarAction(input: z.infer<typeof addCarSchema>) {
@@ -78,11 +80,23 @@ export async function addCarAction(input: z.infer<typeof addCarSchema>) {
         featured_image: validated.featuredImage,
         is_featured: validated.isFeatured || false,
         is_available: true,
+        agent_name: validated.agentName || null,
       })
       .select()
       .single();
 
     if (error) return { success: false, error: error.message };
+
+    if (validated.additionalImages && validated.additionalImages.length > 0) {
+      const imagesToInsert = validated.additionalImages.map((url, idx) => ({
+        car_id: newCar.id,
+        url: url,
+        is_primary: false,
+        display_order: idx + 1
+      }));
+      await (supabase.from('vehicle_images') as any).insert(imagesToInsert);
+    }
+
     return { success: true, car: newCar };
   } catch (err: any) {
     return { success: false, error: err?.message || 'Failed to add supercar to fleet' };
@@ -164,7 +178,7 @@ export async function addAgencyAction(input: z.infer<typeof addAgencySchema>) {
       .insert({
         name: validated.name,
         city: validated.city,
-        country: 'Algérie / International',
+        country: 'Algérie',
         address: validated.address,
         is_airport: false,
       })

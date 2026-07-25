@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache'
 export async function getMediaFiles(bucket?: string) {
   const supabase = await createAdminClient()
   
-  let query = supabase.from('media_library').select('*').order('created_at', { ascending: false });
+  let query = supabase.from('media').select('*').order('created_at', { ascending: false });
   
   if (bucket && bucket !== 'all') {
     query = query.eq('bucket', bucket);
@@ -44,9 +44,9 @@ export async function uploadMediaAction(formData: FormData) {
     return { success: false, error: uploadError.message };
   }
 
-  // 2. Insert into media_library tracking table
+  // 2. Insert into media tracking table
   const { error: dbError } = await supabase
-    .from('media_library')
+    .from('media')
     .insert([{
       file_name: file.name,
       file_path: uploadData.path,
@@ -78,9 +78,9 @@ export async function deleteMediaAction(id: string, bucket: string, path: string
     return { success: false, error: storageError.message };
   }
 
-  // 2. Delete from media_library table
+  // 2. Delete from media table
   const { error: dbError } = await supabase
-    .from('media_library')
+    .from('media')
     .delete()
     .eq('id', id);
 

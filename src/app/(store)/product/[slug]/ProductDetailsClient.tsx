@@ -233,7 +233,7 @@ export default function ProductDetailsClient({ product }: { product: Product }) 
               </button>
               {expanded === 'delivery' && (
                 <div className="pb-6 font-body-md text-on-surface-variant leading-relaxed">
-                  Nous offrons la livraison internationale gratuite. Les retours sont acceptés dans les 14 jours suivant la réception. Les articles doivent être non portés avec les étiquettes d'origine attachées.
+                  Nous offrons la livraison gratuite partout en Algérie. Les retours sont acceptés dans les 14 jours suivant la réception. Les articles doivent être non portés avec les étiquettes d'origine attachées.
                 </div>
               )}
             </div>

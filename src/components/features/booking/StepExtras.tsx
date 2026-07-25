@@ -2,33 +2,35 @@
 
 import React from 'react';
 import { useBookingStore } from '@/store/useBookingStore';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 import { Check, User, Plane, Sparkles, Shield } from 'lucide-react';
 
 export const StepExtras: React.FC = () => {
   const { selectedExtras, toggleExtra } = useBookingStore();
+  const { formatPrice } = useCurrencyStore();
 
   const extras = [
     {
       title: 'Executive Chauffeur Service',
-      price: '€600/day',
+      priceAmount: 600,
       description: 'Multilingual licensed security-trained driver.',
       icon: User,
     },
     {
       title: 'Tarmac Private Jet Delivery',
-      price: '€250/day',
+      priceAmount: 250,
       description: 'Direct tarmac transfer upon flight touchdown.',
       icon: Plane,
     },
     {
       title: 'Child Safety Luxury Seat',
-      price: '€50/day',
+      priceAmount: 50,
       description: 'Hand-sewn leather ISOFIX child safety seat.',
       icon: Shield,
     },
     {
       title: 'Unlimited Kilometers Package',
-      price: '€300/day',
+      priceAmount: 300,
       description: 'Drive without daily mileage restrictions.',
       icon: Sparkles,
     },
@@ -61,7 +63,9 @@ export const StepExtras: React.FC = () => {
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-bold font-heading text-white">{extra.title}</h4>
-                  <span className="text-xs font-bold text-[#D4AF37]">{extra.price}</span>
+                  <span className="text-xs font-bold text-[#D4AF37]">
+                    {formatPrice(extra.priceAmount)}/day
+                  </span>
                 </div>
                 <p className="text-xs text-[#B6B6B6] mt-1">{extra.description}</p>
               </div>

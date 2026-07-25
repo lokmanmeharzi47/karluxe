@@ -80,15 +80,7 @@ export default async function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="md:col-span-12 pt-10 border-t border-tertiary-container/30 mt-12 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-label-caps text-[10px] tracking-widest opacity-50">© {new Date().getFullYear()} {storeSettings.boutiqueName}. Tous droits réservés.</p>
-          <div className="flex gap-6 opacity-50">
-            <span className="material-symbols-outlined text-sm">payments</span>
-            <span className="material-symbols-outlined text-sm">credit_card</span>
-            <span className="material-symbols-outlined text-sm">account_balance_wallet</span>
-          </div>
-        </div>
+        
       </div>
     </footer>
   );

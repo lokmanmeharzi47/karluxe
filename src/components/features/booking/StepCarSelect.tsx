@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useBookingStore } from '@/store/useBookingStore';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 import { CarWithDetails } from '@/types';
 import { Check } from 'lucide-react';
 
@@ -11,6 +12,7 @@ interface StepCarSelectProps {
 
 export const StepCarSelect: React.FC<StepCarSelectProps> = ({ cars }) => {
   const { selectedCar, setSelectedCar, nextStep } = useBookingStore();
+  const { formatPrice } = useCurrencyStore();
 
   return (
     <div className="space-y-6">
@@ -40,7 +42,7 @@ export const StepCarSelect: React.FC<StepCarSelectProps> = ({ cars }) => {
               />
               <div className="flex-1">
                 <h4 className="text-base font-bold font-heading text-white">{car.title}</h4>
-                <span className="text-xs text-[#D4AF37] font-semibold">€{car.daily_rate}/day</span>
+                <span className="text-xs text-[#D4AF37] font-semibold">{formatPrice(car.daily_rate)}/day</span>
               </div>
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center border ${

@@ -8,8 +8,8 @@ import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { createBrowserClient } from '@/lib/supabase/client';
 
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState('admin@karluxe.com');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -27,39 +27,22 @@ export default function AdminLoginPage() {
       });
 
       if (error) {
-        // Fallback for executive demo access if offline/network bypass
-        if (email === 'admin@karluxe.com' && password === 'admin123') {
-          document.cookie = 'karluxe_admin_session=authenticated; path=/; max-age=86400';
-          localStorage.setItem('karluxe_admin_token', 'authenticated');
-          setLoading(false);
-          router.push('/admin');
-          router.refresh();
-          return;
-        }
         setErrorMsg(error.message || 'Identifiants invalides');
         setLoading(false);
         return;
       }
 
       // Successful Supabase Authentication
-      document.cookie = 'karluxe_admin_session=authenticated; path=/; max-age=86400';
-      localStorage.setItem('karluxe_admin_token', 'authenticated');
       if (data?.session) {
         localStorage.setItem('karluxe_admin_user', JSON.stringify(data.session.user));
+        localStorage.setItem('karluxe_admin_token', 'authenticated');
+        document.cookie = "karluxe_admin_session=authenticated; path=/; max-age=86400";
       }
 
       setLoading(false);
       router.push('/admin');
       router.refresh();
     } catch (err: any) {
-      if (email === 'admin@karluxe.com' && password === 'admin123') {
-        document.cookie = 'karluxe_admin_session=authenticated; path=/; max-age=86400';
-        localStorage.setItem('karluxe_admin_token', 'authenticated');
-        setLoading(false);
-        router.push('/admin');
-        router.refresh();
-        return;
-      }
       setErrorMsg(err?.message || 'Une erreur est survenue lors de la connexion');
       setLoading(false);
     }

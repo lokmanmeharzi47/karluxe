@@ -23,18 +23,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
     <aside className="w-64 glass-panel border-r border-[rgba(212,175,55,0.2)] bg-[#0A0A0A]/95 flex flex-col justify-between p-6 shrink-0 z-20 min-h-screen">
       <div className="space-y-8">
         {/* Brand Header */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#E8C65A] flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] group-hover:scale-105 transition-transform">
-            <Car className="w-5 h-5 text-black" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold font-heading tracking-widest text-white uppercase">
-              Kar<span className="text-[#D4AF37]">Luxe</span>
-            </span>
-            <span className="text-[8px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold -mt-0.5">
-              Executive Suite
-            </span>
-          </div>
+        <Link href="/" className="flex items-center justify-center group mb-4">
+          <img 
+            src="/images/logo.png" 
+            alt="Karluxe Logo" 
+            className="w-40 h-auto object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+          />
         </Link>
 
         {/* Navigation Items */}
@@ -91,7 +85,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
                 : 'text-[#B6B6B6] hover:text-white hover:bg-white/5'
             }`}
           >
-            <Award className="w-4.5 h-4.5" /> Marques Automobiles
+            <Award className="w-4.5 h-4.5" /> Brands
           </button>
 
           <button
@@ -113,7 +107,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
                 : 'text-[#B6B6B6] hover:text-white hover:bg-white/5'
             }`}
           >
-            <DollarSign className="w-4.5 h-4.5" /> Revenus & Analytics
+            <DollarSign className="w-4.5 h-4.5" /> Revenus
           </button>
         </nav>
       </div>

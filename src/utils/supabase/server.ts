@@ -45,3 +45,20 @@ export async function createAdminClient() {
     }
   )
 }
+
+export function createStaticClient() {
+  return createServerClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        getAll() {
+          return []
+        },
+        setAll() {
+          // No cookie manipulation needed for static client
+        },
+      },
+    }
+  )
+}

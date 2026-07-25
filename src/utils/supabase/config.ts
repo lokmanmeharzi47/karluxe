@@ -1,2 +1,2 @@
-export const SUPABASE_URL = 'https://hbfeclrmacaxgssfrfxj.supabase.co';
-export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhiZmVjbHJtYWNheGdzc2ZyZnhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MTcyNzYsImV4cCI6MjA5ODk5MzI3Nn0.0pjTjKNDz2EFZx_aMgzOGX6IKRBW8K85qgprur4Jhfk';
+export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+export const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';

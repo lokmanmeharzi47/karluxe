@@ -159,7 +159,7 @@ export default function HomeClient({ latestProducts }: { latestProducts: Product
             <div className="reveal-on-scroll">
               <span className="material-symbols-outlined text-[40px] text-secondary mb-6">local_shipping</span>
               <h5 className="font-label-caps text-label-caps mb-4 uppercase">Livraison</h5>
-              <p className="text-on-surface-variant text-sm">Livraison gants blancs internationale offerte.</p>
+              <p className="text-on-surface-variant text-sm">Livraison gants blancs offerte partout en Algérie.</p>
             </div>
             <div className="reveal-on-scroll">
               <span className="material-symbols-outlined text-[40px] text-secondary mb-6">verified_user</span>

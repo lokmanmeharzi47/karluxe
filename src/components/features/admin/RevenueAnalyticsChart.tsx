@@ -21,7 +21,7 @@ export const RevenueAnalyticsChart: React.FC = () => {
           <h3 className="text-xl font-bold font-heading uppercase text-white flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-[#D4AF37]" /> Revenue & Booking Analytics
           </h3>
-          <p className="text-xs text-[#B6B6B6] mt-1">Monthly gross rental revenue performance growth (€).</p>
+          <p className="text-xs text-[#B6B6B6] mt-1">Monthly gross rental revenue performance growth (DA).</p>
         </div>
 
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-[#D4AF37]">
@@ -34,7 +34,7 @@ export const RevenueAnalyticsChart: React.FC = () => {
         {months.map((m) => (
           <div key={m.month} className="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
             <span className="text-[10px] font-bold text-[#D4AF37] opacity-0 group-hover:opacity-100 transition-opacity">
-              €{(m.revenue / 1000).toFixed(0)}k
+              {(m.revenue / 1000).toFixed(0)}k DA
             </span>
             <div
               style={{ height: m.height }}

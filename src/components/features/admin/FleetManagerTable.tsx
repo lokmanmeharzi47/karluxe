@@ -12,12 +12,16 @@ interface FleetManagerTableProps {
   cars: CarWithDetails[];
   brands?: Brand[];
   categories?: Category[];
+  locations?: any[];
+  onCarAdded?: (car: CarWithDetails) => void;
 }
 
 export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
   cars,
   brands = [],
   categories = [],
+  locations = [],
+  onCarAdded,
 }) => {
   const [carList, setCarList] = useState(cars);
   const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -88,7 +92,7 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
                 <td className="py-4 px-4 text-right">
                   <button
                     disabled={loadingId === car.id}
-                    onClick={() => handleToggle(car.id, car.is_available)}
+                    onClick={() => handleToggle(car.id, car.is_available ?? false)}
                     className="px-3 py-1.5 rounded-xl border border-white/10 text-white hover:border-[#D4AF37] hover:text-[#D4AF37] transition-colors cursor-pointer"
                   >
                     {loadingId === car.id ? 'Updating...' : car.is_available ? 'Set Maintenance' : 'Set Available'}
@@ -105,7 +109,13 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
         onClose={() => setModalOpen(false)}
         brands={brands}
         categories={categories}
-        onCarAdded={(newCar) => setCarList((prev) => [newCar, ...prev])}
+        locations={locations}
+        onCarAdded={(newCar) => {
+          setCarList((prev) => [newCar, ...prev]);
+          if (onCarAdded) {
+            onCarAdded(newCar);
+          }
+        }}
       />
     </div>
   );

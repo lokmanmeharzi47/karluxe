@@ -16,7 +16,7 @@ export const VehicleGallery: React.FC<VehicleGalleryProps> = ({
   featuredImage,
   title,
 }) => {
-  const allImages = images.length > 0 ? images.map((i) => i.url) : [featuredImage];
+  const allImages = [featuredImage, ...images.map((i) => i.url)];
   const [selectedImage, setSelectedImage] = useState(allImages[0]);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 

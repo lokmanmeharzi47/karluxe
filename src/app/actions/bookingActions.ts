@@ -2,6 +2,8 @@
 
 import { createServerClient } from '@/lib/supabase/server';
 import { z } from 'zod';
+import { sendTelegramNotification } from '@/utils/telegram';
+import { appendToAgentSheet } from '@/utils/googleSheets';
 
 const bookingSchema = z.object({
   carId: z.string().uuid(),
@@ -57,6 +59,46 @@ export async function createBookingAction(input: CreateBookingInput) {
     if (error) {
       console.error('Database booking error:', error);
       return { success: false, error: error.message };
+    }
+
+    // Fetch Car details for notifications
+    const { data: carData } = await (supabase.from('cars') as any)
+      .select('title, featured_image, agent_name')
+      .eq('id', validated.carId)
+      .single();
+
+    const carTitle = carData?.title || 'Véhicule Inconnu';
+    const carPhotoUrl = carData?.featured_image || '';
+    const agentName = carData?.agent_name || 'Non Assigné';
+
+    // Prepare message
+    const message = `
+🚨 <b>NOUVELLE RÉSERVATION</b> 🚨
+
+👤 <b>Client:</b> ${validated.customerName}
+📞 <b>Téléphone:</b> ${validated.customerPhone}
+🚘 <b>Véhicule:</b> ${carTitle}
+🏢 <b>Agent Associé:</b> ${agentName}
+📅 <b>Dates:</b> ${validated.pickupDate} - ${validated.dropoffDate}
+📍 <b>Lieu:</b> ${locationCombined}
+💰 <b>Prix Total:</b> ${validated.totalAmount} DA
+    `;
+
+    // Send to Telegram
+    await sendTelegramNotification(message);
+
+    // Send to Google Sheets only if an agent is assigned
+    if (carData?.agent_name) {
+      await appendToAgentSheet(carData.agent_name, {
+        customerName: validated.customerName,
+        customerPhone: validated.customerPhone,
+        carTitle: carTitle,
+        pickupDate: validated.pickupDate,
+        dropoffDate: validated.dropoffDate,
+        location: locationCombined,
+        totalPrice: validated.totalAmount,
+        carPhotoUrl: carPhotoUrl,
+      });
     }
 
     return { success: true, bookingCode: (booking as any)?.booking_code || bookingCode, bookingId: (booking as any)?.id };

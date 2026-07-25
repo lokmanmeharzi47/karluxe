@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import { CarWithDetails } from '@/types';
 import { VehicleGallery } from '@/components/features/fleet/VehicleGallery';
-import { Vehicle360 } from '@/components/features/fleet/Vehicle360';
 import { VehicleSpecs } from '@/components/features/fleet/VehicleSpecs';
 import { StickyBookingCard } from '@/components/features/fleet/StickyBookingCard';
 import { VehicleReviews } from '@/components/features/fleet/VehicleReviews';
@@ -56,18 +55,11 @@ export default async function VehicleDetailPage({ params }: PageProps) {
           <div className="lg:col-span-2 space-y-8">
             {/* Gallery */}
             <VehicleGallery
-              images={car.vehicle_images || []}
+              images={car.vehicle_images?.map(img => ({ ...img, is_primary: img.is_primary ?? undefined })) || []}
               featuredImage={car.featured_image}
               title={car.title}
             />
-
-            {/* 360 Visualizer */}
-            <Vehicle360 image={car.featured_image} title={car.title} />
-
-            {/* Specifications Breakdown */}
             <VehicleSpecs car={car} />
-
-            {/* Verified Client Reviews */}
             <VehicleReviews reviews={car.reviews || []} />
           </div>
 

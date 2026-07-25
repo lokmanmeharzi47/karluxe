@@ -15,9 +15,9 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ review
     <section id="testimonials" className="py-24 bg-[#050505] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          badge="Endorsements"
-          title="What VIP Clients Say"
-          subtitle="Real reviews from world leaders, executives, and high-net-worth drivers."
+          badge="Témoignages"
+          title="Ce Que Disent Nos Clients"
+          subtitle="Avis vérifiés de nos clients privilégiés à travers l'Algérie."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

@@ -8,14 +8,18 @@ import { AddBrandModal } from './AddBrandModal';
 
 interface BrandsManagerTableProps {
   brands: Brand[];
+  onBrandAdded?: (brand: Brand) => void;
 }
 
-export const BrandsManagerTable: React.FC<BrandsManagerTableProps> = ({ brands }) => {
+export const BrandsManagerTable: React.FC<BrandsManagerTableProps> = ({ brands, onBrandAdded }) => {
   const [brandList, setBrandList] = useState(brands);
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleBrandAdded = (newBrand: Brand) => {
     setBrandList((prev) => [newBrand, ...prev]);
+    if (onBrandAdded) {
+      onBrandAdded(newBrand);
+    }
   };
 
   return (

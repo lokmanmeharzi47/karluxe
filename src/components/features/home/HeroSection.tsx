@@ -52,7 +52,7 @@ export const HeroSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-base sm:text-lg md:text-xl text-[#B6B6B6] max-w-3xl mx-auto mb-10 font-normal leading-relaxed"
         >
-          Location haut de gamme avec service concierge VIP : Ferrari, Porsche, Rolls-Royce, Lamborghini et Maybach à Alger, Oran, Monaco, Dubaï et Paris.
+          Location haut de gamme avec service concierge VIP : Ferrari, Porsche, Rolls-Royce, Lamborghini et Maybach à Alger, Oran.
         </motion.p>
 
         {/* CTA Buttons */}

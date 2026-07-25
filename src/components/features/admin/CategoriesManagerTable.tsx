@@ -8,14 +8,18 @@ import { AddCategoryModal } from './AddCategoryModal';
 
 interface CategoriesManagerTableProps {
   categories: Category[];
+  onCategoryAdded?: (category: Category) => void;
 }
 
-export const CategoriesManagerTable: React.FC<CategoriesManagerTableProps> = ({ categories }) => {
+export const CategoriesManagerTable: React.FC<CategoriesManagerTableProps> = ({ categories, onCategoryAdded }) => {
   const [categoryList, setCategoryList] = useState(categories);
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleCategoryAdded = (newCat: Category) => {
     setCategoryList((prev) => [newCat, ...prev]);
+    if (onCategoryAdded) {
+      onCategoryAdded(newCat);
+    }
   };
 
   return (

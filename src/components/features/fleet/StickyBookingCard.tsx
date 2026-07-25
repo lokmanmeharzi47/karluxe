@@ -43,18 +43,7 @@ export const StickyBookingCard: React.FC<StickyBookingCardProps> = ({ car }) => 
           />
         </div>
 
-        <div>
-          <label className="text-xs uppercase tracking-wider text-[#B6B6B6] font-semibold block mb-1.5 flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Pick-Up Location
-          </label>
-          <select className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-xl py-3 px-4 text-xs font-semibold text-white focus:outline-none focus:border-[#D4AF37]">
-            <option>Monaco VIP Heliport Hub</option>
-            <option>Dubai DXB VIP Terminal</option>
-            <option>Paris CDG Lounge</option>
-            <option>LAX Private Jet Lounge</option>
-            <option>Zurich Helipad</option>
-          </select>
-        </div>
+
       </div>
 
       {/* Itemized Price Summary */}

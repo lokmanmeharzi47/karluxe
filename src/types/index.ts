@@ -10,7 +10,9 @@ export type Booking = Database['public']['Tables']['bookings']['Row'];
 export type Location = Database['public']['Tables']['locations']['Row'];
 export type Service = Database['public']['Tables']['services']['Row'];
 export type Profile = Database['public']['Tables']['profiles']['Row'];
-
+export type Faq = Database['public']['Tables']['faqs']['Row'];
+export type SiteStat = Database['public']['Tables']['site_stats']['Row'];
+export type MarketingSection = Database['public']['Tables']['marketing_sections']['Row'];
 export interface CarWithDetails extends Car {
   brands?: Brand | null;
   categories?: Category | null;

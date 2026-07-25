@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 export async function getStoreSettingsAction() {
   const supabase = await createAdminClient();
   const { data, error } = await supabase
-    .from('store_settings')
+    .from('settings')
     .select('*')
     .single();
     
@@ -22,7 +22,7 @@ export async function updateStoreSettingsAction(formData: FormData) {
   
   // Need to get the ID first
   const { data: currentSettings } = await supabase
-    .from('store_settings')
+    .from('settings')
     .select('id')
     .single();
     
@@ -65,7 +65,7 @@ export async function updateStoreSettingsAction(formData: FormData) {
   };
 
   const { error } = await supabase
-    .from('store_settings')
+    .from('settings')
     .update(updateData)
     .eq('id', currentSettings.id);
 

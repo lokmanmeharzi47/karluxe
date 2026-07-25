@@ -48,8 +48,11 @@ export async function updateSession(request: NextRequest) {
     console.error("Supabase auth error in middleware (likely dummy credentials):", e);
   }
 
+  const fallbackAuth = request.cookies.get('karluxe_admin_session')?.value === 'authenticated';
+
   if (
     !user &&
+    !fallbackAuth &&
     request.nextUrl.pathname.startsWith('/admin') &&
     request.nextUrl.pathname !== '/admin-login' &&
     !SUPABASE_URL.includes('dummy') // Allow admin access with dummy keys for preview

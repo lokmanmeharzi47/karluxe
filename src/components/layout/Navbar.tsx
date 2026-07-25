@@ -40,18 +40,12 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#E8C65A] flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] group-hover:scale-105 transition-transform">
-              <Car className="w-5 h-5 text-black" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold font-heading tracking-widest text-white uppercase group-hover:text-[#D4AF37] transition-colors">
-                Kar<span className="text-[#D4AF37]">Luxe</span>
-              </span>
-              <span className="text-[9px] tracking-[0.3em] uppercase text-[#B6B6B6] -mt-1 font-semibold">
-                Location de Luxe
-              </span>
-            </div>
+          <Link href="/" className="flex items-center group">
+            <img 
+              src="/images/logo.png" 
+              alt="Karluxe Logo" 
+              className="w-32 h-auto object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+            />
           </Link>
 
           {/* Desktop Nav Links */}
@@ -82,14 +76,6 @@ export const Navbar: React.FC = () => {
           <div className="hidden lg:flex items-center gap-4">
             {/* Currency Switcher Dropdown */}
             <CurrencySwitcher />
-
-            <Link href="/account" className="p-2.5 rounded-full glass-panel text-white hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-colors" title="Mon Espace Client">
-              <User className="w-4 h-4" />
-            </Link>
-
-            <Link href="/account?tab=wishlist" className="p-2.5 rounded-full glass-panel text-white hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-colors relative" title="Mes Favoris">
-              <Heart className="w-4 h-4" />
-            </Link>
 
             <Link href="/booking">
               <LuxuryButton variant="gold" size="sm" icon={<Shield className="w-4 h-4" />}>
@@ -132,14 +118,7 @@ export const Navbar: React.FC = () => {
                 </Link>
               ))}
 
-              <div className="flex items-center justify-between pt-4">
-                <Link href="/account" onClick={() => setMobileMenuOpen(false)} className="text-xs uppercase text-[#B6B6B6] flex items-center gap-2">
-                  <User className="w-4 h-4 text-[#D4AF37]" /> Espace Client
-                </Link>
-                <Link href="/account?tab=wishlist" onClick={() => setMobileMenuOpen(false)} className="text-xs uppercase text-[#B6B6B6] flex items-center gap-2">
-                  <Heart className="w-4 h-4 text-[#D4AF37]" /> Favoris
-                </Link>
-              </div>
+              
 
               <div className="pt-2">
                 <Link href="/booking" onClick={() => setMobileMenuOpen(false)}>

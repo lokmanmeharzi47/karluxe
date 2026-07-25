@@ -16,7 +16,7 @@ interface CurrencyStore {
 export const useCurrencyStore = create<CurrencyStore>()(
   persist(
     (set, get) => ({
-      currency: 'EUR',
+      currency: 'DZD',
       // Conversion rates relative to 1 EUR
       rates: {
         EUR: 1,

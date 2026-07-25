@@ -18,8 +18,8 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
   activeFleet,
   occupancyRate,
 }) => {
-  const metrics = [
-    { label: 'Gross Revenue', value: totalRevenue, prefix: '€', icon: DollarSign },
+  const metrics: { label: string; value: number; prefix?: string; suffix?: string; icon: any }[] = [
+    { label: 'Gross Revenue', value: totalRevenue, suffix: ' DA', icon: DollarSign },
     { label: 'Total Reservations', value: totalBookings, icon: Calendar },
     { label: 'Active Fleet Vehicles', value: activeFleet, icon: Car },
     { label: 'Fleet Occupancy Rate', value: occupancyRate, suffix: '%', icon: TrendingUp },

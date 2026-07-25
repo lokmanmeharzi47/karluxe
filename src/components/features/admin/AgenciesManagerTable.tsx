@@ -8,14 +8,18 @@ import { AddAgencyModal } from './AddAgencyModal';
 
 interface AgenciesManagerTableProps {
   agencies: Location[];
+  onAgencyAdded?: (agency: Location) => void;
 }
 
-export const AgenciesManagerTable: React.FC<AgenciesManagerTableProps> = ({ agencies }) => {
+export const AgenciesManagerTable: React.FC<AgenciesManagerTableProps> = ({ agencies, onAgencyAdded }) => {
   const [agencyList, setAgencyList] = useState(agencies);
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleAgencyAdded = (newAgency: Location) => {
     setAgencyList((prev) => [newAgency, ...prev]);
+    if (onAgencyAdded) {
+      onAgencyAdded(newAgency);
+    }
   };
 
   return (

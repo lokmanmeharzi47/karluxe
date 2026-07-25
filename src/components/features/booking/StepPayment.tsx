@@ -111,13 +111,7 @@ export const StepPayment: React.FC = () => {
           <span className="text-2xl font-bold text-[#D4AF37] tracking-widest">{confirmedCode}</span>
         </div>
 
-        <div className="pt-4">
-          <a href="/account">
-            <LuxuryButton variant="gold" size="md">
-              Voir dans Mon Espace Client
-            </LuxuryButton>
-          </a>
-        </div>
+        
       </div>
     );
   }
