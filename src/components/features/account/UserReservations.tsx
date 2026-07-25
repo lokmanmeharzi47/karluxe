@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { Booking, CarWithDetails } from '@/types';
-import { Calendar, MapPin, ShieldCheck, Tag } from 'lucide-react';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
+import { Calendar, MapPin } from 'lucide-react';
 import { GoldBadge } from '@/components/ui/GoldBadge';
 
 interface UserReservationsProps {
@@ -10,12 +11,14 @@ interface UserReservationsProps {
 }
 
 export const UserReservations: React.FC<UserReservationsProps> = ({ bookings }) => {
+  const { formatPrice } = useCurrencyStore();
+
   if (bookings.length === 0) {
     return (
       <div className="glass-panel rounded-3xl p-10 text-center border border-white/10">
-        <h3 className="text-lg font-bold font-heading uppercase text-white">No Active Reservations</h3>
+        <h3 className="text-lg font-bold font-heading uppercase text-white">Aucune Réservation En Cours</h3>
         <p className="text-xs text-[#B6B6B6] mt-2">
-          Your upcoming luxury supercar bookings will appear here once reserved.
+          Vos prochaines réservations de supercars de luxe apparaîtront ici une fois validées.
         </p>
       </div>
     );
@@ -43,17 +46,17 @@ export const UserReservations: React.FC<UserReservationsProps> = ({ bookings }) 
                   {b.status}
                 </span>
               </div>
-              <h4 className="text-lg font-bold font-heading text-white">{b.cars?.title || 'Supercar Rental'}</h4>
+              <h4 className="text-lg font-bold font-heading text-white">{b.cars?.title || 'Location Supercar'}</h4>
               <div className="flex items-center gap-4 text-xs text-[#B6B6B6] mt-1">
-                <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-[#D4AF37]" /> {b.pickup_date} to {b.dropoff_date}</span>
+                <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-[#D4AF37]" /> {b.pickup_date} au {b.dropoff_date}</span>
                 <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> {b.pickup_location}</span>
               </div>
             </div>
           </div>
 
           <div className="text-right border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6 w-full md:w-auto">
-            <span className="text-[10px] uppercase text-[#B6B6B6] block">Total Amount</span>
-            <span className="text-xl font-bold font-heading text-[#D4AF37]">€{b.total_price.toLocaleString()}</span>
+            <span className="text-[10px] uppercase text-[#B6B6B6] block">Montant Total</span>
+            <span className="text-xl font-bold font-heading text-[#D4AF37]">{formatPrice(b.total_price)}</span>
           </div>
         </div>
       ))}

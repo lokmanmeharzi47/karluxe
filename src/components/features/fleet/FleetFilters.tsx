@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useFilterStore } from '@/store/useFilterStore';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 import { Brand, Category } from '@/types';
 import { Search, RotateCcw, Filter } from 'lucide-react';
-import { LuxuryButton } from '@/components/ui/LuxuryButton';
 
 interface FleetFiltersProps {
   brands: Brand[];
@@ -18,43 +18,43 @@ export const FleetFilters: React.FC<FleetFiltersProps> = ({ brands, categories }
     categoryId,
     maxPrice,
     transmission,
-    fuelType,
     sortBy,
     setSearchQuery,
     setBrandId,
     setCategoryId,
     setPriceRange,
     setTransmission,
-    setFuelType,
     setSortBy,
     resetFilters,
   } = useFilterStore();
+
+  const { formatPrice } = useCurrencyStore();
 
   return (
     <aside className="glass-panel rounded-3xl p-6 border border-[rgba(212,175,55,0.2)] bg-[#111111]/90 space-y-6">
       <div className="flex items-center justify-between pb-4 border-b border-white/10">
         <h3 className="text-lg font-bold font-heading uppercase text-white flex items-center gap-2">
-          <Filter className="w-4 h-4 text-[#D4AF37]" /> Filter Fleet
+          <Filter className="w-4 h-4 text-[#D4AF37]" /> Filtrer La Flotte
         </h3>
         <button
           onClick={resetFilters}
           className="text-xs text-[#B6B6B6] hover:text-[#D4AF37] flex items-center gap-1 cursor-pointer transition-colors"
         >
-          <RotateCcw className="w-3.5 h-3.5" /> Reset
+          <RotateCcw className="w-3.5 h-3.5" /> Réinitialiser
         </button>
       </div>
 
       {/* Search Bar */}
       <div className="space-y-2">
         <label className="text-xs uppercase tracking-wider text-[#B6B6B6] font-semibold block">
-          Search Supercar
+          Rechercher un Modèle
         </label>
         <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="e.g. Porsche 911, Ferrari..."
+            placeholder="ex. Porsche 911, Ferrari..."
             className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-xl py-3 pl-10 pr-4 text-xs text-white placeholder-[#B6B6B6]/50 focus:outline-none focus:border-[#D4AF37]"
           />
           <Search className="w-4 h-4 text-[#B6B6B6] absolute left-3 top-3.5" />
@@ -64,14 +64,14 @@ export const FleetFilters: React.FC<FleetFiltersProps> = ({ brands, categories }
       {/* Brand Selector */}
       <div className="space-y-2">
         <label className="text-xs uppercase tracking-wider text-[#B6B6B6] font-semibold block">
-          Automotive Brand
+          Marque Automobile
         </label>
         <select
           value={brandId || ''}
           onChange={(e) => setBrandId(e.target.value || null)}
           className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-xl py-3 px-4 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
         >
-          <option value="">All Brands (Porsche, Ferrari...)</option>
+          <option value="">Toutes les Marques (Porsche, Ferrari...)</option>
           {brands.map((brand) => (
             <option key={brand.id} value={brand.id}>
               {brand.name}
@@ -83,14 +83,14 @@ export const FleetFilters: React.FC<FleetFiltersProps> = ({ brands, categories }
       {/* Category Selector */}
       <div className="space-y-2">
         <label className="text-xs uppercase tracking-wider text-[#B6B6B6] font-semibold block">
-          Vehicle Category
+          Catégorie de Véhicule
         </label>
         <select
           value={categoryId || ''}
           onChange={(e) => setCategoryId(e.target.value || null)}
           className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-xl py-3 px-4 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
         >
-          <option value="">All Categories (Sports, Luxury...)</option>
+          <option value="">Toutes les Catégories (Sport, Luxe...)</option>
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
@@ -102,8 +102,8 @@ export const FleetFilters: React.FC<FleetFiltersProps> = ({ brands, categories }
       {/* Max Daily Rate Slider */}
       <div className="space-y-2">
         <div className="flex justify-between items-center text-xs">
-          <span className="uppercase tracking-wider text-[#B6B6B6] font-semibold">Max Daily Rate</span>
-          <span className="font-bold text-[#D4AF37]">€{maxPrice.toLocaleString()}/day</span>
+          <span className="uppercase tracking-wider text-[#B6B6B6] font-semibold">Tarif Max / Jour</span>
+          <span className="font-bold text-[#D4AF37]">{formatPrice(maxPrice)}</span>
         </div>
         <input
           type="range"
@@ -141,17 +141,17 @@ export const FleetFilters: React.FC<FleetFiltersProps> = ({ brands, categories }
       {/* Sort By */}
       <div className="space-y-2">
         <label className="text-xs uppercase tracking-wider text-[#B6B6B6] font-semibold block">
-          Sort Order
+          Ordre d'Affichage
         </label>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as any)}
           className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-xl py-3 px-4 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
         >
-          <option value="popular">Most Popular</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="newest">Newest Fleet Arrivals</option>
+          <option value="popular">Plus Populaires</option>
+          <option value="price-asc">Prix : Croissant</option>
+          <option value="price-desc">Prix : Décroissant</option>
+          <option value="newest">Nouveautés Flotte</option>
         </select>
       </div>
     </aside>

@@ -1,21 +1,31 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { Booking, CarWithDetails, Profile } from '@/types';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { UserReservations } from '@/components/features/account/UserReservations';
 import { UserWishlist } from '@/components/features/account/UserWishlist';
 import { UserProfileEditor } from '@/components/features/account/UserProfileEditor';
-import { Calendar, Heart, User, ShieldCheck } from 'lucide-react';
+import { Calendar, Heart, User } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
-export default function AccountPage() {
-  const [activeTab, setActiveTab] = useState<'reservations' | 'wishlist' | 'profile'>('reservations');
+function AccountPageContent() {
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab') as 'reservations' | 'wishlist' | 'profile' | null;
+
+  const [activeTab, setActiveTab] = useState<'reservations' | 'wishlist' | 'profile'>(tabParam || 'reservations');
   const [bookings, setBookings] = useState<(Booking & { cars?: CarWithDetails | null })[]>([]);
   const [favorites, setFavorites] = useState<CarWithDetails[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
+
+  useEffect(() => {
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
 
   useEffect(() => {
     async function loadUserData() {
@@ -45,17 +55,17 @@ export default function AccountPage() {
     <div className="bg-[#050505] min-h-screen text-white pt-32 pb-24 selection:bg-[#D4AF37] selection:text-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          badge="VIP Membership Portal"
-          title="Customer Dashboard"
-          subtitle="Manage your supercar reservations, saved wishlist, and driver verification."
+          badge="Portail Membre VIP"
+          title="Mon Espace Client"
+          subtitle="Gérez vos réservations de supercars, votre liste de favoris et vos coordonnées."
         />
 
         {/* Tab Buttons */}
         <div className="flex items-center justify-center gap-4 mb-10 overflow-x-auto pb-2">
           {[
-            { id: 'reservations', label: 'My Reservations', icon: Calendar },
-            { id: 'wishlist', label: 'Saved Wishlist', icon: Heart },
-            { id: 'profile', label: 'Profile Settings', icon: User },
+            { id: 'reservations', label: 'Mes Réservations', icon: Calendar },
+            { id: 'wishlist', label: 'Mes Favoris', icon: Heart },
+            { id: 'profile', label: 'Mon Profil & Permis', icon: User },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -83,5 +93,17 @@ export default function AccountPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AccountPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#050505] text-[#D4AF37] flex items-center justify-center font-heading text-lg">
+        Chargement de l'Espace Client...
+      </div>
+    }>
+      <AccountPageContent />
+    </Suspense>
   );
 }

@@ -1,39 +1,42 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 
 export const FaqSection: React.FC = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
   const faqs = [
     {
-      question: 'What driver documentation is required to rent a hypercar?',
-      answer: 'Drivers must possess a valid driver’s license (held for a minimum of 2 years), a valid passport, and be at least 25 years old for supercars (21 for sports category). International driving permits are accepted.',
+      q: "Quelles sont les conditions requises pour louer une supercar ?",
+      a: "Le conducteur doit avoir au minimum 21 ans (25 ans pour certaines hypercars), présenter un permis de conduire valide depuis plus de 2 ans et fournir une pièce d'identité officielle.",
     },
     {
-      question: 'How does airport tarmac and hotel delivery work?',
-      answer: 'Our white-glove concierge delivers your vehicle directly to your private jet tarmac, airport VIP terminal, or hotel entrance with a fully prepped, sanitized vehicle and personal orientation.',
+      q: "Comment fonctionne la livraison sur piste d'aéroport ou à domicile ?",
+      a: "Notre service concierge livre le véhicule directement à l'adresse indiquée (Aéroport d'Alger, Oran, Héliport de Monaco, Hôtel, etc.) à l'heure exacte convenue.",
     },
     {
-      question: 'What is included in the Security Deposit and Insurance?',
-      answer: 'All rentals include standard comprehensive coverage. Our Zero-Excess Platinum insurance option waives security deposit liabilities entirely.',
+      q: "Quel est le montant de la caution et quelles sont les modalités ?",
+      a: "La caution varie selon la catégorie du véhicule et est pré-autorisée par empreinte bancaire ou chèque de garantie, restituée dès la fin de la location.",
     },
     {
-      question: 'Can I request a personal chauffeur with my vehicle?',
-      answer: 'Yes. Our licensed executive chauffeurs are available 24/7 in Monaco, Dubai, Paris, LA, and Zurich for airport transfers, events, or multi-day itineraries.',
+      q: "Les assurances sont-elles incluses dans le tarif journalier ?",
+      a: "Oui, tous nos véhicules bénéficient d'une assurance tout-risque intégrale. Une option de couverture Platinum avec franchise réduite est également disponible.",
+    },
+    {
+      q: "Puis-je réserver un véhicule avec chauffeur privé ?",
+      a: "Absolument. Nous proposons un service de chauffeur trilingue pour vos événements professionnels, mariages et déplacements exécutifs.",
     },
   ];
 
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
   return (
-    <section id="faq" className="py-24 bg-[#050505] relative">
+    <section id="faq" className="py-24 bg-[#050505] relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          badge="Clear Guidance"
-          title="Frequently Asked Questions"
-          subtitle="Everything you need to know about reserving exotic hypercars with KarLuxe."
+          badge="Foire Aux Questions"
+          title="Questions Fréquentes"
+          subtitle="Toutes les réponses relatives à nos modalités de réservation et services de location."
         />
 
         <div className="space-y-4">
@@ -42,14 +45,14 @@ export const FaqSection: React.FC = () => {
             return (
               <div
                 key={index}
-                className="glass-panel rounded-2xl border border-[rgba(212,175,55,0.2)] overflow-hidden transition-colors"
+                className="glass-panel rounded-2xl border border-[rgba(212,175,55,0.2)] bg-[#111111]/80 overflow-hidden"
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                 >
-                  <span className="text-lg font-bold font-heading text-white">
-                    {faq.question}
+                  <span className="text-base font-bold font-heading uppercase text-white flex items-center gap-3">
+                    <HelpCircle className="w-4 h-4 text-[#D4AF37]" /> {faq.q}
                   </span>
                   <ChevronDown
                     className={`w-5 h-5 text-[#D4AF37] transition-transform duration-300 ${
@@ -58,19 +61,11 @@ export const FaqSection: React.FC = () => {
                   />
                 </button>
 
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="px-6 pb-6 text-sm text-[#B6B6B6] leading-relaxed border-t border-white/5 pt-4"
-                    >
-                      {faq.answer}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {isOpen && (
+                  <div className="px-6 pb-6 text-xs text-[#B6B6B6] leading-relaxed border-t border-white/5 pt-4">
+                    {faq.a}
+                  </div>
+                )}
               </div>
             );
           })}

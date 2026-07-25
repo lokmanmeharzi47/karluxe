@@ -22,10 +22,10 @@ export const Navbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Fleet', href: '/fleet' },
-    { name: 'Services', href: '/#services' },
-    { name: 'Wedding', href: '/#wedding' },
-    { name: 'Reviews', href: '/#testimonials' },
+    { name: 'Flotte Supercars', href: '/fleet' },
+    { name: 'Services VIP', href: '/#services' },
+    { name: 'Mariages', href: '/#wedding' },
+    { name: 'Avis Clients', href: '/#testimonials' },
     { name: 'FAQ', href: '/#faq' },
   ];
 
@@ -49,7 +49,7 @@ export const Navbar: React.FC = () => {
                 Kar<span className="text-[#D4AF37]">Luxe</span>
               </span>
               <span className="text-[9px] tracking-[0.3em] uppercase text-[#B6B6B6] -mt-1 font-semibold">
-                Luxury Rentals
+                Location de Luxe
               </span>
             </div>
           </Link>
@@ -83,17 +83,17 @@ export const Navbar: React.FC = () => {
             {/* Currency Switcher Dropdown */}
             <CurrencySwitcher />
 
-            <Link href="/account" className="p-2.5 rounded-full glass-panel text-white hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-colors">
+            <Link href="/account" className="p-2.5 rounded-full glass-panel text-white hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-colors" title="Mon Espace Client">
               <User className="w-4 h-4" />
             </Link>
 
-            <Link href="/fleet" className="p-2.5 rounded-full glass-panel text-white hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-colors relative">
+            <Link href="/account?tab=wishlist" className="p-2.5 rounded-full glass-panel text-white hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-colors relative" title="Mes Favoris">
               <Heart className="w-4 h-4" />
             </Link>
 
             <Link href="/booking">
               <LuxuryButton variant="gold" size="sm" icon={<Shield className="w-4 h-4" />}>
-                Reserve Now
+                Réserver
               </LuxuryButton>
             </Link>
           </div>
@@ -134,17 +134,17 @@ export const Navbar: React.FC = () => {
 
               <div className="flex items-center justify-between pt-4">
                 <Link href="/account" onClick={() => setMobileMenuOpen(false)} className="text-xs uppercase text-[#B6B6B6] flex items-center gap-2">
-                  <User className="w-4 h-4 text-[#D4AF37]" /> Account Portal
+                  <User className="w-4 h-4 text-[#D4AF37]" /> Espace Client
                 </Link>
-                <Link href="/account" onClick={() => setMobileMenuOpen(false)} className="text-xs uppercase text-[#B6B6B6] flex items-center gap-2">
-                  <Heart className="w-4 h-4 text-[#D4AF37]" /> Wishlist
+                <Link href="/account?tab=wishlist" onClick={() => setMobileMenuOpen(false)} className="text-xs uppercase text-[#B6B6B6] flex items-center gap-2">
+                  <Heart className="w-4 h-4 text-[#D4AF37]" /> Favoris
                 </Link>
               </div>
 
               <div className="pt-2">
                 <Link href="/booking" onClick={() => setMobileMenuOpen(false)}>
                   <LuxuryButton variant="gold" size="md" className="w-full">
-                    Reserve Luxury Car
+                    Réserver un Véhicule
                   </LuxuryButton>
                 </Link>
               </div>

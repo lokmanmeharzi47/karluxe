@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Shield, Sparkles, ChevronDown, ArrowRight, Calendar, MapPin, Zap } from 'lucide-react';
+import { Shield, Sparkles, ChevronDown, ArrowRight, Calendar, MapPin } from 'lucide-react';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { GoldBadge } from '@/components/ui/GoldBadge';
 
@@ -31,7 +31,7 @@ export const HeroSection: React.FC = () => {
           className="inline-block mb-6"
         >
           <GoldBadge icon={<Sparkles className="w-3.5 h-3.5" />}>
-            The Pinnacle of Luxury Mobility
+            Le Sommet de la Mobilité de Luxe
           </GoldBadge>
         </motion.div>
 
@@ -42,7 +42,7 @@ export const HeroSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold uppercase tracking-tight font-heading leading-tight mb-6"
         >
-          Drive The <span className="gold-gradient-text">Extraordinary</span>
+          Pilotez L'<span className="gold-gradient-text">Extraordinaire</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -52,7 +52,7 @@ export const HeroSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-base sm:text-lg md:text-xl text-[#B6B6B6] max-w-3xl mx-auto mb-10 font-normal leading-relaxed"
         >
-          White-glove luxury car rentals featuring Ferrari, Porsche, Rolls-Royce, Lamborghini, and Maybach across Monaco, Dubai, Paris, and Los Angeles.
+          Location haut de gamme avec service concierge VIP : Ferrari, Porsche, Rolls-Royce, Lamborghini et Maybach à Alger, Oran, Monaco, Dubaï et Paris.
         </motion.p>
 
         {/* CTA Buttons */}
@@ -64,12 +64,12 @@ export const HeroSection: React.FC = () => {
         >
           <Link href="/fleet">
             <LuxuryButton variant="gold" size="lg" icon={<ArrowRight className="w-5 h-5" />}>
-              Explore Fleet
+              Découvrir la Flotte
             </LuxuryButton>
           </Link>
           <Link href="/booking">
             <LuxuryButton variant="glass" size="lg" icon={<Shield className="w-5 h-5" />}>
-              Instant Reservation
+              Réservation Immédiate
             </LuxuryButton>
           </Link>
         </motion.div>
@@ -85,22 +85,22 @@ export const HeroSection: React.FC = () => {
             <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/5">
               <MapPin className="w-5 h-5 text-[#D4AF37]" />
               <div className="text-left">
-                <span className="block text-[10px] uppercase tracking-wider text-[#B6B6B6] font-semibold">Location</span>
-                <span className="text-sm font-bold text-white">Monaco Heliport</span>
+                <span className="block text-[10px] uppercase tracking-wider text-[#B6B6B6] font-semibold">Emplacement / Wilaya</span>
+                <span className="text-sm font-bold text-white">16 - Alger</span>
               </div>
             </div>
 
             <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/5">
               <Calendar className="w-5 h-5 text-[#D4AF37]" />
               <div className="text-left">
-                <span className="block text-[10px] uppercase tracking-wider text-[#B6B6B6] font-semibold">Pick-Up Date</span>
-                <span className="text-sm font-bold text-white">Today, 14:00</span>
+                <span className="block text-[10px] uppercase tracking-wider text-[#B6B6B6] font-semibold">Date de Prise en Charge</span>
+                <span className="text-sm font-bold text-white">Aujourd'hui, 14:00</span>
               </div>
             </div>
 
             <Link href="/fleet">
               <LuxuryButton variant="gold" size="md" className="w-full">
-                Find Vehicle
+                Trouver un Véhicule
               </LuxuryButton>
             </Link>
           </div>

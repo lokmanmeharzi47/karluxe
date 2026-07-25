@@ -24,9 +24,9 @@ export default async function FleetPage() {
     <div className="bg-[#050505] min-h-screen text-white pt-32 pb-24 selection:bg-[#D4AF37] selection:text-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          badge="Exotic & Executive Fleet"
-          title="The Supreme Collection"
-          subtitle="Filter and select your ideal supercar for delivery in Monaco, Dubai, Paris, LA, or Zurich."
+          badge="Flotte d'Exception"
+          title="La Collection Suprême"
+          subtitle="Filtrez et sélectionnez votre supercar idéale pour une livraison à Alger, Oran, Monaco, Dubaï ou Paris."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">

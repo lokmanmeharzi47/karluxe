@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Car, Mail, Phone, MapPin, ArrowRight, Share2, Globe, Shield } from 'lucide-react';
+import { Car, Mail, MapPin, ArrowRight, Share2, Globe, Shield } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -23,13 +23,13 @@ export const Footer: React.FC = () => {
                   Kar<span className="text-[#D4AF37]">Luxe</span>
                 </span>
                 <span className="text-[9px] tracking-[0.3em] uppercase text-[#B6B6B6] -mt-1 font-semibold">
-                  Luxury Rentals
+                  Location de Luxe
                 </span>
               </div>
             </Link>
 
             <p className="text-sm text-[#B6B6B6] leading-relaxed max-w-sm">
-              The world’s premier luxury car rental platform. Providing white-glove access to exotic hypercars, grand tourers, and executive chauffeur vehicles.
+              La plateforme mondiale de référence pour la location de supercars d'exception, berlines de prestige et véhicules avec chauffeur privé.
             </p>
 
             <div className="flex items-center gap-4">
@@ -51,41 +51,41 @@ export const Footer: React.FC = () => {
               Navigation
             </h4>
             <ul className="space-y-2.5 text-sm text-[#B6B6B6]">
-              <li><Link href="/fleet" className="hover:text-white transition-colors">Exotic Fleet</Link></li>
-              <li><Link href="/#services" className="hover:text-white transition-colors">VIP Concierge</Link></li>
-              <li><Link href="/#wedding" className="hover:text-white transition-colors">Wedding Experiences</Link></li>
-              <li><Link href="/account" className="hover:text-white transition-colors">Customer Portal</Link></li>
-              <li><Link href="/admin/dashboard" className="hover:text-white transition-colors">Executive Portal</Link></li>
+              <li><Link href="/fleet" className="hover:text-white transition-colors">Flotte Supercars</Link></li>
+              <li><Link href="/#services" className="hover:text-white transition-colors">Services VIP</Link></li>
+              <li><Link href="/#wedding" className="hover:text-white transition-colors">Mariages & Cortèges</Link></li>
+              <li><Link href="/account" className="hover:text-white transition-colors">Espace Client</Link></li>
+              <li><Link href="/admin" className="hover:text-white transition-colors">Portail Exécutif</Link></li>
             </ul>
           </div>
 
           {/* Locations */}
           <div className="space-y-4">
             <h4 className="text-sm font-bold uppercase tracking-widest font-heading text-[#D4AF37]">
-              VIP Locations
+              Hubs & Agences
             </h4>
             <ul className="space-y-2.5 text-sm text-[#B6B6B6]">
-              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Monaco Heliport</li>
-              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Dubai DXB VIP</li>
-              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Paris CDG Terminal</li>
-              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> LAX Private Jet Lounge</li>
-              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Zurich Helipad</li>
+              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Alger (16) • Aéroport</li>
+              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Oran (31) • Centre</li>
+              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Monaco Heliport VIP</li>
+              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Dubai DXB Terminal</li>
+              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Paris CDG VIP Lounge</li>
             </ul>
           </div>
 
           {/* Newsletter */}
           <div className="space-y-4">
             <h4 className="text-sm font-bold uppercase tracking-widest font-heading text-[#D4AF37]">
-              VIP Club
+              Club VIP
             </h4>
             <p className="text-xs text-[#B6B6B6] leading-relaxed">
-              Subscribe for private hypercar drops and invitation-only rally events.
+              Inscrivez-vous pour recevoir nos offres privées et nouveautés supercars.
             </p>
             <form onSubmit={(e) => e.preventDefault()} className="space-y-2">
               <div className="relative">
                 <input
                   type="email"
-                  placeholder="Enter VIP Email"
+                  placeholder="Votre Email VIP"
                   className="w-full bg-[#111111] border border-[rgba(212,175,55,0.2)] rounded-full py-3 px-4 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                 />
                 <button type="submit" className="absolute right-1 top-1 bottom-1 px-3 bg-[#D4AF37] text-black rounded-full text-xs font-bold hover:bg-[#E8C65A] transition-colors cursor-pointer">
@@ -98,11 +98,11 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#B6B6B6]">
-          <p>© 2026 KarLuxe Mobility S.A. All Rights Reserved.</p>
+          <p>© 2026 KarLuxe Mobility. Tous droits réservés.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Insurance Policy</a>
+            <a href="#" className="hover:text-white transition-colors">Politique de Confidentialité</a>
+            <a href="#" className="hover:text-white transition-colors">Conditions Générales</a>
+            <a href="#" className="hover:text-white transition-colors">Assurance Tout-Risque</a>
           </div>
         </div>
       </div>
