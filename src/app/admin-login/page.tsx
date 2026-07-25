@@ -21,25 +21,47 @@ export default function AdminLoginPage() {
 
     try {
       const supabase = createBrowserClient();
-      // Try Supabase auth, fallback to executive admin token
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      // Set admin session cookie and localStorage token
+      if (error) {
+        // Fallback for executive demo access if offline/network bypass
+        if (email === 'admin@karluxe.com' && password === 'admin123') {
+          document.cookie = 'karluxe_admin_session=authenticated; path=/; max-age=86400';
+          localStorage.setItem('karluxe_admin_token', 'authenticated');
+          setLoading(false);
+          router.push('/admin');
+          router.refresh();
+          return;
+        }
+        setErrorMsg(error.message || 'Identifiants invalides');
+        setLoading(false);
+        return;
+      }
+
+      // Successful Supabase Authentication
       document.cookie = 'karluxe_admin_session=authenticated; path=/; max-age=86400';
       localStorage.setItem('karluxe_admin_token', 'authenticated');
+      if (data?.session) {
+        localStorage.setItem('karluxe_admin_user', JSON.stringify(data.session.user));
+      }
 
       setLoading(false);
       router.push('/admin');
       router.refresh();
     } catch (err: any) {
-      document.cookie = 'karluxe_admin_session=authenticated; path=/; max-age=86400';
-      localStorage.setItem('karluxe_admin_token', 'authenticated');
+      if (email === 'admin@karluxe.com' && password === 'admin123') {
+        document.cookie = 'karluxe_admin_session=authenticated; path=/; max-age=86400';
+        localStorage.setItem('karluxe_admin_token', 'authenticated');
+        setLoading(false);
+        router.push('/admin');
+        router.refresh();
+        return;
+      }
+      setErrorMsg(err?.message || 'Une erreur est survenue lors de la connexion');
       setLoading(false);
-      router.push('/admin');
-      router.refresh();
     }
   };
 
@@ -61,7 +83,7 @@ export default function AdminLoginPage() {
               Kar<span className="text-[#D4AF37]">Luxe</span>
             </h1>
             <span className="text-[9px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mt-1">
-              Portail Exécutif Administration
+              Portail Exécutif Administration Supabase
             </span>
           </div>
           <p className="text-xs text-[#B6B6B6] max-w-xs mx-auto">
@@ -121,12 +143,12 @@ export default function AdminLoginPage() {
             disabled={loading}
             icon={loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
           >
-            {loading ? 'Connexion en cours...' : 'Connexion à l\'Admin'}
+            {loading ? 'Authentification Supabase...' : 'Connexion à l\'Admin'}
           </LuxuryButton>
         </form>
 
         <div className="pt-4 border-t border-white/10 text-center flex items-center justify-center gap-1.5 text-[10px] text-[#B6B6B6] font-semibold">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Accès Chiffré SSL 256-Bit • KarLuxe Mobility
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Authentification Chiffrée Supabase Auth • KarLuxe
         </div>
       </div>
     </div>
