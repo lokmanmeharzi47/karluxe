@@ -1,11 +1,11 @@
 'use server';
 
-import { createServerClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 
 export async function toggleCarAvailabilityAction(carId: string, isAvailable: boolean) {
   try {
-    const supabase = await createServerClient();
+    const supabase = createAdminClient();
     const { error } = await (supabase.from('cars') as any)
       .update({ is_available: isAvailable })
       .eq('id', carId);
@@ -19,7 +19,7 @@ export async function toggleCarAvailabilityAction(carId: string, isAvailable: bo
 
 export async function updateBookingStatusAction(bookingId: string, status: string) {
   try {
-    const supabase = await createServerClient();
+    const supabase = createAdminClient();
     const { error } = await (supabase.from('bookings') as any)
       .update({ status })
       .eq('id', bookingId);
@@ -54,7 +54,7 @@ const addCarSchema = z.object({
 export async function addCarAction(input: z.infer<typeof addCarSchema>) {
   try {
     const validated = addCarSchema.parse(input);
-    const supabase = await createServerClient();
+    const supabase = createAdminClient();
     const slug = validated.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
     const { data: newCar, error } = await (supabase.from('cars') as any)
@@ -98,7 +98,7 @@ const addCategorySchema = z.object({
 export async function addCategoryAction(input: z.infer<typeof addCategorySchema>) {
   try {
     const validated = addCategorySchema.parse(input);
-    const supabase = await createServerClient();
+    const supabase = createAdminClient();
     const slug = validated.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
     const { data: newCategory, error } = await (supabase.from('categories') as any)
@@ -127,7 +127,7 @@ const addBrandSchema = z.object({
 export async function addBrandAction(input: z.infer<typeof addBrandSchema>) {
   try {
     const validated = addBrandSchema.parse(input);
-    const supabase = await createServerClient();
+    const supabase = createAdminClient();
     const slug = validated.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
     const { data: newBrand, error } = await (supabase.from('brands') as any)
@@ -158,7 +158,7 @@ const addAgencySchema = z.object({
 export async function addAgencyAction(input: z.infer<typeof addAgencySchema>) {
   try {
     const validated = addAgencySchema.parse(input);
-    const supabase = await createServerClient();
+    const supabase = createAdminClient();
 
     const { data: newAgency, error } = await (supabase.from('locations') as any)
       .insert({
@@ -189,7 +189,7 @@ const addLocationSchema = z.object({
 export async function addLocationAction(input: z.infer<typeof addLocationSchema>) {
   try {
     const validated = addLocationSchema.parse(input);
-    const supabase = await createServerClient();
+    const supabase = createAdminClient();
 
     const { data: newLoc, error } = await (supabase.from('locations') as any)
       .insert({
@@ -219,7 +219,7 @@ const addCouponSchema = z.object({
 export async function addCouponAction(input: z.infer<typeof addCouponSchema>) {
   try {
     const validated = addCouponSchema.parse(input);
-    const supabase = await createServerClient();
+    const supabase = createAdminClient();
 
     const { data: newCoupon, error } = await (supabase.from('coupons') as any)
       .insert({
