@@ -3,6 +3,7 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useBookingStore } from '@/store/useBookingStore';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { CarWithDetails } from '@/types';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -13,16 +14,29 @@ import { StepInsurance } from '@/components/features/booking/StepInsurance';
 import { StepExtras } from '@/components/features/booking/StepExtras';
 import { StepPayment } from '@/components/features/booking/StepPayment';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Car, Calendar, RefreshCw } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 function BookingPageContent() {
   const searchParams = useSearchParams();
   const carIdParam = searchParams.get('carId');
+  const daysParam = searchParams.get('days');
   const [cars, setCars] = useState<CarWithDetails[]>([]);
 
-  const { currentStep, setStep, nextStep, prevStep, selectedCar, setSelectedCar } = useBookingStore();
+  const {
+    currentStep,
+    setStep,
+    nextStep,
+    prevStep,
+    selectedCar,
+    setSelectedCar,
+    pickupDate,
+    dropoffDate,
+    setDates,
+  } = useBookingStore();
+
+  const { formatPrice } = useCurrencyStore();
 
   useEffect(() => {
     async function loadCars() {
@@ -44,7 +58,27 @@ function BookingPageContent() {
       }
     }
     loadCars();
-  }, [carIdParam, setSelectedCar, setStep, selectedCar]);
+  }, [carIdParam, setSelectedCar, setStep]);
+
+  // Handle URL days parameter
+  useEffect(() => {
+    if (daysParam) {
+      const numDays = Math.max(1, parseInt(daysParam, 10) || 3);
+      const start = new Date();
+      const end = new Date(Date.now() + numDays * 24 * 60 * 60 * 1000);
+      setDates(start.toISOString().split('T')[0], end.toISOString().split('T')[0]);
+    }
+  }, [daysParam, setDates]);
+
+  const calculateDays = () => {
+    const start = new Date(pickupDate).getTime();
+    const end = new Date(dropoffDate).getTime();
+    const diff = (end - start) / (1000 * 3600 * 24);
+    return Math.max(1, Math.round(diff) || 1);
+  };
+
+  const rentalDays = calculateDays();
+  const estimatedTotal = selectedCar ? selectedCar.daily_rate * rentalDays : 0;
 
   const steps = [
     { number: 1, title: 'Vehicle' },
@@ -65,7 +99,7 @@ function BookingPageContent() {
         />
 
         {/* Wizard Step Progress Indicator */}
-        <div className="mb-10 flex items-center justify-between relative">
+        <div className="mb-8 flex items-center justify-between relative">
           <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-white/10 -translate-y-1/2 z-0" />
 
           {steps.map((step) => {
@@ -75,7 +109,7 @@ function BookingPageContent() {
             return (
               <div
                 key={step.number}
-                onClick={() => isCompleted && setStep(step.number)}
+                onClick={() => (isCompleted || step.number < currentStep) && setStep(step.number)}
                 className={`relative z-10 flex flex-col items-center gap-1.5 cursor-pointer ${
                   isCompleted || isCurrent ? 'text-[#D4AF37]' : 'text-[#B6B6B6]'
                 }`}
@@ -85,7 +119,7 @@ function BookingPageContent() {
                     isCompleted
                       ? 'bg-[#D4AF37] text-black shadow-[0_0_15px_rgba(212,175,55,0.4)]'
                       : isCurrent
-                      ? 'bg-[#111111] border-2 border-[#D4AF37] text-[#D4AF37]'
+                      ? 'bg-[#111111] border-2 border-[#D4AF37] text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.2)]'
                       : 'bg-[#111111] border border-white/20 text-[#B6B6B6]'
                   }`}
                 >
@@ -98,6 +132,39 @@ function BookingPageContent() {
             );
           })}
         </div>
+
+        {/* Selected Vehicle Banner Preview (Shown if a vehicle is active) */}
+        {selectedCar && currentStep > 1 && (
+          <div className="mb-6 glass-panel rounded-2xl p-4 border border-[rgba(212,175,55,0.3)] bg-[#111111]/90 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <img
+                src={selectedCar.featured_image}
+                alt={selectedCar.title}
+                className="w-16 h-12 rounded-xl object-cover"
+              />
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#D4AF37] tracking-wider block">
+                  {selectedCar.brands?.name || 'Supercar'}
+                </span>
+                <h4 className="text-sm font-bold font-heading uppercase text-white">
+                  {selectedCar.title}
+                </h4>
+                <div className="flex items-center gap-3 text-[11px] text-[#B6B6B6] mt-0.5">
+                  <span>{formatPrice(selectedCar.daily_rate)}/day</span>
+                  <span>•</span>
+                  <span>{rentalDays} {rentalDays === 1 ? 'Day' : 'Days'} ({formatPrice(estimatedTotal)})</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setStep(1)}
+              className="flex items-center gap-1.5 text-xs font-bold text-[#D4AF37] hover:underline cursor-pointer"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Change Vehicle
+            </button>
+          </div>
+        )}
 
         {/* Step Content Card */}
         <div className="glass-panel rounded-3xl p-6 sm:p-10 border border-[rgba(212,175,55,0.2)] bg-[#111111]/90 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">

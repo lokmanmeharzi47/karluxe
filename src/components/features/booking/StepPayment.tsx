@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useBookingStore } from '@/store/useBookingStore';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 import { createBookingAction } from '@/app/actions/bookingActions';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { CreditCard, ShieldCheck, CheckCircle2, Loader2, ArrowRight } from 'lucide-react';
@@ -20,6 +21,8 @@ export const StepPayment: React.FC = () => {
     customerPhone,
     setCustomerInfo,
   } = useBookingStore();
+
+  const { formatPrice } = useCurrencyStore();
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -45,9 +48,9 @@ export const StepPayment: React.FC = () => {
 
     const res = await createBookingAction({
       carId: selectedCar.id,
-      customerName,
-      customerEmail,
-      customerPhone,
+      customerName: customerName || 'VIP Guest',
+      customerEmail: customerEmail || 'guest@vip-concierge.com',
+      customerPhone: customerPhone || '+377 98 00 11 22',
       pickupDate,
       dropoffDate,
       pickupLocation,
@@ -197,7 +200,7 @@ export const StepPayment: React.FC = () => {
         disabled={loading}
         icon={loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
       >
-        {loading ? 'Processing VIP Booking...' : `Pay & Complete Reservation (€${totalAmount.toLocaleString()})`}
+        {loading ? 'Processing VIP Booking...' : `Pay & Complete Reservation (${formatPrice(totalAmount)})`}
       </LuxuryButton>
     </form>
   );
