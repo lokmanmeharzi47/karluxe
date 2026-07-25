@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Car, LayoutDashboard, Calendar, MapPin, Tag, DollarSign, LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Car, LayoutDashboard, Calendar, Layers, Award, Building2, DollarSign, LogOut } from 'lucide-react';
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -10,6 +11,14 @@ interface AdminSidebarProps {
 }
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActiveTab }) => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    document.cookie = 'karluxe_admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    localStorage.removeItem('karluxe_admin_token');
+    router.push('/admin-login');
+  };
+
   return (
     <aside className="w-64 glass-panel border-r border-[rgba(212,175,55,0.2)] bg-[#0A0A0A]/95 flex flex-col justify-between p-6 shrink-0 z-20 min-h-screen">
       <div className="space-y-8">
@@ -64,25 +73,36 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
           </button>
 
           <button
-            onClick={() => setActiveTab('locations')}
+            onClick={() => setActiveTab('categories')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-              activeTab === 'locations'
+              activeTab === 'categories'
                 ? 'bg-gradient-to-r from-[#D4AF37] to-[#E8C65A] text-black shadow-[0_0_20px_rgba(212,175,55,0.3)]'
                 : 'text-[#B6B6B6] hover:text-white hover:bg-white/5'
             }`}
           >
-            <MapPin className="w-4.5 h-4.5" /> Hubs de Livraison
+            <Layers className="w-4.5 h-4.5" /> Catégories
           </button>
 
           <button
-            onClick={() => setActiveTab('coupons')}
+            onClick={() => setActiveTab('brands')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-              activeTab === 'coupons'
+              activeTab === 'brands'
                 ? 'bg-gradient-to-r from-[#D4AF37] to-[#E8C65A] text-black shadow-[0_0_20px_rgba(212,175,55,0.3)]'
                 : 'text-[#B6B6B6] hover:text-white hover:bg-white/5'
             }`}
           >
-            <Tag className="w-4.5 h-4.5" /> Codes Promo VIP
+            <Award className="w-4.5 h-4.5" /> Marques Automobiles
+          </button>
+
+          <button
+            onClick={() => setActiveTab('agencies')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+              activeTab === 'agencies'
+                ? 'bg-gradient-to-r from-[#D4AF37] to-[#E8C65A] text-black shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+                : 'text-[#B6B6B6] hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <Building2 className="w-4.5 h-4.5" /> Agences & Hubs
           </button>
 
           <button
@@ -102,16 +122,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
         <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/5 border border-white/5">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400">
-            Monaco Hub Active
+            Session Admin Sécurisée
           </span>
         </div>
 
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-2.5 rounded-2xl text-xs font-bold uppercase tracking-wider text-rose-400 hover:bg-rose-500/10 transition-colors"
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl text-xs font-bold uppercase tracking-wider text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
         >
-          <LogOut className="w-4 h-4" /> Quitter l'Admin
-        </Link>
+          <LogOut className="w-4 h-4" /> Déconnexion Admin
+        </button>
       </div>
     </aside>
   );

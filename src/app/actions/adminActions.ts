@@ -89,6 +89,95 @@ export async function addCarAction(input: z.infer<typeof addCarSchema>) {
   }
 }
 
+// Action for Adding New Category
+const addCategorySchema = z.object({
+  name: z.string().min(2, 'Le nom de catégorie doit contenir au moins 2 caractères'),
+  description: z.string().optional(),
+});
+
+export async function addCategoryAction(input: z.infer<typeof addCategorySchema>) {
+  try {
+    const validated = addCategorySchema.parse(input);
+    const supabase = await createServerClient();
+    const slug = validated.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+    const { data: newCategory, error } = await (supabase.from('categories') as any)
+      .insert({
+        name: validated.name,
+        slug: `${slug}-${Math.floor(100 + Math.random() * 900)}`,
+        description: validated.description || 'Collection exclusive de prestige',
+      })
+      .select()
+      .single();
+
+    if (error) return { success: false, error: error.message };
+    return { success: true, category: newCategory };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Échec de l\'ajout de la catégorie' };
+  }
+}
+
+// Action for Adding New Automotive Brand
+const addBrandSchema = z.object({
+  name: z.string().min(2, 'Le nom de la marque doit contenir au moins 2 caractères'),
+  country: z.string().optional(),
+  logoUrl: z.string().optional(),
+});
+
+export async function addBrandAction(input: z.infer<typeof addBrandSchema>) {
+  try {
+    const validated = addBrandSchema.parse(input);
+    const supabase = await createServerClient();
+    const slug = validated.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+    const { data: newBrand, error } = await (supabase.from('brands') as any)
+      .insert({
+        name: validated.name,
+        slug: `${slug}-${Math.floor(100 + Math.random() * 900)}`,
+        country: validated.country || 'Italie / Allemagne',
+        logo_url: validated.logoUrl || 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=300&q=80',
+      })
+      .select()
+      .single();
+
+    if (error) return { success: false, error: error.message };
+    return { success: true, brand: newBrand };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Échec de l\'ajout de la marque' };
+  }
+}
+
+// Action for Adding New Agency / Branch
+const addAgencySchema = z.object({
+  name: z.string().min(2, 'Le nom de l\'agence doit contenir au moins 2 caractères'),
+  city: z.string().min(2, 'La ville / wilaya est requise'),
+  address: z.string().min(3, 'L\'adresse de l\'agence est requise'),
+  phone: z.string().optional(),
+});
+
+export async function addAgencyAction(input: z.infer<typeof addAgencySchema>) {
+  try {
+    const validated = addAgencySchema.parse(input);
+    const supabase = await createServerClient();
+
+    const { data: newAgency, error } = await (supabase.from('locations') as any)
+      .insert({
+        name: validated.name,
+        city: validated.city,
+        country: 'Algérie / International',
+        address: validated.address,
+        is_airport: false,
+      })
+      .select()
+      .single();
+
+    if (error) return { success: false, error: error.message };
+    return { success: true, agency: newAgency };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Échec de l\'ajout de l\'agence' };
+  }
+}
+
 const addLocationSchema = z.object({
   name: z.string().min(2),
   city: z.string().min(2),
@@ -148,35 +237,5 @@ export async function addCouponAction(input: z.infer<typeof addCouponSchema>) {
     return { success: true, coupon: newCoupon };
   } catch (err: any) {
     return { success: false, error: err?.message || 'Failed to add promo coupon' };
-  }
-}
-
-const addDriverSchema = z.object({
-  name: z.string().min(2),
-  phone: z.string(),
-  experienceYears: z.number().int().min(1),
-  photoUrl: z.string().optional(),
-});
-
-export async function addDriverAction(input: z.infer<typeof addDriverSchema>) {
-  try {
-    const validated = addDriverSchema.parse(input);
-    const supabase = await createServerClient();
-
-    const { data: newDriver, error } = await (supabase.from('drivers') as any)
-      .insert({
-        name: validated.name,
-        phone: validated.phone,
-        experience_years: validated.experienceYears,
-        photo_url: validated.photoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-        status: 'Available',
-      })
-      .select()
-      .single();
-
-    if (error) return { success: false, error: error.message };
-    return { success: true, driver: newDriver };
-  } catch (err: any) {
-    return { success: false, error: err?.message || 'Failed to add chauffeur driver' };
   }
 }

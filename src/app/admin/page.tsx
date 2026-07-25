@@ -1,22 +1,24 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { Booking, CarWithDetails, Brand, Category, Location } from '@/types';
 import { AdminSidebar } from '@/components/features/admin/AdminSidebar';
 import { MetricsOverview } from '@/components/features/admin/MetricsOverview';
 import { FleetManagerTable } from '@/components/features/admin/FleetManagerTable';
 import { BookingsManagerTable } from '@/components/features/admin/BookingsManagerTable';
-import { LocationsManagerTable } from '@/components/features/admin/LocationsManagerTable';
-import { CouponsManagerTable } from '@/components/features/admin/CouponsManagerTable';
+import { CategoriesManagerTable } from '@/components/features/admin/CategoriesManagerTable';
+import { BrandsManagerTable } from '@/components/features/admin/BrandsManagerTable';
+import { AgenciesManagerTable } from '@/components/features/admin/AgenciesManagerTable';
 import { RevenueAnalyticsChart } from '@/components/features/admin/RevenueAnalyticsChart';
-import { Bell, Sparkles, Car, Calendar, MapPin, Tag, DollarSign } from 'lucide-react';
+import { Bell, Sparkles, Car, Calendar, Layers, Award, Building2, DollarSign } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 function AdminPageContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const tabParam = searchParams.get('tab') || 'overview';
   const [activeTab, setActiveTab] = useState(tabParam);
 
@@ -25,12 +27,28 @@ function AdminPageContent() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
+  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+
+  // Secure Route: Verify Admin Session
+  useEffect(() => {
+    const isAuth =
+      document.cookie.includes('karluxe_admin_session=authenticated') ||
+      localStorage.getItem('karluxe_admin_token') === 'authenticated';
+
+    if (!isAuth) {
+      router.push('/admin-login');
+    } else {
+      setAuthenticated(true);
+    }
+  }, [router]);
 
   useEffect(() => {
     setActiveTab(tabParam);
   }, [tabParam]);
 
   useEffect(() => {
+    if (!authenticated) return;
+
     async function loadAdminData() {
       const supabase = createBrowserClient();
       const [{ data: cData }, { data: bData }, { data: brData }, { data: catData }, { data: locData }] = await Promise.all([
@@ -48,7 +66,15 @@ function AdminPageContent() {
       if (locData) setLocations(locData as Location[]);
     }
     loadAdminData();
-  }, []);
+  }, [authenticated]);
+
+  if (authenticated === null) {
+    return (
+      <div className="min-h-screen bg-[#050505] text-[#D4AF37] flex items-center justify-center font-heading text-lg">
+        Vérification de la session administrateur...
+      </div>
+    );
+  }
 
   const totalRevenue = bookings.reduce((sum, b) => sum + (b.total_price || 0), 185400);
   const activeFleetCount = cars.filter((c) => c.is_available).length;
@@ -84,7 +110,7 @@ function AdminPageContent() {
               </div>
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-white uppercase tracking-wider">Directeur Flotte</span>
-                <span className="text-[10px] text-[#D4AF37] font-semibold">Concierge Monaco</span>
+                <span className="text-[10px] text-[#D4AF37] font-semibold">Administrateur KarLuxe</span>
               </div>
             </div>
           </div>
@@ -98,14 +124,14 @@ function AdminPageContent() {
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-4 h-4 text-[#D4AF37]" />
                 <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold">
-                  Monaco, Dubai, Paris, LA, Zurich Hubs
+                  Gestion Exécutive de la Flotte KarLuxe
                 </span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-extrabold font-heading uppercase text-white tracking-tight">
-                Aperçu de la Flotte & Réservations VIP
+                Aperçu & Gestion de Flotte Privée
               </h1>
               <p className="text-xs sm:text-sm text-[#B6B6B6] mt-1 max-w-2xl">
-                Gestion complète des supercars en location, hubs de livraison tarmac, statuts de réservation et analytics de chiffre d'affaires.
+                Gestion des véhicules, réservations VIP, catégories, marques automobiles et agences de location.
               </p>
             </div>
 
@@ -115,8 +141,9 @@ function AdminPageContent() {
                 { id: 'overview', label: 'Aperçu', icon: Sparkles },
                 { id: 'fleet', label: 'Flotte', icon: Car },
                 { id: 'bookings', label: 'Réservations', icon: Calendar },
-                { id: 'locations', label: 'Hubs', icon: MapPin },
-                { id: 'coupons', label: 'Coupons', icon: Tag },
+                { id: 'categories', label: 'Catégories', icon: Layers },
+                { id: 'brands', label: 'Marques', icon: Award },
+                { id: 'agencies', label: 'Agences', icon: Building2 },
                 { id: 'analytics', label: 'Revenus', icon: DollarSign },
               ].map((tab) => {
                 const Icon = tab.icon;
@@ -163,12 +190,16 @@ function AdminPageContent() {
             <BookingsManagerTable bookings={bookings} />
           )}
 
-          {activeTab === 'locations' && (
-            <LocationsManagerTable locations={locations} />
+          {activeTab === 'categories' && (
+            <CategoriesManagerTable categories={categories} />
           )}
 
-          {activeTab === 'coupons' && (
-            <CouponsManagerTable />
+          {activeTab === 'brands' && (
+            <BrandsManagerTable brands={brands} />
+          )}
+
+          {activeTab === 'agencies' && (
+            <AgenciesManagerTable agencies={locations} />
           )}
 
           {activeTab === 'analytics' && (
