@@ -5,15 +5,19 @@ import { z } from 'zod';
 
 const bookingSchema = z.object({
   carId: z.string().uuid(),
-  customerName: z.string().min(2, 'Name must be at least 2 characters'),
-  customerEmail: z.string().email('Invalid email address'),
-  customerPhone: z.string().min(6, 'Invalid phone number'),
+  customerName: z.string().min(2, 'Le nom doit comporter au moins 2 caractères'),
+  customerPhone: z.string().min(6, 'Numéro de téléphone invalide'),
+  customerEmail: z.string().optional(),
   pickupDate: z.string(),
   dropoffDate: z.string(),
-  pickupLocation: z.string(),
-  dropoffLocation: z.string(),
-  insuranceTier: z.enum(['Standard', 'Premium VIP', 'Zero Excess Platinum']),
-  selectedExtras: z.array(z.string()),
+  wilaya: z.string().optional(),
+  commune: z.string().optional(),
+  notes: z.string().optional(),
+  paymentMethod: z.string().optional(),
+  pickupLocation: z.string().optional(),
+  dropoffLocation: z.string().optional(),
+  insuranceTier: z.string().optional(),
+  selectedExtras: z.array(z.string()).optional(),
   totalAmount: z.number().positive(),
 });
 
@@ -25,20 +29,23 @@ export async function createBookingAction(input: CreateBookingInput) {
     const supabase = await createServerClient();
 
     const bookingCode = `KLX-${Math.floor(10000 + Math.random() * 90000)}`;
+    const locationCombined = validated.wilaya
+      ? `${validated.wilaya}${validated.commune ? `, ${validated.commune}` : ''}`
+      : validated.pickupLocation || 'Monaco VIP Heliport Hub';
 
     const { data: booking, error } = await (supabase.from('bookings') as any)
       .insert({
         booking_code: bookingCode,
         car_id: validated.carId,
         customer_name: validated.customerName,
-        customer_email: validated.customerEmail,
+        customer_email: validated.customerEmail || `${validated.customerPhone}@karluxe-rental.com`,
         customer_phone: validated.customerPhone,
         pickup_date: validated.pickupDate,
         dropoff_date: validated.dropoffDate,
-        pickup_location: validated.pickupLocation,
-        dropoff_location: validated.dropoffLocation,
-        insurance_tier: validated.insuranceTier,
-        extras: validated.selectedExtras,
+        pickup_location: locationCombined,
+        dropoff_location: locationCombined,
+        insurance_tier: validated.insuranceTier || 'Standard',
+        extras: validated.selectedExtras || [],
         subtotal: validated.totalAmount,
         total_price: validated.totalAmount,
         status: 'confirmed',
