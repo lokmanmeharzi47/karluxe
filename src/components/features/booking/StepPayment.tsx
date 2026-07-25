@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useBookingStore } from '@/store/useBookingStore';
 import { useCurrencyStore } from '@/store/useCurrencyStore';
 import { createBookingAction } from '@/app/actions/bookingActions';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
-import { CheckCircle2, Loader2, ArrowRight, DollarSign, CreditCard } from 'lucide-react';
+import { CheckCircle2, Loader2, ArrowRight, DollarSign, CreditCard, MapPin } from 'lucide-react';
+import wilayaCommunesData from '@/data/wilayaCommunes.json';
 
 export const StepPayment: React.FC = () => {
   const {
@@ -20,14 +21,34 @@ export const StepPayment: React.FC = () => {
 
   const { formatPrice } = useCurrencyStore();
 
-  const [wilaya, setWilaya] = useState('16 - Alger');
-  const [commune, setCommune] = useState('');
+  const wilayaKeys = Object.keys(wilayaCommunesData);
+  const defaultWilaya = wilayaKeys.find((w) => w.includes('16') || w.includes('الجزائر')) || wilayaKeys[0] || '16 ~ الجزائر';
+
+  const [selectedWilaya, setSelectedWilaya] = useState<string>(defaultWilaya);
+  const [communesList, setCommunesList] = useState<string[]>(
+    (wilayaCommunesData as Record<string, string[]>)[defaultWilaya] || []
+  );
+  const [selectedCommune, setSelectedCommune] = useState<string>(
+    ((wilayaCommunesData as Record<string, string[]>)[defaultWilaya] || [])[0] || ''
+  );
+
   const [notes, setNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'check'>('cash');
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [confirmedCode, setConfirmedCode] = useState<string | null>(null);
+
+  // Update communes list when wilaya changes
+  useEffect(() => {
+    const list = (wilayaCommunesData as Record<string, string[]>)[selectedWilaya] || [];
+    setCommunesList(list);
+    if (list.length > 0) {
+      setSelectedCommune(list[0]);
+    } else {
+      setSelectedCommune('');
+    }
+  }, [selectedWilaya]);
 
   const calculateDays = () => {
     const start = new Date(pickupDate).getTime();
@@ -39,22 +60,6 @@ export const StepPayment: React.FC = () => {
   const days = calculateDays();
   const carRate = selectedCar?.daily_rate || 2500;
   const totalAmount = carRate * days;
-
-  const wilayasAlgerie = [
-    '16 - Alger',
-    '31 - Oran',
-    '25 - Constantine',
-    '23 - Annaba',
-    '09 - Blida',
-    '19 - Sétif',
-    '13 - Tlemcen',
-    '15 - Tizi Ouzou',
-    '06 - Béjaïa',
-    '35 - Boumerdès',
-    'Monaco VIP Heliport Hub',
-    'Dubai DXB VIP Terminal',
-    'Paris CDG Lounge',
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,8 +75,8 @@ export const StepPayment: React.FC = () => {
       customerEmail,
       pickupDate,
       dropoffDate,
-      wilaya,
-      commune,
+      wilaya: selectedWilaya,
+      commune: selectedCommune,
       notes,
       paymentMethod,
       totalAmount,
@@ -98,7 +103,7 @@ export const StepPayment: React.FC = () => {
         </h3>
 
         <p className="text-sm text-[#B6B6B6] max-w-md mx-auto">
-          Votre véhicule de luxe a été réservé avec livraison concierge prioritaire.
+          Votre véhicule de luxe a été réservé avec livraison concierge prioritaire à {selectedCommune} ({selectedWilaya}).
         </p>
 
         <div className="p-4 rounded-2xl bg-white/5 border border-white/10 inline-block">
@@ -129,7 +134,7 @@ export const StepPayment: React.FC = () => {
         </div>
       )}
 
-      {/* Form Fields Matching Algerian Luxury Format */}
+      {/* Form Fields Matching Algerian Wilaya & Communes */}
       <div className="space-y-4">
         {/* Nom complet */}
         <div>
@@ -161,33 +166,37 @@ export const StepPayment: React.FC = () => {
           />
         </div>
 
-        {/* Commune et Wilaya */}
+        {/* Wilaya et Commune Dropdowns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs uppercase text-[#B6B6B6] font-semibold block mb-1.5 text-right sm:text-left">
-              Commune
+            <label className="text-xs uppercase text-[#B6B6B6] font-semibold block mb-1.5 text-right sm:text-left flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Wilaya
             </label>
-            <input
-              type="text"
-              placeholder="Commune"
-              value={commune}
-              onChange={(e) => setCommune(e.target.value)}
+            <select
+              value={selectedWilaya}
+              onChange={(e) => setSelectedWilaya(e.target.value)}
               className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-[#D4AF37]"
-            />
+            >
+              {wilayaKeys.map((w) => (
+                <option key={w} value={w}>
+                  {w}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
-            <label className="text-xs uppercase text-[#B6B6B6] font-semibold block mb-1.5 text-right sm:text-left">
-              Wilaya
+            <label className="text-xs uppercase text-[#B6B6B6] font-semibold block mb-1.5 text-right sm:text-left flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Commune
             </label>
             <select
-              value={wilaya}
-              onChange={(e) => setWilaya(e.target.value)}
+              value={selectedCommune}
+              onChange={(e) => setSelectedCommune(e.target.value)}
               className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-[#D4AF37]"
             >
-              {wilayasAlgerie.map((w) => (
-                <option key={w} value={w}>
-                  {w}
+              {communesList.map((c) => (
+                <option key={c} value={c}>
+                  {c}
                 </option>
               ))}
             </select>
