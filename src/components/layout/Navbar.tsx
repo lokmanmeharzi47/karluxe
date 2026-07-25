@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Car, Heart, User, Menu, X, Shield, PhoneCall } from 'lucide-react';
+import { Car, Heart, User, Menu, X, Shield } from 'lucide-react';
 import { LuxuryButton } from '../ui/LuxuryButton';
+import { CurrencySwitcher } from './CurrencySwitcher';
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -78,7 +79,10 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right Action Controls */}
-          <div className="hidden lg:flex items-center gap-5">
+          <div className="hidden lg:flex items-center gap-4">
+            {/* Currency Switcher Dropdown */}
+            <CurrencySwitcher />
+
             <Link href="/account" className="p-2.5 rounded-full glass-panel text-white hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-colors">
               <User className="w-4 h-4" />
             </Link>
@@ -95,12 +99,15 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2.5 rounded-xl glass-panel text-white hover:text-[#D4AF37] cursor-pointer"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="flex lg:hidden items-center gap-3">
+            <CurrencySwitcher />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2.5 rounded-xl glass-panel text-white hover:text-[#D4AF37] cursor-pointer"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -6,6 +6,7 @@ import { toggleCarAvailabilityAction } from '@/app/actions/adminActions';
 import { AddCarModal } from './AddCarModal';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { CheckCircle2, XCircle, Plus, Car } from 'lucide-react';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 
 interface FleetManagerTableProps {
   cars: CarWithDetails[];
@@ -21,6 +22,7 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
   const [carList, setCarList] = useState(cars);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const { formatPrice } = useCurrencyStore();
 
   const handleToggle = async (carId: string, currentStatus: boolean) => {
     setLoadingId(carId);
@@ -70,7 +72,7 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
                   {car.title}
                 </td>
                 <td className="py-4 px-4 text-[#D4AF37] font-semibold">{car.brands?.name || 'Supercar'}</td>
-                <td className="py-4 px-4 font-bold text-white">€{car.daily_rate}/day</td>
+                <td className="py-4 px-4 font-bold text-white">{formatPrice(car.daily_rate)}/day</td>
                 <td className="py-4 px-4 text-[#B6B6B6]">{car.location}</td>
                 <td className="py-4 px-4">
                   {car.is_available ? (

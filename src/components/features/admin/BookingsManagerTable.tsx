@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Booking, CarWithDetails } from '@/types';
 import { updateBookingStatusAction } from '@/app/actions/adminActions';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 
 interface BookingsManagerTableProps {
   bookings: (Booking & { cars?: CarWithDetails | null })[];
@@ -10,6 +11,7 @@ interface BookingsManagerTableProps {
 
 export const BookingsManagerTable: React.FC<BookingsManagerTableProps> = ({ bookings }) => {
   const [bookingList, setBookingList] = useState(bookings);
+  const { formatPrice } = useCurrencyStore();
 
   const handleStatusChange = async (bookingId: string, newStatus: string) => {
     const res = await updateBookingStatusAction(bookingId, newStatus);
@@ -46,8 +48,8 @@ export const BookingsManagerTable: React.FC<BookingsManagerTableProps> = ({ book
                 </td>
                 <td className="py-4 px-4 text-white font-semibold">{b.cars?.title || 'Supercar'}</td>
                 <td className="py-4 px-4 text-[#B6B6B6]">{b.pickup_date} → {b.dropoff_date}</td>
-                <td className="py-4 px-4 font-bold text-[#D4AF37]">€{b.total_price.toLocaleString()}</td>
-                <td className="py-4 px-4">
+                <td className="py-4 px-4 font-bold text-[#D4AF37]">{formatPrice(b.total_price)}</td>
+                <td className="py-4 px-[#B6B6B6]">
                   <select
                     value={b.status}
                     onChange={(e) => handleStatusChange(b.id, e.target.value)}

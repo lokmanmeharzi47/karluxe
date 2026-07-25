@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { CarWithDetails } from '@/types';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { Calendar, MapPin, ShieldCheck, ArrowRight, Check } from 'lucide-react';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 
 interface StickyBookingCardProps {
   car: CarWithDetails;
@@ -12,6 +13,7 @@ interface StickyBookingCardProps {
 
 export const StickyBookingCard: React.FC<StickyBookingCardProps> = ({ car }) => {
   const [days, setDays] = useState(3);
+  const { formatPrice } = useCurrencyStore();
   const totalAmount = car.daily_rate * days;
 
   return (
@@ -20,7 +22,7 @@ export const StickyBookingCard: React.FC<StickyBookingCardProps> = ({ car }) => 
       <div className="pb-4 border-b border-white/10">
         <span className="text-xs uppercase tracking-wider text-[#B6B6B6] font-semibold block">Daily Rate</span>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-extrabold font-heading text-white">€{car.daily_rate.toLocaleString()}</span>
+          <span className="text-3xl font-extrabold font-heading text-white">{formatPrice(car.daily_rate)}</span>
           <span className="text-xs text-[#B6B6B6]">/ day</span>
         </div>
       </div>
@@ -59,15 +61,15 @@ export const StickyBookingCard: React.FC<StickyBookingCardProps> = ({ car }) => 
       <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-[#B6B6B6]">
         <div className="flex justify-between">
           <span>Rental ({days} days)</span>
-          <span className="text-white font-semibold">€{totalAmount.toLocaleString()}</span>
+          <span className="text-white font-semibold">{formatPrice(totalAmount)}</span>
         </div>
         <div className="flex justify-between">
           <span>Security Deposit</span>
-          <span className="text-white font-semibold">€{car.security_deposit.toLocaleString()}</span>
+          <span className="text-white font-semibold">{formatPrice(car.security_deposit)}</span>
         </div>
         <div className="flex justify-between pt-2 border-t border-white/10 text-sm font-bold text-[#D4AF37]">
           <span>Estimated Total</span>
-          <span>€{totalAmount.toLocaleString()}</span>
+          <span>{formatPrice(totalAmount)}</span>
         </div>
       </div>
 

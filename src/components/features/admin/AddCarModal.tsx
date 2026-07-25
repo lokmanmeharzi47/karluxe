@@ -5,7 +5,7 @@ import { Brand, Category } from '@/types';
 import { addCarAction } from '@/app/actions/adminActions';
 import { LuxuryModal } from '@/components/ui/LuxuryModal';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
-import { Car, Loader2, CheckCircle2 } from 'lucide-react';
+import { Car, Loader2, Coins } from 'lucide-react';
 
 interface AddCarModalProps {
   isOpen: boolean;
@@ -26,7 +26,7 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
   const [brandId, setBrandId] = useState(brands[0]?.id || '');
   const [categoryId, setCategoryId] = useState(categories[0]?.id || '');
   const [year, setYear] = useState(2025);
-  const [dailyRate, setDailyRate] = useState(3000);
+  const [dailyRateEur, setDailyRateEur] = useState(3000);
   const [deposit, setDeposit] = useState(6000);
   const [transmission, setTransmission] = useState<'Automatic' | 'Dual-Clutch' | 'Manual'>('Dual-Clutch');
   const [fuelType, setFuelType] = useState<'Gasoline' | 'Hybrid' | 'Electric' | 'Twin-Turbo V8' | 'V12'>('Twin-Turbo V8');
@@ -42,6 +42,10 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Currency Conversions
+  const dailyRateDzd = Math.round(dailyRateEur * 240); // 1 EUR = 240 DZD (DA)
+  const dailyRateUsd = Math.round(dailyRateEur * 1.08); // 1 EUR = 1.08 USD ($)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -52,7 +56,7 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
       brandId: brandId || brands[0]?.id,
       categoryId: categoryId || categories[0]?.id,
       year: Number(year),
-      dailyRate: Number(dailyRate),
+      dailyRate: Number(dailyRateEur),
       securityDeposit: Number(deposit),
       transmission,
       fuelType,
@@ -133,17 +137,29 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
             </select>
           </div>
 
-          <div>
-            <label className="text-xs uppercase text-[#B6B6B6] font-semibold block mb-1">
-              Daily Rate (€)
+          {/* Daily Rate Input with Multi-Currency Live Preview */}
+          <div className="space-y-1.5">
+            <label className="text-xs uppercase text-[#B6B6B6] font-semibold block mb-1 flex items-center justify-between">
+              <span>Daily Rate (€ EUR)</span>
+              <Coins className="w-3.5 h-3.5 text-[#D4AF37]" />
             </label>
             <input
               type="number"
               required
-              value={dailyRate}
-              onChange={(e) => setDailyRate(Number(e.target.value))}
-              className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+              value={dailyRateEur}
+              onChange={(e) => setDailyRateEur(Number(e.target.value))}
+              className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-xl py-2.5 px-3 text-xs font-bold text-white focus:outline-none focus:border-[#D4AF37]"
             />
+
+            {/* Converted Currencies Live Badge */}
+            <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-[11px]">
+              <span className="text-[#D4AF37] font-semibold">
+                Dinar: {dailyRateDzd.toLocaleString('fr-DZ')} DA
+              </span>
+              <span className="text-emerald-400 font-semibold">
+                Dollar: ${dailyRateUsd.toLocaleString('en-US')}
+              </span>
+            </div>
           </div>
 
           <div>

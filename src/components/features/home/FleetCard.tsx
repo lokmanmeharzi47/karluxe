@@ -3,16 +3,19 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Zap, Gauge, Flame, ArrowRight, Heart, CheckCircle2 } from 'lucide-react';
+import { Zap, Gauge, Flame, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { CarWithDetails } from '@/types';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { GoldBadge } from '@/components/ui/GoldBadge';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 
 interface FleetCardProps {
   car: CarWithDetails;
 }
 
 export const FleetCard: React.FC<FleetCardProps> = ({ car }) => {
+  const { formatPrice } = useCurrencyStore();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -44,7 +47,7 @@ export const FleetCard: React.FC<FleetCardProps> = ({ car }) => {
         <div className="absolute bottom-4 left-4 z-10">
           <span className="text-xs uppercase text-[#B6B6B6] tracking-wider block font-semibold">Daily Rate</span>
           <span className="text-2xl font-extrabold font-heading text-white">
-            €{car.daily_rate.toLocaleString()}
+            {formatPrice(car.daily_rate)}
             <span className="text-xs font-normal text-[#B6B6B6]"> /day</span>
           </span>
         </div>
