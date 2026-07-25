@@ -1,20 +1,43 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
-  title: "Maison de Couture",
-  description: "Maison de Couture",
+  title: "KarLuxe — World-Class Luxury Car Rental Platform",
+  description: "Experience the apex of luxury automotive mobility. Rent Porsche 911 GT3 RS, Ferrari SF90 Stradale, Rolls-Royce Phantom, Lamborghini Revuelto, and Bentley in Monaco, Dubai, Paris, and Los Angeles.",
+  keywords: ["Luxury car rental", "Supercar rental", "Monaco luxury rental", "Chauffeur service", "Porsche GT3 RS rental", "Ferrari SF90 rental", "Rolls-Royce Phantom rental"],
+  openGraph: {
+    title: "KarLuxe — World-Class Luxury Car Rental Platform",
+    description: "Rent exotic supercars and executive chauffeured limousines across Monaco, Dubai, Paris, and Los Angeles.",
+    url: "https://karluxe.com",
+    siteName: "KarLuxe",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80",
+        width: 1200,
+        height: 630,
+        alt: "KarLuxe Luxury Car Rental",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KarLuxe — World-Class Luxury Car Rental Platform",
+    description: "Rent exotic supercars and executive chauffeured limousines.",
+    images: ["https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80"],
+  },
 };
 
 export default function RootLayout({
@@ -23,17 +46,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="fr"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" />
-      </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} dark scroll-smooth`}>
+      <body className="bg-[#050505] text-white min-h-screen flex flex-col font-sans antialiased">
+        {children}
+      </body>
     </html>
   );
 }
