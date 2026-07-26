@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ImageKitProviderWrapper } from "@/components/providers/ImageKitProviderWrapper";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -52,6 +54,8 @@ export default function RootLayout({
         <ImageKitProviderWrapper>
           {children}
         </ImageKitProviderWrapper>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
