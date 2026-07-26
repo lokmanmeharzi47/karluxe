@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Car, Mail, Share2, Globe, Shield } from 'lucide-react';
+import { Mail, Share2, Globe, Shield } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (

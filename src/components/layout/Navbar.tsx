@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Car, Heart, User, Menu, X, Shield } from 'lucide-react';
+import { Menu, X, Shield } from 'lucide-react';
 import { LuxuryButton } from '../ui/LuxuryButton';
 import { CurrencySwitcher } from './CurrencySwitcher';
 
