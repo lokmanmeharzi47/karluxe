@@ -47,7 +47,6 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-sm text-[#B6B6B6]">
               <li><Link href="/fleet" className="hover:text-white transition-colors">Flotte Supercars</Link></li>
               <li><Link href="/#services" className="hover:text-white transition-colors">Services VIP</Link></li>
-              <li><Link href="/#wedding" className="hover:text-white transition-colors">Mariages & Cortèges</Link></li>
               <li><Link href="/admin" className="hover:text-white transition-colors">Portail Exécutif</Link></li>
             </ul>
           </div>

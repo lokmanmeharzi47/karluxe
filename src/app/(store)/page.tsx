@@ -5,8 +5,6 @@ import { HeroSection } from '@/components/features/home/HeroSection';
 import { FeaturedFleet } from '@/components/features/home/FeaturedFleet';
 import { CategoriesSection } from '@/components/features/home/CategoriesSection';
 import { ServicesSection } from '@/components/features/home/ServicesSection';
-import { StatsSection } from '@/components/features/home/StatsSection';
-import { TestimonialsSection } from '@/components/features/home/TestimonialsSection';
 import { BrandsSection } from '@/components/features/home/BrandsSection';
 import { FaqSection } from '@/components/features/home/FaqSection';
 import { CtaSection } from '@/components/features/home/CtaSection';
@@ -58,13 +56,6 @@ export default async function HomePage() {
 
       {/* 4. Bespoke VIP Services */}
       <ServicesSection services={serviceList} />
-
-
-      {/* 6. Animated Statistics */}
-      <StatsSection stats={statsList} />
-
-      {/* 7. Testimonials */}
-      <TestimonialsSection reviews={reviewList} />
 
       {/* 8. Brands Marquee */}
       <BrandsSection brands={brandList} />
