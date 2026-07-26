@@ -46,10 +46,22 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
   // Live currency conversion
   const dailyRateDzd = Math.round(dailyRateEur * 240);
   const dailyRateUsd = Math.round(dailyRateEur * 1.08);
+  const ALLOWED_IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
+  const ALLOWED_IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'gif']);
+
+  const isAllowedImageFile = (file: File) => {
+    const mimeType = (file.type || '').toLowerCase();
+    if (ALLOWED_IMAGE_MIME_TYPES.has(mimeType)) return true;
+
+    const extension = file.name.split('.').pop()?.toLowerCase() || '';
+    return ALLOWED_IMAGE_EXTENSIONS.has(extension);
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    const files = Array.from(e.target.files).slice(0, 5);
+    const files = Array.from(e.target.files)
+      .filter(isAllowedImageFile)
+      .slice(0, 5);
     setImageFiles(files);
     const previews = files.map((f) => URL.createObjectURL(f));
     setImagePreviews(previews);
