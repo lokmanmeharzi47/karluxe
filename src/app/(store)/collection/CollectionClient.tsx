@@ -23,7 +23,7 @@ export default function CollectionClient({
   initialProducts: Product[], 
   titleOverride?: string 
 }) {
-  const [currentPage, setCurrentPage] = useState(1);
+
   const [favorites, setFavorites] = useState<string[]>([]);
   const [isFavoritesView, setIsFavoritesView] = useState(false);
 

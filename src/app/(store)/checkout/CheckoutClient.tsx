@@ -1,6 +1,6 @@
 "use client";
 
-import { Phone, MessageCircle, Mail, Trash2 } from "lucide-react";
+import { Phone, MessageCircle, Mail } from "lucide-react";
 import { useState } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { submitCheckout } from "@/app/actions/store";

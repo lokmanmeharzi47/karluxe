@@ -1,6 +1,6 @@
 import React from 'react';
 import { createServerClient } from '@/lib/supabase/server';
-import { CarWithDetails, Brand, Category, Review } from '@/types';
+import { CarWithDetails, Brand, Category } from '@/types';
 import { HeroSection } from '@/components/features/home/HeroSection';
 import { FeaturedFleet } from '@/components/features/home/FeaturedFleet';
 import { CategoriesSection } from '@/components/features/home/CategoriesSection';
@@ -37,7 +37,7 @@ export default async function HomePage() {
   const featuredCars = (cars as CarWithDetails[]) || [];
   const brandList = (brands as Brand[]) || [];
   const categoryList = (categories as Category[]) || [];
-  const reviewList = (reviews as Review[]) || [];
+  void reviews; // fetched for future use
   const faqList = faqs || [];
   const serviceList = services || [];
   const statsList = siteStats || [];

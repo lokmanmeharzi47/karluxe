@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useBookingStore } from '@/store/useBookingStore';
 import { useCurrencyStore } from '@/store/useCurrencyStore';
@@ -55,7 +56,7 @@ function BookingPageContent() {
       }
     }
     loadCars();
-  }, [carIdParam, setSelectedCar, setStep]);
+  }, [carIdParam, selectedCar, setSelectedCar, setStep]);
 
   useEffect(() => {
     if (daysParam) {
@@ -130,9 +131,11 @@ function BookingPageContent() {
         {selectedCar && currentStep > 1 && (
           <div className="mb-6 glass-panel rounded-2xl p-4 border border-[rgba(212,175,55,0.3)] bg-[#111111]/90 flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <img
+              <Image
                 src={selectedCar.featured_image}
                 alt={selectedCar.title}
+                width={64}
+                height={48}
                 className="w-16 h-12 rounded-xl object-cover"
               />
               <div>

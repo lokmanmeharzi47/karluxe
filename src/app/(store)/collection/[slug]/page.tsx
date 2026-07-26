@@ -38,7 +38,7 @@ export default async function CollectionSlugPage({ params }: { params: Promise<{
 
   const products = (rawProducts || []).map(p => {
     // Sum up the stock from all variants
-    const totalStock = p.product_variants?.reduce((acc: number, v: any) => acc + (v.stock || 0), 0) || 0;
+    const totalStock = p.product_variants?.reduce((acc: number, v: { stock: number | null }) => acc + (v.stock || 0), 0) || 0;
     
     return {
       id: p.id,
