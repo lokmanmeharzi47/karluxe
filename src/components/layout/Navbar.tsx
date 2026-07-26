@@ -31,19 +31,18 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-        scrolled
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${scrolled
           ? 'bg-[#050505]/80 backdrop-blur-xl border-b border-[rgba(212,175,55,0.2)] py-4 shadow-[0_10px_30px_rgba(0,0,0,0.8)]'
           : 'bg-transparent py-6'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <img 
-              src="/images/logo.png" 
-              alt="Karluxe Logo" 
+            <img
+              src="/images/logoheader.png"
+              alt="Karluxe Logo"
               className="w-32 h-auto object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
             />
           </Link>
@@ -56,9 +55,8 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`text-xs font-semibold tracking-widest uppercase transition-colors relative py-1 ${
-                    isActive ? 'text-[#D4AF37]' : 'text-white/80 hover:text-[#D4AF37]'
-                  }`}
+                  className={`text-xs font-semibold tracking-widest uppercase transition-colors relative py-1 ${isActive ? 'text-[#D4AF37]' : 'text-white/80 hover:text-[#D4AF37]'
+                    }`}
                 >
                   {link.name}
                   {isActive && (
@@ -118,7 +116,7 @@ export const Navbar: React.FC = () => {
                 </Link>
               ))}
 
-              
+
 
               <div className="pt-2">
                 <Link href="/booking" onClick={() => setMobileMenuOpen(false)}>

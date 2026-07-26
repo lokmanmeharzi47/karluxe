@@ -5,7 +5,6 @@ import { HeroSection } from '@/components/features/home/HeroSection';
 import { FeaturedFleet } from '@/components/features/home/FeaturedFleet';
 import { CategoriesSection } from '@/components/features/home/CategoriesSection';
 import { ServicesSection } from '@/components/features/home/ServicesSection';
-import { WeddingSection } from '@/components/features/home/WeddingSection';
 import { StatsSection } from '@/components/features/home/StatsSection';
 import { TestimonialsSection } from '@/components/features/home/TestimonialsSection';
 import { BrandsSection } from '@/components/features/home/BrandsSection';
@@ -60,8 +59,6 @@ export default async function HomePage() {
       {/* 4. Bespoke VIP Services */}
       <ServicesSection services={serviceList} />
 
-      {/* 5. Wedding Experience */}
-      <WeddingSection data={weddingMarketing} />
 
       {/* 6. Animated Statistics */}
       <StatsSection stats={statsList} />
