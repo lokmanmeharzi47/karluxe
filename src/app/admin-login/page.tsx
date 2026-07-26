@@ -34,9 +34,8 @@ export default function AdminLoginPage() {
 
       // Successful Supabase Authentication
       if (data?.session) {
-        localStorage.setItem('karluxe_admin_user', JSON.stringify(data.session.user));
-        localStorage.setItem('karluxe_admin_token', 'authenticated');
-        document.cookie = "karluxe_admin_session=authenticated; path=/; max-age=86400";
+        // Session handling is managed by Supabase auth persistence.
+        // Avoid storing authentication/user data in cleartext browser storage.
       }
 
       setLoading(false);
