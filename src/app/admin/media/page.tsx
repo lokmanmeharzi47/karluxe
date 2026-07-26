@@ -1,6 +1,8 @@
 import { getMediaFiles } from "@/app/actions/media";
 import MediaClient from "./MediaClient";
 
+export const dynamic = 'force-dynamic';
+
 export default async function MediaPage() {
   const files = await getMediaFiles();
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hbfeclrmacaxgssfrfxj.supabase.co';
