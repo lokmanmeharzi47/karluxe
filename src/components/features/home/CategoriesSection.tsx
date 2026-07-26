@@ -42,7 +42,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
             >
               <Link href={`/fleet?category=${cat.id}`} className="group block relative h-80 rounded-3xl overflow-hidden glass-panel border border-[rgba(212,175,55,0.2)]">
                 <img
-                  src={categoryImages[cat.name] || defaultImage}
+                  src={(cat as any).image_url || categoryImages[cat.name] || defaultImage}
                   alt={cat.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out filter brightness-75"
                 />

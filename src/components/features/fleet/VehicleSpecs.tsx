@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CarWithDetails } from '@/types';
-import { Zap, Flame, Gauge, Shield, Users, Fuel, Settings2, CheckCircle2 } from 'lucide-react';
+import { Shield, Users, CheckCircle2, CalendarDays, MapPin } from 'lucide-react';
 
 interface VehicleSpecsProps {
   car: CarWithDetails;
@@ -10,22 +10,18 @@ interface VehicleSpecsProps {
 
 export const VehicleSpecs: React.FC<VehicleSpecsProps> = ({ car }) => {
   const specs = [
-    { icon: Zap, label: '0-100 km/h', value: car.acceleration },
-    { icon: Flame, label: 'Horsepower', value: `${car.horsepower} HP` },
-    { icon: Gauge, label: 'Top Speed', value: car.top_speed },
-    { icon: Settings2, label: 'Engine', value: car.engine },
-    { icon: Fuel, label: 'Fuel / Powertrain', value: car.fuel_type },
-    { icon: Users, label: 'Seating Capacity', value: `${car.seats} Seats` },
     { icon: Shield, label: 'Transmission', value: car.transmission },
-    { icon: CheckCircle2, label: 'Model Year', value: car.year.toString() },
+    { icon: Users, label: 'Capacité', value: `${car.seats} Places` },
+    { icon: CalendarDays, label: 'Année Modèle', value: car.year.toString() },
+    { icon: MapPin, label: 'Agence', value: car.location },
   ];
 
   return (
     <div className="space-y-8">
-      {/* Metrics Grid */}
+      {/* Essentials Grid */}
       <div className="glass-panel rounded-3xl p-8 border border-[rgba(212,175,55,0.2)] bg-[#111111]/90">
         <h3 className="text-xl font-bold font-heading uppercase text-white mb-6">
-          Technical Specifications
+          Informations Clés
         </h3>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
@@ -50,7 +46,7 @@ export const VehicleSpecs: React.FC<VehicleSpecsProps> = ({ car }) => {
       {car.vehicle_features && car.vehicle_features.length > 0 && (
         <div className="glass-panel rounded-3xl p-8 border border-[rgba(212,175,55,0.2)] bg-[#111111]/90">
           <h3 className="text-xl font-bold font-heading uppercase text-white mb-6">
-            Bespoke Luxury Amenities
+            Équipements & Services
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

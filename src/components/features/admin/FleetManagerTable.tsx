@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import { CarWithDetails, Brand, Category } from '@/types';
-import { toggleCarAvailabilityAction } from '@/app/actions/adminActions';
+import { toggleCarAvailabilityAction, deleteCarAction } from '@/app/actions/adminActions';
 import { AddCarModal } from './AddCarModal';
+import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
-import { CheckCircle2, XCircle, Plus, Car } from 'lucide-react';
+import { CheckCircle2, XCircle, Plus, Car, Trash2, Pencil } from 'lucide-react';
 import { useCurrencyStore } from '@/store/useCurrencyStore';
 
 interface FleetManagerTableProps {
@@ -26,6 +27,8 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
   const [carList, setCarList] = useState(cars);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<CarWithDetails | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const { formatPrice } = useCurrencyStore();
 
   const handleToggle = async (carId: string, currentStatus: boolean) => {
@@ -41,12 +44,26 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
     }
   };
 
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    setDeleteLoading(true);
+    const res = await deleteCarAction(deleteTarget.id);
+    setDeleteLoading(false);
+
+    if (res.success) {
+      setCarList((prev) => prev.filter((c) => c.id !== deleteTarget.id));
+      setDeleteTarget(null);
+    } else {
+      alert(res.error || 'Échec de la suppression');
+    }
+  };
+
   return (
     <div className="glass-panel rounded-3xl p-6 border border-[rgba(212,175,55,0.2)] bg-[#111111]/90 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-xl font-bold font-heading uppercase text-white flex items-center gap-2">
-            <Car className="w-5 h-5 text-[#D4AF37]" /> Fleet Availability & Supercar Controls
+            <Car className="w-5 h-5 text-[#D4AF37]" /> Fleet Availability &amp; Supercar Controls
           </h3>
           <p className="text-xs text-[#B6B6B6] mt-1">Manage supercar status, location hubs, daily rates, and maintenance.</p>
         </div>
@@ -65,12 +82,12 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
               <th className="py-3 px-4">Daily Rate</th>
               <th className="py-3 px-4">Location</th>
               <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4 text-right">Action</th>
+              <th className="py-3 px-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5 font-medium">
             {carList.map((car) => (
-              <tr key={car.id} className="hover:bg-white/5 transition-colors">
+              <tr key={car.id} className="hover:bg-white/5 transition-colors group">
                 <td className="py-4 px-4 font-bold text-white flex items-center gap-3">
                   <img src={car.featured_image} alt={car.title} className="w-12 h-9 rounded-lg object-cover" />
                   {car.title}
@@ -89,14 +106,26 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
                     </span>
                   )}
                 </td>
-                <td className="py-4 px-4 text-right">
-                  <button
-                    disabled={loadingId === car.id}
-                    onClick={() => handleToggle(car.id, car.is_available ?? false)}
-                    className="px-3 py-1.5 rounded-xl border border-white/10 text-white hover:border-[#D4AF37] hover:text-[#D4AF37] transition-colors cursor-pointer"
-                  >
-                    {loadingId === car.id ? 'Updating...' : car.is_available ? 'Set Maintenance' : 'Set Available'}
-                  </button>
+                <td className="py-4 px-4">
+                  <div className="flex items-center justify-end gap-2">
+                    {/* Toggle availability */}
+                    <button
+                      disabled={loadingId === car.id}
+                      onClick={() => handleToggle(car.id, car.is_available ?? false)}
+                      className="px-3 py-1.5 rounded-xl border border-white/10 text-white hover:border-[#D4AF37] hover:text-[#D4AF37] transition-colors cursor-pointer text-[10px] font-semibold uppercase"
+                    >
+                      {loadingId === car.id ? '...' : car.is_available ? 'Maintenance' : 'Disponible'}
+                    </button>
+
+                    {/* Delete */}
+                    <button
+                      onClick={() => setDeleteTarget(car)}
+                      title="Supprimer"
+                      className="p-2 rounded-xl border border-white/10 text-[#B6B6B6] hover:border-rose-500/50 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -112,10 +141,17 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
         locations={locations}
         onCarAdded={(newCar) => {
           setCarList((prev) => [newCar, ...prev]);
-          if (onCarAdded) {
-            onCarAdded(newCar);
-          }
+          if (onCarAdded) onCarAdded(newCar);
         }}
+      />
+
+      <ConfirmDeleteModal
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteConfirm}
+        loading={deleteLoading}
+        title="Supprimer le Véhicule"
+        message={`Supprimer définitivement "${deleteTarget?.title}" ? Cette action est irréversible.`}
       />
     </div>
   );

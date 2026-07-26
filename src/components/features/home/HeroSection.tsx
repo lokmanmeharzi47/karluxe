@@ -74,37 +74,6 @@ export const HeroSection: React.FC = () => {
           </Link>
         </motion.div>
 
-        {/* Floating Quick Search Bento Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="max-w-4xl mx-auto glass-panel rounded-3xl p-4 sm:p-6 border border-[rgba(212,175,55,0.3)] shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/5">
-              <MapPin className="w-5 h-5 text-[#D4AF37]" />
-              <div className="text-left">
-                <span className="block text-[10px] uppercase tracking-wider text-[#B6B6B6] font-semibold">Emplacement / Wilaya</span>
-                <span className="text-sm font-bold text-white">16 - Alger</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/5">
-              <Calendar className="w-5 h-5 text-[#D4AF37]" />
-              <div className="text-left">
-                <span className="block text-[10px] uppercase tracking-wider text-[#B6B6B6] font-semibold">Date de Prise en Charge</span>
-                <span className="text-sm font-bold text-white">Aujourd'hui, 14:00</span>
-              </div>
-            </div>
-
-            <Link href="/fleet">
-              <LuxuryButton variant="gold" size="md" className="w-full">
-                Trouver un Véhicule
-              </LuxuryButton>
-            </Link>
-          </div>
-        </motion.div>
       </div>
 
       {/* Scroll Down Indicator */}
