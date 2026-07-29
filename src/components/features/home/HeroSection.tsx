@@ -13,8 +13,8 @@ export const HeroSection: React.FC = () => {
       {/* Background Image / Video Backdrop */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=2000&q=90"
-          alt="Porsche 911 GT3 RS Hero"
+          src="/hero-bg.png"
+          alt="Luxury Cars Background"
           className="w-full h-full object-cover object-center scale-105 filter brightness-75 contrast-110"
         />
         {/* Dark Gradient Overlay */}

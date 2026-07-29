@@ -59,17 +59,33 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    const files = Array.from(e.target.files)
-      .filter(isAllowedImageFile)
-      .slice(0, 5);
-    setImageFiles(files);
-    const previews = files.map((f) => URL.createObjectURL(f));
-    setImagePreviews(previews);
+    const newFiles = Array.from(e.target.files).filter(isAllowedImageFile);
+    
+    setImageFiles(prev => {
+      const combined = [...prev, ...newFiles].slice(0, 5);
+      return combined;
+    });
+    
+    setImagePreviews(prev => {
+      const newPreviews = newFiles.map(f => URL.createObjectURL(f));
+      const combined = [...prev, ...newPreviews].slice(0, 5);
+      return combined;
+    });
+    
+    if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+    }
   };
 
   const removeImage = (idx: number) => {
     setImageFiles((prev) => prev.filter((_, i) => i !== idx));
-    setImagePreviews((prev) => prev.filter((_, i) => i !== idx));
+    setImagePreviews((prev) => {
+      const toRemove = prev[idx];
+      if (toRemove && toRemove.startsWith('blob:')) {
+        URL.revokeObjectURL(toRemove);
+      }
+      return prev.filter((_, i) => i !== idx);
+    });
   };
 
   const resetForm = () => {
@@ -288,27 +304,43 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
             </label>
 
             {imagePreviews.length > 0 ? (
-              <div className="flex flex-wrap gap-2 mb-2">
-                {imagePreviews.map((src, idx) => (
-                  <div key={idx} className="relative group w-20 h-16">
-                    <img src={src} alt="" className="w-20 h-16 object-cover rounded-lg border border-[rgba(212,175,55,0.2)]" />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(idx)}
-                      className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                    {idx === 0 && (
-                      <span className="absolute bottom-0.5 left-0.5 text-[8px] bg-[#D4AF37] text-black font-bold rounded px-1">COVER</span>
+              <div className="space-y-3 mb-2">
+                {/* Large Cover Preview */}
+                <div className="relative group w-full h-48 rounded-xl overflow-hidden border border-[rgba(212,175,55,0.2)]">
+                  <img src={imagePreviews[0]} alt="Cover Preview" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(0)}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-rose-600/90 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                  <span className="absolute bottom-2 left-2 text-xs bg-[#D4AF37] text-black font-bold rounded px-2 py-0.5 z-10">IMAGE DE COUVERTURE</span>
+                </div>
+
+                {/* Additional Images Thumbnails */}
+                {imagePreviews.length > 1 || imagePreviews.length < 5 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {imagePreviews.slice(1).map((src, idx) => (
+                      <div key={idx + 1} className="relative group w-20 h-16">
+                        <img src={src} alt="" className="w-20 h-16 object-cover rounded-lg border border-[rgba(212,175,55,0.2)]" />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(idx + 1)}
+                          className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                    
+                    {imagePreviews.length < 5 && (
+                      <label htmlFor="car-images-upload" className="w-20 h-16 rounded-lg border-2 border-dashed border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] flex items-center justify-center cursor-pointer transition-colors bg-[#050505]">
+                        <ImagePlus className="w-5 h-5 text-[#D4AF37]/50 hover:text-[#D4AF37]" />
+                      </label>
                     )}
                   </div>
-                ))}
-                {imagePreviews.length < 5 && (
-                  <label htmlFor="car-images-upload" className="w-20 h-16 rounded-lg border-2 border-dashed border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] flex items-center justify-center cursor-pointer transition-colors">
-                    <ImagePlus className="w-5 h-5 text-[#D4AF37]/50 hover:text-[#D4AF37]" />
-                  </label>
-                )}
+                ) : null}
               </div>
             ) : (
               <label

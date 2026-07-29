@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Zap, Gauge, Flame, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { CarWithDetails } from '@/types';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { GoldBadge } from '@/components/ui/GoldBadge';
@@ -64,26 +64,6 @@ export const FleetCard: React.FC<FleetCardProps> = ({ car }) => {
           </p>
         </div>
 
-        {/* Specifications Metrics */}
-        <div className="grid grid-cols-3 gap-2 py-3 border-y border-white/10 text-center">
-          <div className="flex flex-col items-center">
-            <Zap className="w-4 h-4 text-[#D4AF37] mb-1" />
-            <span className="text-[10px] uppercase text-[#B6B6B6]">0-100 km/h</span>
-            <span className="text-xs font-bold text-white mt-0.5">{car.acceleration}</span>
-          </div>
-
-          <div className="flex flex-col items-center border-x border-white/10">
-            <Flame className="w-4 h-4 text-[#D4AF37] mb-1" />
-            <span className="text-[10px] uppercase text-[#B6B6B6]">Horsepower</span>
-            <span className="text-xs font-bold text-white mt-0.5">{car.horsepower} HP</span>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <Gauge className="w-4 h-4 text-[#D4AF37] mb-1" />
-            <span className="text-[10px] uppercase text-[#B6B6B6]">Top Speed</span>
-            <span className="text-xs font-bold text-white mt-0.5">{car.top_speed}</span>
-          </div>
-        </div>
 
         {/* Actions */}
         <div className="flex items-center gap-3 pt-2">
