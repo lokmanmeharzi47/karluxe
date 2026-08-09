@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Mail, Share2, Globe, Shield } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -15,9 +16,11 @@ export const Footer: React.FC = () => {
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-6">
             <Link href="/" className="flex items-center group">
-              <img 
-                src="/images/logo.png" 
-                alt="Karluxe Logo" 
+              <Image
+                src="/images/logo.png"
+                alt="Karluxe Logo"
+                width={1991}
+                height={1576}
                 className="w-36 h-auto object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
               />
             </Link>

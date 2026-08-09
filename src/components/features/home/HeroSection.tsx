@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Shield, Sparkles, ChevronDown, ArrowRight, Calendar, MapPin } from 'lucide-react';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
@@ -12,10 +13,14 @@ export const HeroSection: React.FC = () => {
     <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden bg-[#050505]">
       {/* Background Image / Video Backdrop */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src="/hero-bg.png"
           alt="Luxury Cars Background"
-          className="w-full h-full object-cover object-center scale-105 filter brightness-75 contrast-110"
+          fill
+          priority
+          sizes="100vw"
+          quality={70}
+          className="object-cover object-center scale-105 filter brightness-75 contrast-110"
         />
         {/* Dark Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-[#050505]/40" />

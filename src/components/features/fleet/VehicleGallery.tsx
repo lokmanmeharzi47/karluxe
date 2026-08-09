@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Image } from '@imagekit/next';
 import { motion } from 'framer-motion';
 import { Maximize2 } from 'lucide-react';
 import { LuxuryModal } from '@/components/ui/LuxuryModal';
@@ -24,10 +25,13 @@ export const VehicleGallery: React.FC<VehicleGalleryProps> = ({
     <div className="space-y-4">
       {/* Main Image Banner */}
       <div className="relative h-[420px] sm:h-[520px] rounded-3xl overflow-hidden glass-panel border border-[rgba(212,175,55,0.3)] bg-black group">
-        <img
+        <Image
           src={selectedImage}
           alt={title}
-          className="w-full h-full object-cover object-center filter brightness-95 transition-all duration-500"
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 66vw"
+          className="object-cover object-center filter brightness-95 transition-all duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
@@ -50,7 +54,7 @@ export const VehicleGallery: React.FC<VehicleGalleryProps> = ({
                 selectedImage === imgUrl ? 'border-[#D4AF37] scale-105' : 'border-transparent opacity-60 hover:opacity-100'
               }`}
             >
-              <img src={imgUrl} alt={`${title} ${index + 1}`} className="w-full h-full object-cover" />
+              <Image src={imgUrl} alt={`${title} ${index + 1}`} fill sizes="96px" className="object-cover" />
             </button>
           ))}
         </div>
@@ -59,7 +63,14 @@ export const VehicleGallery: React.FC<VehicleGalleryProps> = ({
       {/* Fullscreen Lightbox Modal */}
       <LuxuryModal isOpen={lightboxOpen} onClose={() => setLightboxOpen(false)} maxWidth="full" title={title}>
         <div className="relative max-h-[80vh] flex items-center justify-center bg-black rounded-2xl overflow-hidden">
-          <img src={selectedImage} alt={title} className="max-h-[75vh] w-auto object-contain mx-auto" />
+          <Image
+            src={selectedImage}
+            alt={title}
+            width={1600}
+            height={1067}
+            sizes="90vw"
+            className="max-h-[75vh] w-auto object-contain mx-auto"
+          />
         </div>
       </LuxuryModal>
     </div>

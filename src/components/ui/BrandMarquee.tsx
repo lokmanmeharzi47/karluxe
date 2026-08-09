@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { defaultLogos } from './CarLogos';
 
 interface BrandMarqueeProps {
@@ -30,9 +31,11 @@ export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
               style={{ minWidth: '140px' }}
             >
               {logoUrl ? (
-                <img
+                <Image
                   src={logoUrl}
                   alt={brand.name}
+                  width={80}
+                  height={80}
                   className="object-contain transition-all duration-500 ease-out"
                   style={{
                     height: '80px',

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { Image } from '@imagekit/next';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { CarWithDetails } from '@/types';
@@ -26,10 +27,12 @@ export const FleetCard: React.FC<FleetCardProps> = ({ car }) => {
     >
       {/* Vehicle Image Container */}
       <div className="relative h-64 overflow-hidden bg-black">
-        <img
+        <Image
           src={car.featured_image}
           alt={car.title}
-          className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out filter brightness-95"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out filter brightness-95"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-transparent to-black/40" />
 

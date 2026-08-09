@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { Image } from '@imagekit/next';
 import { motion } from 'framer-motion';
 import { Category } from '@/types';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -41,10 +42,12 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Link href={`/fleet?category=${cat.id}`} className="group block relative h-80 rounded-3xl overflow-hidden glass-panel border border-[rgba(212,175,55,0.2)]">
-                <img
+                <Image
                   src={(cat as any).image_url || categoryImages[cat.name] || defaultImage}
                   alt={cat.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out filter brightness-75"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out filter brightness-75"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent" />
 

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Image } from '@imagekit/next';
 import { useBookingStore } from '@/store/useBookingStore';
 import { useCurrencyStore } from '@/store/useCurrencyStore';
 import { CarWithDetails } from '@/types';
@@ -35,11 +36,15 @@ export const StepCarSelect: React.FC<StepCarSelectProps> = ({ cars }) => {
                   : 'border-white/10 hover:border-white/30 bg-[#111111]/80'
               }`}
             >
-              <img
-                src={car.featured_image}
-                alt={car.title}
-                className="w-24 h-20 rounded-2xl object-cover"
-              />
+              <div className="relative w-24 h-20 rounded-2xl overflow-hidden shrink-0">
+                <Image
+                  src={car.featured_image}
+                  alt={car.title}
+                  fill
+                  sizes="96px"
+                  className="object-cover"
+                />
+              </div>
               <div className="flex-1">
                 <h4 className="text-base font-bold font-heading text-white">{car.title}</h4>
                 <span className="text-xs text-[#D4AF37] font-semibold">{formatPrice(car.daily_rate)}/day</span>

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { Image } from '@imagekit/next';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { Heart, Sparkles, Shield, ArrowRight } from 'lucide-react';
@@ -58,10 +59,12 @@ export const WeddingSection: React.FC<WeddingSectionProps> = ({ data }) => {
 
             {data.image_url && (
               <div className="relative h-96 rounded-2xl overflow-hidden">
-                <img
+                <Image
                   src={data.image_url}
                   alt={data.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
               </div>
