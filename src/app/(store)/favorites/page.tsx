@@ -1,9 +1,13 @@
-import { createClient } from "@/utils/supabase/server";
+import { createStaticClient } from "@/utils/supabase/server";
 import CollectionClient from "../collection/CollectionClient";
 import { Suspense } from "react";
 
+// The favorites themselves live in localStorage and are filtered on the client,
+// so the product list this page ships is the same for every visitor.
+export const revalidate = 60;
+
 export default async function FavoritesPage() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
 
   // Fetch all published products so the client can filter by local storage favorites
   const { data: rawProducts, error: productsError } = await supabase

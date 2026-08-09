@@ -4,10 +4,15 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Shield } from 'lucide-react';
 import { LuxuryButton } from '../ui/LuxuryButton';
 import { CurrencySwitcher } from './CurrencySwitcher';
+
+const navLinks = [
+  { name: 'Flotte Supercars', href: '/fleet' },
+  { name: 'Services VIP', href: '/#services' },
+  { name: 'FAQ', href: '/#faq' },
+];
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -18,15 +23,11 @@ export const Navbar: React.FC = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    // Passive: this listener never calls preventDefault, and marking it so keeps
+    // it off the scrolling critical path.
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const navLinks = [
-    { name: 'Flotte Supercars', href: '/fleet' },
-    { name: 'Services VIP', href: '/#services' },
-    { name: 'FAQ', href: '/#faq' },
-  ];
 
   return (
     <header
@@ -40,10 +41,10 @@ export const Navbar: React.FC = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center group">
             <Image
-              src="/images/logoheader.png"
+              src="/images/logoheader.webp"
               alt="Karluxe Logo"
-              width={1750}
-              height={1230}
+              width={400}
+              height={281}
               priority
               className="w-16 h-auto object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
             />
@@ -62,10 +63,7 @@ export const Navbar: React.FC = () => {
                 >
                   {link.name}
                   {isActive && (
-                    <motion.div
-                      layoutId="activeNavIndicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#D4AF37] rounded-full"
-                    />
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#D4AF37] rounded-full" />
                   )}
                 </Link>
               );
@@ -89,6 +87,8 @@ export const Navbar: React.FC = () => {
             <CurrencySwitcher />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              aria-expanded={mobileMenuOpen}
               className="p-2.5 rounded-xl glass-panel text-white hover:text-[#D4AF37] cursor-pointer"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -97,15 +97,16 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-panel border-b border-[rgba(212,175,55,0.2)] mt-4 px-6 py-6 bg-[#050505]/95 backdrop-blur-2xl"
-          >
+      {/*
+        Mobile drawer. The 0fr -> 1fr grid row is the CSS equivalent of animating
+        to height:auto, which is the only thing AnimatePresence was doing here.
+      */}
+      <div
+        className={`md:hidden grid transition-all duration-300 ease-out motion-reduce:transition-none ${mobileMenuOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+          }`}
+      >
+        <div className="overflow-hidden">
+          <div className="glass-panel border-b border-[rgba(212,175,55,0.2)] mt-4 px-6 py-6 bg-[#050505]/95 backdrop-blur-2xl">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
                 <Link
@@ -118,8 +119,6 @@ export const Navbar: React.FC = () => {
                 </Link>
               ))}
 
-
-
               <div className="pt-2">
                 <Link href="/booking" onClick={() => setMobileMenuOpen(false)}>
                   <LuxuryButton variant="gold" size="md" className="w-full">
@@ -128,9 +127,9 @@ export const Navbar: React.FC = () => {
                 </Link>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </header>
   );
 };

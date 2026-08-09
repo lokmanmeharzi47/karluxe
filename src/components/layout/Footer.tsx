@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -17,10 +15,11 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-2 space-y-6">
             <Link href="/" className="flex items-center group">
               <Image
-                src="/images/logo.png"
+                src="/images/logo.webp"
                 alt="Karluxe Logo"
-                width={1991}
-                height={1576}
+                width={600}
+                height={475}
+                loading="lazy"
                 className="w-36 h-auto object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
               />
             </Link>

@@ -4,7 +4,10 @@ const nextConfig: NextConfig = {
   /* config options here */
   images: {
     formats: ['image/avif', 'image/webp'],
-    qualities: [70, 75],
+    qualities: [70, 75, 82],
+    // Local art is now pre-sized WebP, so optimized variants stay valid for a
+    // year instead of being re-derived every 60s (the default).
+    minimumCacheTTL: 31536000,
   },
   experimental: {
     serverActions: {

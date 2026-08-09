@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { createClient } from "@/utils/supabase/server";
+import { createStaticClient } from "@/utils/supabase/server";
 import CollectionsListClient from "./CollectionsListClient";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Nos Collections",
@@ -8,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CollectionsPage() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
 
   // Fetch all active collections
   const { data: collections, error } = await supabase

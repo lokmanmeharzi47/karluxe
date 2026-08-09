@@ -1,5 +1,5 @@
 import React from 'react';
-import { createServerClient } from '@/lib/supabase/server';
+import { createStaticClient } from '@/lib/supabase/server';
 import { CarWithDetails, Brand, Category } from '@/types';
 import { HeroSection } from '@/components/features/home/HeroSection';
 import { FeaturedFleet } from '@/components/features/home/FeaturedFleet';
@@ -12,7 +12,7 @@ import { CtaSection } from '@/components/features/home/CtaSection';
 export const revalidate = 60; // Revalidate page every 60 seconds
 
 export default async function HomePage() {
-  const supabase = await createServerClient();
+  const supabase = createStaticClient();
 
   const [
     { data: cars },
@@ -21,16 +21,24 @@ export default async function HomePage() {
     { data: faqs },
     { data: services },
   ] = await Promise.all([
-    supabase.from('cars').select('*, brands(*), categories(*)').order('created_at', { ascending: false }),
-    supabase.from('brands').select('*').order('name'),
-    supabase.from('categories').select('*').order('name'),
-    supabase.from('faqs').select('*').order('sort_order', { ascending: true }),
-    supabase.from('services').select('*').order('created_at', { ascending: true }),
+    // Only the 6 cards rendered by FeaturedFleet — the page used to pull every
+    // car with full brand/category joins and throw all but six away.
+    supabase
+      .from('cars')
+      .select('id, slug, title, description, daily_rate, featured_image, brands(name)')
+      .order('created_at', { ascending: false })
+      .limit(6),
+    supabase.from('brands').select('id, name, logo_url').order('name'),
+    supabase.from('categories').select('id, name, description, image_url').order('name'),
+    supabase.from('faqs').select('id, question, answer').order('sort_order', { ascending: true }),
+    supabase.from('services').select('id, title, description, icon').order('created_at', { ascending: true }),
   ]);
 
-  const featuredCars = (cars as CarWithDetails[]) || [];
-  const brandList = (brands as Brand[]) || [];
-  const categoryList = (categories as Category[]) || [];
+  // Casts go through `unknown` because the selects above are narrowed to the
+  // columns each section actually renders, not the full row shape.
+  const featuredCars = (cars as unknown as CarWithDetails[]) || [];
+  const brandList = (brands as unknown as Brand[]) || [];
+  const categoryList = (categories as unknown as Category[]) || [];
   const faqList = faqs || [];
   const serviceList = services || [];
 

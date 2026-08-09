@@ -58,6 +58,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${inter.variable} ${spaceGrotesk.variable} dark scroll-smooth`}>
+      <head>
+        {/* Marks that scripting is available before first paint, which gates the
+            scroll-reveal starting state. Inline and synchronous on purpose: if it
+            ran later, revealed sections would flash in. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js')",
+          }}
+        />
+      </head>
       <body className="bg-[#050505] text-white min-h-screen flex flex-col font-sans antialiased">
         <ImageKitProviderWrapper>
           {children}

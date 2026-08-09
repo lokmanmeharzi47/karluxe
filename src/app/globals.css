@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/*
+ * next/font ships each family under a generated, hashed name and exposes it via
+ * these CSS variables. Referencing 'Inter' / 'Space Grotesk' by their literal
+ * names instead only matched a locally-installed copy, so the self-hosted files
+ * were downloaded on every visit and then never used. Mapping them into
+ * Tailwind's theme wires `font-sans` / `font-heading` to the real families.
+ */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+}
+
 @layer base {
   :root {
     --background: #050505;
@@ -14,13 +26,13 @@
   body {
     background-color: var(--background);
     color: var(--text-white);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-sans);
     overflow-x: hidden;
     scroll-behavior: smooth;
   }
 
   h1, h2, h3, h4, h5, h6, .font-heading {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: var(--font-heading);
     letter-spacing: -0.02em;
   }
 }
@@ -57,6 +69,120 @@
 
 .gold-border-gradient {
   border-image: linear-gradient(to right, rgba(212,175,55,0.4), rgba(232,198,90,0.1)) 1;
+}
+
+/*
+ * Entry animations.
+ *
+ * These replace framer-motion on the public pages. The hero variants are pure
+ * CSS so above-the-fold content paints with the server HTML instead of sitting
+ * at opacity:0 until the animation library hydrates.
+ */
+/* Scoped to .js so the starting (hidden) state only applies when the observer
+   that clears it can actually run. Without this, a failed/blocked JS bundle —
+   or a crawler that doesn't execute scripts — would see empty sections. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes float-y {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+.animate-float-y {
+  animation: float-y 2s ease-in-out infinite;
+}
+
+@keyframes brand-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* The track renders the brand list twice, so -50% is exactly one loop. */
+    transform: translateX(-50%);
+  }
+}
+
+.animate-brand-marquee {
+  display: flex;
+  width: max-content;
+  animation: brand-marquee 30s linear infinite;
+}
+
+.animate-brand-marquee:hover {
+  animation-play-state: paused;
+}
+
+.brand-logo {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.45;
+  filter: grayscale(100%) brightness(1.8);
+  transition: opacity 0.5s ease-out, filter 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.brand-logo:hover {
+  opacity: 1;
+  filter: grayscale(0%) brightness(1) drop-shadow(0 0 20px rgba(212, 175, 55, 0.3));
+  transform: scale(1.1);
+}
+
+.brand-wordmark {
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.25);
+  transition: color 0.5s ease-out, text-shadow 0.5s ease-out;
+}
+
+.brand-wordmark:hover {
+  color: #d4af37;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal,
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .animate-fade-up,
+  .animate-float-y,
+  .animate-brand-marquee {
+    animation: none;
+  }
 }
 
 /* Custom Luxury Scrollbar */

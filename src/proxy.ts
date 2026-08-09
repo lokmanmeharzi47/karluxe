@@ -8,12 +8,12 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
+     * Only the admin area is auth-gated, so the session refresh only needs to run
+     * there. Matching every route made `supabase.auth.getUser()` — a network call
+     * to the Supabase auth server — block the render of every public page, and
+     * opted those pages out of static caching.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/admin/:path*',
+    '/dashboard/:path*',
   ],
 }

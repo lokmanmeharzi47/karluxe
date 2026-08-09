@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { createServerClient } from '@/lib/supabase/server';
+import { createStaticClient } from '@/lib/supabase/server';
 import { CarWithDetails, Brand, Category } from '@/types';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { FleetFilters } from '@/components/features/fleet/FleetFilters';
@@ -14,17 +14,23 @@ export const metadata: Metadata = {
 };
 
 export default async function FleetPage() {
-  const supabase = await createServerClient();
+  const supabase = createStaticClient();
 
   const [{ data: cars }, { data: brands }, { data: categories }] = await Promise.all([
-    supabase.from('cars').select('*, brands(*), categories(*)').order('created_at', { ascending: false }),
-    supabase.from('brands').select('*').order('name'),
-    supabase.from('categories').select('*').order('name'),
+    // Columns FleetGrid renders plus the ones FleetFilters filters/sorts on.
+    supabase
+      .from('cars')
+      .select(
+        'id, slug, title, description, daily_rate, featured_image, brand_id, category_id, transmission, year, brands(name)'
+      )
+      .order('created_at', { ascending: false }),
+    supabase.from('brands').select('id, name').order('name'),
+    supabase.from('categories').select('id, name').order('name'),
   ]);
 
-  const carList = (cars as CarWithDetails[]) || [];
-  const brandList = (brands as Brand[]) || [];
-  const categoryList = (categories as Category[]) || [];
+  const carList = (cars as unknown as CarWithDetails[]) || [];
+  const brandList = (brands as unknown as Brand[]) || [];
+  const categoryList = (categories as unknown as Category[]) || [];
 
   return (
     <div className="bg-[#050505] min-h-screen text-white pt-32 pb-24 selection:bg-[#D4AF37] selection:text-black">

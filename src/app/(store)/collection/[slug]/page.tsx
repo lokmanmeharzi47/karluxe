@@ -1,12 +1,14 @@
 import { cache } from "react";
 import type { Metadata } from "next";
-import { createClient } from "@/utils/supabase/server";
+import { createStaticClient } from "@/utils/supabase/server";
 import CollectionClient from "../CollectionClient";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+export const revalidate = 60;
+
 const getCollection = cache(async (slug: string) => {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from('collections')
     .select('id, name')
@@ -28,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function CollectionSlugPage({ params }: { params: Promise<{ slug: string }> }) {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { slug } = await params;
 
   // 1. Fetch the collection details

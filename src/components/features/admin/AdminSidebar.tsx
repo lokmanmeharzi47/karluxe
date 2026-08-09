@@ -26,10 +26,10 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
         {/* Brand Header */}
         <Link href="/" className="flex items-center justify-center group mb-4">
           <Image
-            src="/images/logo.png"
+            src="/images/logo.webp"
             alt="Karluxe Logo"
-            width={1991}
-            height={1576}
+            width={600}
+            height={475}
             className="w-40 h-auto object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
           />
         </Link>

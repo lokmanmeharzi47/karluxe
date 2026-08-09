@@ -1,12 +1,10 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import { Image } from '@imagekit/next';
-import { motion } from 'framer-motion';
 import { Category } from '@/types';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { ArrowRight, Flame, Shield, Zap, Sparkles, Heart } from 'lucide-react';
+import { Reveal } from '@/components/ui/Reveal';
+import { ArrowRight } from 'lucide-react';
 
 interface CategoriesSectionProps {
   categories: Category[];
@@ -34,13 +32,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((cat, index) => (
-            <motion.div
-              key={cat.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
+            <Reveal key={cat.id} delay={index * 100}>
               <Link href={`/fleet?category=${cat.id}`} className="group block relative h-80 rounded-3xl overflow-hidden glass-panel border border-[rgba(212,175,55,0.2)]">
                 <Image
                   src={(cat as any).image_url || categoryImages[cat.name] || defaultImage}
@@ -68,7 +60,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
                   </div>
                 </div>
               </Link>
-            </motion.div>
+            </Reveal>
           ))}
         </div>
       </div>

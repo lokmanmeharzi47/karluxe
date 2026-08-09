@@ -2,7 +2,7 @@ import React from 'react';
 import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { createServerClient } from '@/lib/supabase/server';
+import { createStaticClient } from '@/lib/supabase/server';
 import { CarWithDetails } from '@/types';
 import { VehicleGallery } from '@/components/features/fleet/VehicleGallery';
 import { VehicleSpecs } from '@/components/features/fleet/VehicleSpecs';
@@ -17,7 +17,7 @@ interface PageProps {
 export const revalidate = 60;
 
 const getCar = cache(async (slug: string) => {
-  const supabase = await createServerClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from('cars')
     .select('*, brands(*), categories(*), vehicle_images(*), vehicle_features(*), reviews(*)')

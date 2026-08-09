@@ -1,11 +1,13 @@
 import { cache } from "react";
 import type { Metadata } from "next";
-import { createClient } from "@/utils/supabase/server";
+import { createStaticClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import ProductDetailsClient from "./ProductDetailsClient";
 
+export const revalidate = 60;
+
 const getProduct = cache(async (slug: string) => {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from('products')
     .select(`

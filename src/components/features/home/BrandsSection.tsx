@@ -1,8 +1,6 @@
-'use client';
-
 import React from 'react';
-import { motion } from 'framer-motion';
 import { BrandMarquee } from '@/components/ui/BrandMarquee';
+import { Reveal } from '@/components/ui/Reveal';
 import { Brand } from '@/types';
 
 interface BrandsSectionProps {
@@ -21,13 +19,7 @@ export const BrandsSection: React.FC<BrandsSectionProps> = ({ brands }) => {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(212,175,55,0.25)] to-transparent" />
 
       {/* Heading */}
-      <motion.div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center relative z-10"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.7, ease: 'easeOut' }}
-      >
+      <Reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center relative z-10">
         <span className="text-[11px] uppercase tracking-[0.4em] font-semibold text-[#D4AF37]/80 block mb-4">
           Elite Automotive Partners
         </span>
@@ -35,17 +27,12 @@ export const BrandsSection: React.FC<BrandsSectionProps> = ({ brands }) => {
           Nos Marques Partenaires
         </h2>
         <div className="mt-5 mx-auto w-16 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
-      </motion.div>
+      </Reveal>
 
       {/* Marquee */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
+      <Reveal delay={200}>
         <BrandMarquee brands={brands} />
-      </motion.div>
+      </Reveal>
 
       {/* Bottom decorative line */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(212,175,55,0.25)] to-transparent" />

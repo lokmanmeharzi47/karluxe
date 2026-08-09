@@ -29,7 +29,7 @@ export default async function ProductsPage() {
     
     return {
       id: p.id,
-      image: p.cover_image || (p.product_images?.[0]?.image_url) || "/images/placeholder.png",
+      image: p.cover_image || (p.product_images?.[0]?.image_url) || "/images/placeholder.webp",
       name: p.name,
       sku: p.sku || "N/A",
       price: p.price,
