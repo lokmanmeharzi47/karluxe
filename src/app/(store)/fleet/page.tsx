@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import { createServerClient } from '@/lib/supabase/server';
 import { CarWithDetails, Brand, Category } from '@/types';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -6,6 +7,11 @@ import { FleetFilters } from '@/components/features/fleet/FleetFilters';
 import { FleetGrid } from '@/components/features/fleet/FleetGrid';
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: 'Notre Flotte de Supercars',
+  description: "Découvrez notre flotte de voitures de luxe : Ferrari, Porsche, Lamborghini, Rolls-Royce et Mercedes-Maybach. Filtrez par marque, catégorie et tarif pour trouver votre supercar idéale en Algérie.",
+};
 
 export default async function FleetPage() {
   const supabase = await createServerClient();

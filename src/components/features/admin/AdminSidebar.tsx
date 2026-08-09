@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Car, LayoutDashboard, Calendar, Layers, Award, Building2, DollarSign, LogOut } from 'lucide-react';
 
@@ -24,9 +25,11 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
       <div className="space-y-8">
         {/* Brand Header */}
         <Link href="/" className="flex items-center justify-center group mb-4">
-          <img 
-            src="/images/logo.png" 
-            alt="Karluxe Logo" 
+          <Image
+            src="/images/logo.png"
+            alt="Karluxe Logo"
+            width={1991}
+            height={1576}
             className="w-40 h-auto object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
           />
         </Link>

@@ -1,10 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Image } from '@imagekit/next';
 import { CarWithDetails, Brand, Category } from '@/types';
 import { toggleCarAvailabilityAction, deleteCarAction } from '@/app/actions/adminActions';
-import { AddCarModal } from './AddCarModal';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
+
+const AddCarModal = dynamic(() => import('./AddCarModal').then((m) => m.AddCarModal));
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { CheckCircle2, XCircle, Plus, Car, Trash2, Pencil } from 'lucide-react';
 import { useCurrencyStore } from '@/store/useCurrencyStore';
@@ -89,7 +92,7 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
             {carList.map((car) => (
               <tr key={car.id} className="hover:bg-white/5 transition-colors group">
                 <td className="py-4 px-4 font-bold text-white flex items-center gap-3">
-                  <img src={car.featured_image} alt={car.title} className="w-12 h-9 rounded-lg object-cover" />
+                  <Image src={car.featured_image} alt={car.title} width={96} height={72} className="w-12 h-9 rounded-lg object-cover" />
                   {car.title}
                 </td>
                 <td className="py-4 px-4 text-[#D4AF37] font-semibold">{car.brands?.name || 'Supercar'}</td>
@@ -133,17 +136,19 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
         </table>
       </div>
 
-      <AddCarModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        brands={brands}
-        categories={categories}
-        locations={locations}
-        onCarAdded={(newCar) => {
-          setCarList((prev) => [newCar, ...prev]);
-          if (onCarAdded) onCarAdded(newCar);
-        }}
-      />
+      {modalOpen && (
+        <AddCarModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          brands={brands}
+          categories={categories}
+          locations={locations}
+          onCarAdded={(newCar) => {
+            setCarList((prev) => [newCar, ...prev]);
+            if (onCarAdded) onCarAdded(newCar);
+          }}
+        />
+      )}
 
       <ConfirmDeleteModal
         isOpen={!!deleteTarget}

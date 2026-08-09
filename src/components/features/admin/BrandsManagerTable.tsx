@@ -1,10 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Image } from '@imagekit/next';
 import { Brand } from '@/types';
 import { ShieldCheck, Plus, Award } from 'lucide-react';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
-import { AddBrandModal } from './AddBrandModal';
+
+const AddBrandModal = dynamic(() => import('./AddBrandModal').then((m) => m.AddBrandModal));
 
 interface BrandsManagerTableProps {
   brands: Brand[];
@@ -53,7 +56,7 @@ export const BrandsManagerTable: React.FC<BrandsManagerTableProps> = ({ brands, 
               <tr key={brand.id} className="hover:bg-white/5 transition-colors">
                 <td className="py-4 px-4 font-bold text-white flex items-center gap-3">
                   {brand.logo_url && (
-                    <img src={brand.logo_url} alt={brand.name} className="w-6 h-6 object-contain rounded-md" />
+                    <Image src={brand.logo_url} alt={brand.name} width={24} height={24} className="w-6 h-6 object-contain rounded-md" />
                   )}
                   {brand.name}
                 </td>
@@ -70,11 +73,13 @@ export const BrandsManagerTable: React.FC<BrandsManagerTableProps> = ({ brands, 
         </table>
       </div>
 
-      <AddBrandModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onAdded={handleBrandAdded}
-      />
+      {modalOpen && (
+        <AddBrandModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onAdded={handleBrandAdded}
+        />
+      )}
     </div>
   );
 };

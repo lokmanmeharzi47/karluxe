@@ -1,21 +1,40 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { createClient } from "@/utils/supabase/server";
 import CollectionClient from "../CollectionClient";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+
+const getCollection = cache(async (slug: string) => {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('collections')
+    .select('id, name')
+    .eq('slug', slug)
+    .maybeSingle();
+  return data;
+});
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const collection = await getCollection(slug);
+
+  if (!collection) return {};
+
+  return {
+    title: collection.name,
+    description: `Découvrez la collection ${collection.name} chez KarLuxe.`,
+  };
+}
 
 export default async function CollectionSlugPage({ params }: { params: Promise<{ slug: string }> }) {
   const supabase = await createClient();
   const { slug } = await params;
 
   // 1. Fetch the collection details
-  const { data: collection, error: collectionError } = await supabase
-    .from('collections')
-    .select('id, name')
-    .eq('slug', slug)
-    .maybeSingle();
+  const collection = await getCollection(slug);
 
-  if (collectionError || !collection) {
-    console.error("Collection not found:", collectionError);
+  if (!collection) {
     notFound();
   }
 

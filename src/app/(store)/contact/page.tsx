@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { getStoreSettings } from "@/lib/storeSettings";
 import { MapPin, Phone, MessageCircle, Mail, Clock, Globe } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Contactez KarLuxe pour réserver votre voiture de luxe en Algérie. Alger, Oran — service concierge VIP disponible 7j/7.",
+};
 
 export default async function ContactPage() {
   const storeSettings = await getStoreSettings();

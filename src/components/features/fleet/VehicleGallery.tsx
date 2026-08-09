@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Image } from '@imagekit/next';
-import { motion } from 'framer-motion';
 import { Maximize2 } from 'lucide-react';
-import { LuxuryModal } from '@/components/ui/LuxuryModal';
+
+const LuxuryModal = dynamic(() => import('@/components/ui/LuxuryModal').then((m) => m.LuxuryModal));
 
 interface VehicleGalleryProps {
   images: { id: string; url: string; is_primary?: boolean }[];
@@ -61,18 +62,20 @@ export const VehicleGallery: React.FC<VehicleGalleryProps> = ({
       )}
 
       {/* Fullscreen Lightbox Modal */}
-      <LuxuryModal isOpen={lightboxOpen} onClose={() => setLightboxOpen(false)} maxWidth="full" title={title}>
-        <div className="relative max-h-[80vh] flex items-center justify-center bg-black rounded-2xl overflow-hidden">
-          <Image
-            src={selectedImage}
-            alt={title}
-            width={1600}
-            height={1067}
-            sizes="90vw"
-            className="max-h-[75vh] w-auto object-contain mx-auto"
-          />
-        </div>
-      </LuxuryModal>
+      {lightboxOpen && (
+        <LuxuryModal isOpen={lightboxOpen} onClose={() => setLightboxOpen(false)} maxWidth="full" title={title}>
+          <div className="relative max-h-[80vh] flex items-center justify-center bg-black rounded-2xl overflow-hidden">
+            <Image
+              src={selectedImage}
+              alt={title}
+              width={1600}
+              height={1067}
+              sizes="90vw"
+              className="max-h-[75vh] w-auto object-contain mx-auto"
+            />
+          </div>
+        </LuxuryModal>
+      )}
     </div>
   );
 };

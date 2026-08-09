@@ -16,13 +16,21 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "KarLuxe — Location de Voitures de Luxe en Algérie",
+  metadataBase: new URL("https://www.karluxlocation.com"),
+  title: {
+    default: "KarLuxe — Location de Voitures de Luxe en Algérie",
+    template: "%s | KarLuxe",
+  },
   description: "La référence de la location de voitures de luxe en Algérie. Louez Porsche, Ferrari, Rolls-Royce, Lamborghini et Bentley à Alger, Oran et partout en Algérie.",
   keywords: ["Location voiture de luxe Algérie", "Location supercar Alger", "Location Porsche Algérie", "Chauffeur privé Algérie", "Location Ferrari Alger", "Location Rolls-Royce Algérie", "Voiture prestige Oran"],
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     title: "KarLuxe — Location de Voitures de Luxe en Algérie",
     description: "Louez des supercars d'exception et des berlines de prestige avec chauffeur privé partout en Algérie.",
-    url: "https://karluxe.com",
+    url: "https://www.karluxlocation.com",
     siteName: "KarLuxe",
     images: [
       {

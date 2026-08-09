@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { createClient } from "@/utils/supabase/server";
 import CollectionsListClient from "./CollectionsListClient";
+
+export const metadata: Metadata = {
+  title: "Nos Collections",
+  description: "Explorez les collections KarLuxe et trouvez la pièce qui vous correspond.",
+};
 
 export default async function CollectionsPage() {
   const supabase = await createClient();

@@ -18,30 +18,21 @@ export default async function HomePage() {
     { data: cars },
     { data: brands },
     { data: categories },
-    { data: reviews },
     { data: faqs },
     { data: services },
-    { data: siteStats },
-    { data: marketingSections }
   ] = await Promise.all([
     supabase.from('cars').select('*, brands(*), categories(*)').order('created_at', { ascending: false }),
     supabase.from('brands').select('*').order('name'),
     supabase.from('categories').select('*').order('name'),
-    supabase.from('reviews').select('*').order('created_at', { ascending: false }),
     supabase.from('faqs').select('*').order('sort_order', { ascending: true }),
     supabase.from('services').select('*').order('created_at', { ascending: true }),
-    supabase.from('site_stats').select('*').order('sort_order', { ascending: true }),
-    supabase.from('marketing_sections').select('*')
   ]);
 
   const featuredCars = (cars as CarWithDetails[]) || [];
   const brandList = (brands as Brand[]) || [];
   const categoryList = (categories as Category[]) || [];
-  void reviews; // fetched for future use
   const faqList = faqs || [];
   const serviceList = services || [];
-  const statsList = siteStats || [];
-  const weddingMarketing = marketingSections?.find(section => section.section_id === 'wedding') || null;
 
   return (
     <div className="bg-[#050505] text-white selection:bg-[#D4AF37] selection:text-black">

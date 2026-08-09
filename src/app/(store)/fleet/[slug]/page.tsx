@@ -1,5 +1,7 @@
 import React from 'react';
+import { cache } from 'react';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { createServerClient } from '@/lib/supabase/server';
 import { CarWithDetails } from '@/types';
 import { VehicleGallery } from '@/components/features/fleet/VehicleGallery';
@@ -14,15 +16,47 @@ interface PageProps {
 
 export const revalidate = 60;
 
-export default async function VehicleDetailPage({ params }: PageProps) {
-  const { slug } = await params;
+const getCar = cache(async (slug: string) => {
   const supabase = await createServerClient();
-
-  const { data: carData } = await supabase
+  const { data } = await supabase
     .from('cars')
     .select('*, brands(*), categories(*), vehicle_images(*), vehicle_features(*), reviews(*)')
     .eq('slug', slug)
     .single();
+  return data;
+});
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const car = await getCar(slug);
+
+  if (!car) return {};
+
+  const brandName = (car.brands as any)?.name;
+  const title = brandName ? `Location ${car.title} — ${brandName}` : `Location ${car.title}`;
+  const description = car.description || `Louez ${car.title} en Algérie avec service concierge VIP. Livraison à Alger, Oran et partout en Algérie.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: car.featured_image ? [{ url: car.featured_image, width: 1200, height: 630, alt: car.title }] : undefined,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: car.featured_image ? [car.featured_image] : undefined,
+    },
+  };
+}
+
+export default async function VehicleDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const carData = await getCar(slug);
 
   if (!carData) {
     notFound();

@@ -1,12 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Image } from '@imagekit/next';
 import { Category } from '@/types';
 import { deleteCategoryAction, updateCategoryAction } from '@/app/actions/adminActions';
 import { Layers, Plus, Sparkles, Trash2, Pencil, Check, X } from 'lucide-react';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
-import { AddCategoryModal } from './AddCategoryModal';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
+
+const AddCategoryModal = dynamic(() => import('./AddCategoryModal').then((m) => m.AddCategoryModal));
 
 interface CategoriesManagerTableProps {
   categories: Category[];
@@ -107,9 +110,11 @@ export const CategoriesManagerTable: React.FC<CategoriesManagerTableProps> = ({ 
                 {/* Image */}
                 <td className="py-4 px-4">
                   {(cat as any).image_url ? (
-                    <img
+                    <Image
                       src={(cat as any).image_url}
                       alt={cat.name}
+                      width={96}
+                      height={80}
                       className="w-12 h-10 object-cover rounded-lg border border-[rgba(212,175,55,0.2)]"
                     />
                   ) : (
@@ -209,11 +214,13 @@ export const CategoriesManagerTable: React.FC<CategoriesManagerTableProps> = ({ 
         </table>
       </div>
 
-      <AddCategoryModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onAdded={handleCategoryAdded}
-      />
+      {modalOpen && (
+        <AddCategoryModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onAdded={handleCategoryAdded}
+        />
+      )}
 
       <ConfirmDeleteModal
         isOpen={!!deleteTarget}

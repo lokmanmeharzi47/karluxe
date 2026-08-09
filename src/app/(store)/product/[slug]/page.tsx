@@ -1,12 +1,12 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import ProductDetailsClient from "./ProductDetailsClient";
 
-export default async function ProductDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
+const getProduct = cache(async (slug: string) => {
   const supabase = await createClient();
-  const { slug } = await params;
-
-  const { data: product, error } = await supabase
+  const { data } = await supabase
     .from('products')
     .select(`
       *,
@@ -17,8 +17,41 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
     `)
     .eq('slug', slug)
     .maybeSingle();
+  return data;
+});
 
-  if (error || !product) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+
+  if (!product) return {};
+
+  const title = product.name;
+  const description = product.description || `Découvrez ${product.name} chez KarLuxe.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: product.cover_image ? [{ url: product.cover_image, width: 1200, height: 630, alt: product.name }] : undefined,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: product.cover_image ? [product.cover_image] : undefined,
+    },
+  };
+}
+
+export default async function ProductDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+
+  if (!product) {
     notFound();
   }
 
