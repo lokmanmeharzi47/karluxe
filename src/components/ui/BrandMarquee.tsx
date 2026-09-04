@@ -11,12 +11,12 @@ export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
   const displayBrands = [...brands, ...brands];
 
   return (
-    <div className="relative w-full overflow-hidden py-8">
+    <div className="relative w-full overflow-hidden py-10">
       {/* Wide fade edges */}
       <div className="absolute left-0 top-0 bottom-0 w-40 z-10 bg-gradient-to-r from-[#060606] to-transparent pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-40 z-10 bg-gradient-to-l from-[#060606] to-transparent pointer-events-none" />
 
-      <div className="flex animate-brand-marquee whitespace-nowrap items-center" style={{ gap: '5rem' }}>
+      <div className="flex animate-brand-marquee whitespace-nowrap items-center" style={{ gap: '6rem' }}>
         {displayBrands.map((brand, index) => {
           const logoUrl = getBrandLogoUrl(brand.name) || brand.logo_url || null;
 
@@ -24,22 +24,22 @@ export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
             <div
               key={`${brand.id}-${index}`}
               className="flex items-center justify-center shrink-0 cursor-pointer group transition-transform duration-300 hover:scale-110"
-              style={{ minWidth: '140px' }}
+              style={{ minWidth: '180px' }}
               title={brand.name}
             >
               {logoUrl ? (
                 <Image
                   src={logoUrl}
                   alt={brand.name}
-                  width={140}
-                  height={70}
-                  sizes="140px"
+                  width={180}
+                  height={90}
+                  sizes="180px"
                   loading="lazy"
                   className="brand-logo"
                   unoptimized={logoUrl.endsWith('.svg')}
                 />
               ) : (
-                <span className="brand-wordmark font-bold uppercase whitespace-nowrap">
+                <span className="brand-wordmark font-bold uppercase whitespace-nowrap text-lg">
                   {brand.name}
                 </span>
               )}
