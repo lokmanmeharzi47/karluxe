@@ -6,8 +6,8 @@ import { Database } from '@/types/database.types';
 export async function createServerClient() {
   const cookieStore = await cookies();
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hbfeclrmacaxgssfrfxj.supabase.co';
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder';
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://sspqegfafhdzcxaggbei.supabase.co';
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzcHFlZ2ZhZmhkemN4YWdnYmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5NjQ0NTQsImV4cCI6MjEwMDU0MDQ1NH0._-VXwLgRiPBPc8lFBKRRR16Z72f7BjC8TztwS_U41IE';
 
   return createSupabaseServerClient<Database>(
     url,
@@ -41,8 +41,8 @@ export async function createServerClient() {
  * actually matters.
  */
 export function createStaticClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hbfeclrmacaxgssfrfxj.supabase.co';
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder';
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://sspqegfafhdzcxaggbei.supabase.co';
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzcHFlZ2ZhZmhkemN4YWdnYmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5NjQ0NTQsImV4cCI6MjEwMDU0MDQ1NH0._-VXwLgRiPBPc8lFBKRRR16Z72f7BjC8TztwS_U41IE';
 
   return createSupabaseClient<Database>(
     url,
@@ -57,8 +57,8 @@ export function createStaticClient() {
 }
 
 export function createAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hbfeclrmacaxgssfrfxj.supabase.co';
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder';
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://sspqegfafhdzcxaggbei.supabase.co';
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzcHFlZ2ZhZmhkemN4YWdnYmVpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NDk2NDQ1NCwiZXhwIjoyMTAwNTQwNDU0fQ.BWFj2vymd7dJVfo3VWr8sRJZboIYpY280IyQcGej-6E';
 
   return createSupabaseClient<Database>(
     url,

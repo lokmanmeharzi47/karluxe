@@ -10,6 +10,15 @@ import { deleteBrandAction, updateBrandAction } from '@/app/actions/adminActions
 
 const AddBrandModal = dynamic(() => import('./AddBrandModal').then((m) => m.AddBrandModal));
 
+const normalizeLogoUrl = (url: string | null | undefined): string | null => {
+  if (!url) return null;
+  if (url.includes('ik.imagekit.io') && url.includes('.svg') && !url.includes('tr=')) {
+    const sep = url.includes('?') ? '&' : '?';
+    return `${url}${sep}tr=orig-true`;
+  }
+  return url;
+};
+
 interface BrandsManagerTableProps {
   brands: Brand[];
   onBrandAdded?: (brand: Brand) => void;
@@ -199,7 +208,7 @@ export const BrandsManagerTable: React.FC<BrandsManagerTableProps> = ({
                         {brand.logo_url ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={brand.logo_url}
+                            src={normalizeLogoUrl(brand.logo_url) || brand.logo_url}
                             alt={brand.name}
                             className="w-full h-full object-contain filter invert brightness-125 group-hover:brightness-150 group-hover:scale-105 transition-all drop-shadow-[0_2px_8px_rgba(255,255,255,0.2)]"
                             loading="lazy"

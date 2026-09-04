@@ -1,10 +1,18 @@
 import React from 'react';
-import Image from 'next/image';
 import { getBrandLogoUrl } from './CarLogos';
 
 interface BrandMarqueeProps {
   brands: { id: string; name: string; logo_url?: string | null }[];
 }
+
+const normalizeLogoUrl = (url: string | null | undefined): string | null => {
+  if (!url) return null;
+  if (url.includes('ik.imagekit.io') && url.includes('.svg') && !url.includes('tr=')) {
+    const sep = url.includes('?') ? '&' : '?';
+    return `${url}${sep}tr=orig-true`;
+  }
+  return url;
+};
 
 export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
   // Seamless loop with exactly two passes
@@ -18,7 +26,8 @@ export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
 
       <div className="flex animate-brand-marquee whitespace-nowrap items-center" style={{ gap: '6rem' }}>
         {displayBrands.map((brand, index) => {
-          const logoUrl = getBrandLogoUrl(brand.name) || brand.logo_url || null;
+          const rawLogoUrl = brand.logo_url || getBrandLogoUrl(brand.name) || null;
+          const logoUrl = normalizeLogoUrl(rawLogoUrl);
 
           return (
             <div
@@ -28,15 +37,14 @@ export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
               title={brand.name}
             >
               {logoUrl ? (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={logoUrl}
                   alt={brand.name}
-                  width={180}
-                  height={90}
-                  sizes="180px"
+                  width={160}
+                  height={80}
                   loading="lazy"
                   className="brand-logo"
-                  unoptimized={logoUrl.endsWith('.svg')}
                 />
               ) : (
                 <span className="brand-wordmark font-bold uppercase whitespace-nowrap text-lg">
@@ -50,3 +58,4 @@ export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
     </div>
   );
 };
+
