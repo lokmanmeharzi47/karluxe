@@ -49,6 +49,15 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
   const ALLOWED_IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
   const ALLOWED_IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'gif']);
 
+  const getSafeImageUrl = (url: string | undefined): string => {
+    if (!url || typeof url !== 'string') return '';
+    const trimmed = url.trim();
+    if (/^blob:[a-zA-Z0-9-.:/]+$/i.test(trimmed) || /^https:\/\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+$/i.test(trimmed)) {
+      return encodeURI(trimmed);
+    }
+    return '';
+  };
+
   const isAllowedImageFile = (file: File) => {
     const mimeType = (file.type || '').toLowerCase();
     if (ALLOWED_IMAGE_MIME_TYPES.has(mimeType)) return true;
@@ -307,7 +316,9 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
               <div className="space-y-3 mb-2">
                 {/* Large Cover Preview */}
                 <div className="relative group w-full h-48 rounded-xl overflow-hidden border border-[rgba(212,175,55,0.2)]">
-                  <img src={imagePreviews[0]} alt="Cover Preview" className="w-full h-full object-cover" />
+                  {getSafeImageUrl(imagePreviews[0]) && (
+                    <img src={getSafeImageUrl(imagePreviews[0])} alt="Cover Preview" className="w-full h-full object-cover" />
+                  )}
                   <button
                     type="button"
                     onClick={() => removeImage(0)}
@@ -321,18 +332,22 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
                 {/* Additional Images Thumbnails */}
                 {imagePreviews.length > 1 || imagePreviews.length < 5 ? (
                   <div className="flex flex-wrap gap-2">
-                    {imagePreviews.slice(1).map((src, idx) => (
-                      <div key={idx + 1} className="relative group w-20 h-16">
-                        <img src={src} alt="" className="w-20 h-16 object-cover rounded-lg border border-[rgba(212,175,55,0.2)]" />
-                        <button
-                          type="button"
-                          onClick={() => removeImage(idx + 1)}
-                          className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))}
+                    {imagePreviews.slice(1).map((src, idx) => {
+                      const safeSrc = getSafeImageUrl(src);
+                      if (!safeSrc) return null;
+                      return (
+                        <div key={idx + 1} className="relative group w-20 h-16">
+                          <img src={safeSrc} alt={`Aperçu ${idx + 2}`} className="w-20 h-16 object-cover rounded-lg border border-[rgba(212,175,55,0.2)]" />
+                          <button
+                            type="button"
+                            onClick={() => removeImage(idx + 1)}
+                            className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      );
+                    })}
                     
                     {imagePreviews.length < 5 && (
                       <label htmlFor="car-images-upload" className="w-20 h-16 rounded-lg border-2 border-dashed border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] flex items-center justify-center cursor-pointer transition-colors bg-[#050505]">
