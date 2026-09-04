@@ -215,6 +215,8 @@ function AdminPageContent() {
             <BrandsManagerTable 
               brands={brands} 
               onBrandAdded={(newBrand) => setBrands((prev) => [newBrand, ...prev])}
+              onBrandDeleted={(brandId) => setBrands((prev) => prev.filter((b) => b.id !== brandId))}
+              onBrandUpdated={(updated) => setBrands((prev) => prev.map((b) => b.id === updated.id ? updated : b))}
             />
           )}
 

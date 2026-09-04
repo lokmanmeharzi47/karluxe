@@ -39,8 +39,8 @@ export default async function HomePage() {
   const featuredCars = (cars as unknown as CarWithDetails[]) || [];
   const brandList = (brands as unknown as Brand[]) || [];
   const categoryList = (categories as unknown as Category[]) || [];
-  const faqList = faqs || [];
-  const serviceList = services || [];
+  const faqList = (faqs as unknown as any[]) || [];
+  const serviceList = (services as unknown as any[]) || [];
 
   return (
     <div className="bg-[#050505] text-white selection:bg-[#D4AF37] selection:text-black">

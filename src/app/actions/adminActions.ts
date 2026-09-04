@@ -146,7 +146,7 @@ export async function addBrandAction(input: z.infer<typeof addBrandSchema>) {
         name: validated.name,
         slug: `${slug}-${Math.floor(100 + Math.random() * 900)}`,
         country: validated.country || 'Italie / Allemagne',
-        logo_url: validated.logoUrl || 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=300&q=80',
+        logo_url: validated.logoUrl || null,
       })
       .select()
       .single();
@@ -288,6 +288,25 @@ export async function deleteAgencyAction(agencyId: string) {
   }
 }
 
+export async function deleteBrandAction(brandId: string) {
+  try {
+    const supabase = createAdminClient();
+    const { count } = await (supabase.from('cars') as any)
+      .select('*', { count: 'exact', head: true })
+      .eq('brand_id', brandId);
+
+    if (count && count > 0) {
+      return { success: false, error: `Impossible de supprimer cette marque : ${count} véhicule(s) y sont rattaché(s).` };
+    }
+
+    const { error } = await (supabase.from('brands') as any).delete().eq('id', brandId);
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Échec de la suppression de la marque' };
+  }
+}
+
 // ─── UPDATE ACTIONS ────────────────────────────────────────────────────────
 
 const updateCategorySchema = z.object({
@@ -332,5 +351,39 @@ export async function updateAgencyAction(input: z.infer<typeof updateAgencySchem
     return { success: true, agency: data };
   } catch (err: any) {
     return { success: false, error: err?.message || "Échec de la modification de l'agence" };
+  }
+}
+
+const updateBrandSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(2),
+  country: z.string().optional(),
+  description: z.string().optional(),
+  logoUrl: z.string().optional(),
+});
+
+export async function updateBrandAction(input: z.infer<typeof updateBrandSchema>) {
+  try {
+    const validated = updateBrandSchema.parse(input);
+    const supabase = createAdminClient();
+    const updatePayload: Record<string, any> = {
+      name: validated.name,
+      country: validated.country || 'Italie / Allemagne',
+      description: validated.description,
+    };
+    if (validated.logoUrl) {
+      updatePayload.logo_url = validated.logoUrl;
+    }
+
+    const { data, error } = await (supabase.from('brands') as any)
+      .update(updatePayload)
+      .eq('id', validated.id)
+      .select()
+      .single();
+
+    if (error) return { success: false, error: error.message };
+    return { success: true, brand: data };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Échec de la modification de la marque' };
   }
 }

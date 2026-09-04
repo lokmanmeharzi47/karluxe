@@ -51,7 +51,7 @@ export const HeroSection: React.FC = () => {
           className="text-base sm:text-lg md:text-xl text-[#B6B6B6] max-w-3xl mx-auto mb-10 font-normal leading-relaxed animate-fade-up"
           style={{ animationDelay: '300ms' }}
         >
-          Location haut de gamme avec service concierge VIP : Ferrari, Porsche, Rolls-Royce, Lamborghini et Maybach à Alger, Oran.
+          Location voiture partout en Algérie – Alger, Oran, Constantine, Annaba et toutes les wilayas. Service fiable avec livraison nationale.
         </p>
 
         {/* CTA Buttons */}
