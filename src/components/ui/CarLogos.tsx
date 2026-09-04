@@ -1,20 +1,29 @@
-// Map brand names (lowercase) to local logo images in public/brands/.
-// Only the brands that exist in the database need entries here.
-//
-// Stored as 240px WebP: the sources were 1024x1024 PNGs (~350KB each) for a
-// logo that renders at 80px, which cost 3.3MB of repo and a full-size decode
-// on every image-optimizer cold miss.
+// Map brand names (lowercase) to the SVG vector logos placed in /public
 export const defaultLogos: Record<string, string> = {
-  bentley: '/brands/bentley.webp',
-  ferrari: '/brands/ferrari.webp',
-  lamborghini: '/brands/lamborghini.webp',
-  'mercedes-maybach': '/brands/mercedes-maybach.webp',
-  polo: '/brands/polo.webp',
-  porsche: '/brands/porsche.webp',
-  'rolls-royce': '/brands/rolls-royce.webp',
-  // Legacy entries (Audi, BMW, Mercedes logos)
-  audi: '/brands/audi.webp',
-  mercedes: '/brands/mercedes.webp',
-  'mercedes-benz': '/brands/mercedes.webp',
-  bmw: '/brands/bmw.webp',
+  porsche: '/porsche-svgrepo-com.svg',
+  ferrari: '/ferrari-svgrepo-com.svg',
+  'rolls-royce': '/rolls-royce-svgrepo-com.svg',
+  rollsroyce: '/rolls-royce-svgrepo-com.svg',
+  'rolls royce': '/rolls-royce-svgrepo-com.svg',
+  lamborghini: '/lamborghini-alt-svgrepo-com.svg',
+  bentley: '/bentley-svgrepo-com.svg',
+  'mercedes-maybach': '/mercedes-benz-alt-svgrepo-com.svg',
+  maybach: '/mercedes-benz-alt-svgrepo-com.svg',
+  mercedes: '/mercedes-benz-alt-svgrepo-com.svg',
+  'mercedes-benz': '/mercedes-benz-alt-svgrepo-com.svg',
+  polo: '/volkswagen-svgrepo-com.svg',
+  volkswagen: '/volkswagen-svgrepo-com.svg',
+  vw: '/volkswagen-svgrepo-com.svg',
+  bmw: '/bmw-svgrepo-com.svg',
+  audi: '/audi-svgrepo-com.svg',
+  'aston-martin': '/aston-martin-svgrepo-com.svg',
+  astonmartin: '/aston-martin-svgrepo-com.svg',
+  jaguar: '/jaguar-alt-svgrepo-com.svg',
+};
+
+// Normalized helper to get logo URL for any brand name
+export const getBrandLogoUrl = (name: string): string | null => {
+  if (!name) return null;
+  const key = name.toLowerCase().trim();
+  return defaultLogos[key] || null;
 };

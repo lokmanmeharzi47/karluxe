@@ -1,15 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
-import { defaultLogos } from './CarLogos';
+import { getBrandLogoUrl } from './CarLogos';
 
 interface BrandMarqueeProps {
   brands: { id: string; name: string; logo_url?: string | null }[];
 }
 
 export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
-  // The keyframe translates the track by -50%, so exactly two passes are needed
-  // for a seamless loop. It used to render four, which both broke the loop point
-  // and quadrupled the logo markup.
+  // Seamless loop with exactly two passes
   const displayBrands = [...brands, ...brands];
 
   return (
@@ -20,23 +18,25 @@ export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
 
       <div className="flex animate-brand-marquee whitespace-nowrap items-center" style={{ gap: '5rem' }}>
         {displayBrands.map((brand, index) => {
-          const logoUrl = defaultLogos[brand.name.toLowerCase()] || null;
+          const logoUrl = getBrandLogoUrl(brand.name) || brand.logo_url || null;
 
           return (
             <div
               key={`${brand.id}-${index}`}
-              className="flex items-center justify-center shrink-0 cursor-pointer group"
+              className="flex items-center justify-center shrink-0 cursor-pointer group transition-transform duration-300 hover:scale-110"
               style={{ minWidth: '140px' }}
+              title={brand.name}
             >
               {logoUrl ? (
                 <Image
                   src={logoUrl}
                   alt={brand.name}
-                  width={160}
-                  height={80}
-                  sizes="160px"
+                  width={140}
+                  height={70}
+                  sizes="140px"
                   loading="lazy"
                   className="brand-logo"
+                  unoptimized={logoUrl.endsWith('.svg')}
                 />
               ) : (
                 <span className="brand-wordmark font-bold uppercase whitespace-nowrap">
