@@ -1,17 +1,60 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, Share2, Globe, Shield } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
 export const Footer: React.FC = () => {
+  const socialLinks = [
+    {
+      name: 'Facebook',
+      href: 'https://www.facebook.com/karluxelocation',
+      label: 'Suivez-nous sur Facebook',
+      icon: (
+        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        </svg>
+      ),
+      hoverClass: 'hover:text-[#1877F2] hover:border-[#1877F2]/50',
+    },
+    {
+      name: 'Instagram',
+      href: 'https://www.instagram.com/karluxe_location',
+      label: 'Suivez-nous sur Instagram',
+      icon: (
+        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg>
+      ),
+      hoverClass: 'hover:text-[#E4405F] hover:border-[#E4405F]/50',
+    },
+    {
+      name: 'TikTok',
+      href: 'https://www.tiktok.com/@karluxelocation',
+      label: 'Suivez-nous sur TikTok',
+      icon: (
+        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.97v7.9c0 1.34-.33 2.67-1 3.82-.94 1.63-2.45 2.87-4.25 3.39-1.07.31-2.2.37-3.3.17-2.12-.39-3.95-1.68-4.96-3.55-.98-1.81-1.09-4-.31-5.91.73-1.78 2.22-3.18 4.07-3.79.79-.26 1.62-.36 2.45-.33v4.06c-.66-.08-1.34.02-1.95.31-.77.37-1.34 1.05-1.57 1.88-.32 1.17-.03 2.47.77 3.37.75.84 1.87 1.25 2.99 1.1 1.19-.15 2.22-.98 2.6-2.11.16-.48.24-.98.24-1.49V.02z" />
+        </svg>
+      ),
+      hoverClass: 'hover:text-[#00F2FE] hover:border-[#00F2FE]/50',
+    },
+    {
+      name: 'Email',
+      href: 'mailto:contact@karluxlocation.com',
+      label: 'Écrivez-nous par Email',
+      icon: <Mail className="w-4 h-4" />,
+      hoverClass: 'hover:text-[#D4AF37] hover:border-[#D4AF37]/50',
+    },
+  ];
+
   return (
     <footer className="bg-[#050505] text-white pt-20 pb-10 border-t border-[rgba(212,175,55,0.2)] relative overflow-hidden">
       {/* Background Radial Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[#D4AF37]/5 blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 pb-16 border-b border-white/10">
-          {/* Brand Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-16 border-b border-white/10">
+          {/* Brand Info & Socials */}
           <div className="lg:col-span-2 space-y-6">
             <Link href="/" className="flex items-center group">
               <Image
@@ -25,17 +68,22 @@ export const Footer: React.FC = () => {
             </Link>
 
             <p className="text-sm text-[#B6B6B6] leading-relaxed max-w-sm">
-              La référence en Algérie pour la location de supercars d'exception, berlines de prestige et véhicules avec chauffeur privé.
+              La référence en Algérie pour la location de supercars d'exception, berlines de prestige et véhicules avec chauffeur privé VIP.
             </p>
 
-            <div className="flex items-center gap-4">
-              {[Globe, Share2, Shield, Mail].map((Icon, i) => (
+            {/* Social Icons with Facebook, Instagram, TikTok, WhatsApp, Email */}
+            <div className="flex items-center gap-3">
+              {socialLinks.map((social) => (
                 <a
-                  key={i}
-                  href="#"
-                  className="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-[#B6B6B6] hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-colors"
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  title={social.label}
+                  className={`w-10 h-10 rounded-full glass-panel flex items-center justify-center text-[#B6B6B6] transition-all transform hover:scale-110 shadow-sm ${social.hoverClass}`}
                 >
-                  <Icon className="w-4 h-4" />
+                  {social.icon}
                 </a>
               ))}
             </div>
@@ -47,9 +95,68 @@ export const Footer: React.FC = () => {
               Navigation
             </h4>
             <ul className="space-y-2.5 text-sm text-[#B6B6B6]">
-              <li><Link href="/fleet" className="hover:text-white transition-colors">Flotte Supercars</Link></li>
-              <li><Link href="/#services" className="hover:text-white transition-colors">Services VIP</Link></li>
-              <li><Link href="/admin" className="hover:text-white transition-colors">Portail Exécutif</Link></li>
+              <li>
+                <Link href="/fleet" className="hover:text-white transition-colors">
+                  Flotte Supercars
+                </Link>
+              </li>
+              <li>
+                <Link href="/#services" className="hover:text-white transition-colors">
+                  Services VIP & Chauffeur
+                </Link>
+              </li>
+              <li>
+                <Link href="/booking" className="hover:text-white transition-colors">
+                  Réservation Directe
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin" className="hover:text-white transition-colors">
+                  Portail Exécutif
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact Direct */}
+          <div className="space-y-4">
+            <h4 className="text-sm font-bold uppercase tracking-widest font-heading text-[#D4AF37]">
+              Conciergerie VIP
+            </h4>
+            <ul className="space-y-3 text-xs text-[#B6B6B6]">
+              <li className="flex items-start gap-2.5">
+                <Phone className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                <div>
+                  <span className="block text-white font-semibold">Téléphone & WhatsApp</span>
+                  <a
+                    href="https://wa.me/213778612190"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#25D366] transition-colors font-mono"
+                  >
+                    +213 (0) 778 61 21 90
+                  </a>
+                </div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <Mail className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                <div>
+                  <span className="block text-white font-semibold">Email Service VIP</span>
+                  <a
+                    href="mailto:contact@karluxlocation.com"
+                    className="hover:text-[#D4AF37] transition-colors"
+                  >
+                    contact@karluxlocation.com
+                  </a>
+                </div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                <div>
+                  <span className="block text-white font-semibold">Alger, Algérie</span>
+                  <span>Livraison VIP Aéroport & Hôtels</span>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
@@ -58,9 +165,15 @@ export const Footer: React.FC = () => {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#B6B6B6]">
           <p>© 2026 KarLuxe Mobility. Tous droits réservés.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-white transition-colors">Politique de Confidentialité</a>
-            <a href="#" className="hover:text-white transition-colors">Conditions Générales</a>
-            <a href="#" className="hover:text-white transition-colors">Assurance Tout-Risque</a>
+            <a href="#" className="hover:text-white transition-colors">
+              Politique de Confidentialité
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Conditions Générales
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Assurance Tout-Risque
+            </a>
           </div>
         </div>
       </div>

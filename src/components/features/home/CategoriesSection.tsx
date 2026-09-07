@@ -22,7 +22,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
   const defaultImage = 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80';
 
   return (
-    <section className="py-24 bg-[#050505] relative overflow-hidden">
+    <section id="categories" className="py-24 bg-[#050505] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           badge="Catégories Véhicules"

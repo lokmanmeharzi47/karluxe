@@ -13,7 +13,6 @@ export const VehicleSpecs: React.FC<VehicleSpecsProps> = ({ car }) => {
     { icon: Shield, label: 'Transmission', value: car.transmission },
     { icon: Users, label: 'Capacité', value: `${car.seats} Places` },
     { icon: CalendarDays, label: 'Année Modèle', value: car.year.toString() },
-    { icon: MapPin, label: 'Agence', value: car.location },
   ];
 
   return (

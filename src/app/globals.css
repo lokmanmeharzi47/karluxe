@@ -35,6 +35,10 @@
     font-family: var(--font-heading);
     letter-spacing: -0.02em;
   }
+
+  input[type="date"] {
+    color-scheme: dark;
+  }
 }
 
 /* Glassmorphism & Custom Luxury Utilities */

@@ -18,7 +18,7 @@ export const StepCarSelect: React.FC<StepCarSelectProps> = ({ cars }) => {
   return (
     <div className="space-y-6">
       <h3 className="text-xl font-bold font-heading uppercase text-white">
-        Step 1: Select Your Supercar
+        Étape 1: Choisissez Votre Véhicule de Prestige
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -47,7 +47,7 @@ export const StepCarSelect: React.FC<StepCarSelectProps> = ({ cars }) => {
               </div>
               <div className="flex-1">
                 <h4 className="text-base font-bold font-heading text-white">{car.title}</h4>
-                <span className="text-xs text-[#D4AF37] font-semibold">{formatPrice(car.daily_rate)}/day</span>
+                <span className="text-xs text-[#D4AF37] font-semibold">{formatPrice(car.daily_rate)}/jour</span>
               </div>
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center border ${

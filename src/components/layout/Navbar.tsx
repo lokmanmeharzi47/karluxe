@@ -9,9 +9,10 @@ import { LuxuryButton } from '../ui/LuxuryButton';
 import { CurrencySwitcher } from './CurrencySwitcher';
 
 const navLinks = [
-  { name: 'Flotte Supercars', href: '/fleet' },
-  { name: 'Services VIP', href: '/#services' },
-  { name: 'FAQ', href: '/#faq' },
+  { name: 'Accueil', href: '/' },
+  { name: 'Voitures', href: '/fleet' },
+  { name: 'Catégories', href: '/#categories' },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export const Navbar: React.FC = () => {
@@ -51,15 +52,21 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-8 glass-panel px-8 py-2.5 rounded-full border border-[rgba(212,175,55,0.2)]">
+          <nav className="hidden md:flex items-center gap-6 glass-panel px-7 py-2.5 rounded-full border border-[rgba(212,175,55,0.2)]">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive =
+                link.href === '/'
+                  ? pathname === '/'
+                  : link.href.startsWith('/#')
+                  ? false
+                  : pathname.startsWith(link.href);
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`text-xs font-semibold tracking-widest uppercase transition-colors relative py-1 ${isActive ? 'text-[#D4AF37]' : 'text-white/80 hover:text-[#D4AF37]'
-                    }`}
+                  className={`text-xs font-semibold tracking-widest uppercase transition-colors relative py-1 ${
+                    isActive ? 'text-[#D4AF37]' : 'text-white/80 hover:text-[#D4AF37]'
+                  }`}
                 >
                   {link.name}
                   {isActive && (

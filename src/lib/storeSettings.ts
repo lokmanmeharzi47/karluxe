@@ -51,17 +51,17 @@ export async function getStoreSettings(): Promise<StoreSettings> {
 
   // Fallback if DB fails or data is missing
   return {
-    boutiqueName: "KarLuxe Location de Luxe",
-    founderName: "KarLuxe Executive",
-    emailAddress: "contact@karluxe.com",
-    phoneNumber: "+213 555 00 00 00",
-    whatsappNumber: "213555000000",
-    whatsappDisplay: "+213 555 00 00 00",
-    address: "Alger, Algérie",
-    websiteUrl: "https://karluxe.com",
-    googleMapsUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.142047744348!2d3.0588!3d36.7538!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb2f57c5a0a3d%3A0x2865913e2f9d50!2sAlger!5e0!3m2!1sfr!2sdz!4v1715000000000",
-    instagramUrl: "https://instagram.com/karluxe",
-    facebookUrl: "https://facebook.com/karluxe",
+    boutiqueName: "KarLuxe Location de Prestige",
+    founderName: "KarLuxe VIP Executive",
+    emailAddress: "contact@karluxlocation.com",
+    phoneNumber: "+213 (0) 778 61 21 90",
+    whatsappNumber: "213778612190",
+    whatsappDisplay: "+213 (0) 778 61 21 90",
+    address: "Alger, Algérie • Service VIP Toutes Wilayas",
+    websiteUrl: "https://www.karluxlocation.com",
+    googleMapsUrl: "",
+    instagramUrl: "https://instagram.com/karluxe_location",
+    facebookUrl: "https://facebook.com/karluxelocation",
     businessHours: [
       "Lundi - Dimanche : 24h/24 (Sur réservation)",
       "Service Chauffeur VIP : 7j/7"

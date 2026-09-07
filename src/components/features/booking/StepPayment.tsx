@@ -118,9 +118,17 @@ export const StepPayment: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h3 className="text-xl font-bold font-heading uppercase text-white">
-        Étape 3: Coordonnées & Paiement
-      </h3>
+      <div className="pb-4 border-b border-white/10">
+        <span className="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37] px-2.5 py-0.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 inline-block mb-2">
+          Informations Client & Livraison VIP
+        </span>
+        <h3 className="text-xl sm:text-2xl font-bold font-heading uppercase text-white tracking-wide">
+          Coordonnées & Confirmation
+        </h3>
+        <p className="text-xs text-[#B6B6B6] mt-1">
+          Renseignez vos coordonnées pour la remise des clés et la livraison concierge.
+        </p>
+      </div>
 
       {errorMsg && (
         <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold">
