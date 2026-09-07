@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Image } from '@imagekit/next';
 import { CarWithDetails, Brand, Category } from '@/types';
@@ -8,6 +8,7 @@ import { toggleCarAvailabilityAction, deleteCarAction } from '@/app/actions/admi
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 
 const AddCarModal = dynamic(() => import('./AddCarModal').then((m) => m.AddCarModal));
+const EditCarModal = dynamic(() => import('./EditCarModal').then((m) => m.EditCarModal));
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { CheckCircle2, XCircle, Plus, Car, Trash2, Pencil } from 'lucide-react';
 import { useCurrencyStore } from '@/store/useCurrencyStore';
@@ -18,6 +19,7 @@ interface FleetManagerTableProps {
   categories?: Category[];
   locations?: any[];
   onCarAdded?: (car: CarWithDetails) => void;
+  onCarUpdated?: (car: CarWithDetails) => void;
 }
 
 export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
@@ -26,13 +28,19 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
   categories = [],
   locations = [],
   onCarAdded,
+  onCarUpdated,
 }) => {
   const [carList, setCarList] = useState(cars);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingCar, setEditingCar] = useState<CarWithDetails | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<CarWithDetails | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const { formatPrice } = useCurrencyStore();
+
+  useEffect(() => {
+    setCarList(cars);
+  }, [cars]);
 
   const handleToggle = async (carId: string, currentStatus: boolean) => {
     setLoadingId(carId);
@@ -111,6 +119,15 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
                 </td>
                 <td className="py-4 px-4">
                   <div className="flex items-center justify-end gap-2">
+                    {/* Edit Supercar */}
+                    <button
+                      onClick={() => setEditingCar(car)}
+                      title="Modifier le véhicule"
+                      className="p-2 rounded-xl border border-white/10 text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 transition-all cursor-pointer"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+
                     {/* Toggle availability */}
                     <button
                       disabled={loadingId === car.id}
@@ -146,6 +163,24 @@ export const FleetManagerTable: React.FC<FleetManagerTableProps> = ({
           onCarAdded={(newCar) => {
             setCarList((prev) => [newCar, ...prev]);
             if (onCarAdded) onCarAdded(newCar);
+          }}
+        />
+      )}
+
+      {editingCar && (
+        <EditCarModal
+          isOpen={!!editingCar}
+          onClose={() => setEditingCar(null)}
+          car={editingCar}
+          brands={brands}
+          categories={categories}
+          locations={locations}
+          onCarUpdated={(updatedCar) => {
+            setCarList((prev) =>
+              prev.map((c) => (c.id === updatedCar.id ? { ...c, ...updatedCar } : c))
+            );
+            if (onCarUpdated) onCarUpdated(updatedCar);
+            setEditingCar(null);
           }}
         />
       )}

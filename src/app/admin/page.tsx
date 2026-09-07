@@ -185,7 +185,16 @@ function AdminPageContent() {
           {activeTab === 'overview' && (
             <div className="space-y-8">
               <RevenueAnalyticsChart />
-              <FleetManagerTable cars={cars} brands={brands} categories={categories} locations={locations} />
+              <FleetManagerTable
+                cars={cars}
+                brands={brands}
+                categories={categories}
+                locations={locations}
+                onCarAdded={(newCar) => setCars((prev) => [newCar, ...prev])}
+                onCarUpdated={(updatedCar) =>
+                  setCars((prev) => prev.map((c) => (c.id === updatedCar.id ? { ...c, ...updatedCar } : c)))
+                }
+              />
               <BookingsManagerTable bookings={bookings} />
             </div>
           )}
@@ -196,7 +205,10 @@ function AdminPageContent() {
               brands={brands} 
               categories={categories} 
               locations={locations}
-              onCarAdded={(newCar) => setCars((prev) => [newCar, ...prev])} 
+              onCarAdded={(newCar) => setCars((prev) => [newCar, ...prev])}
+              onCarUpdated={(updatedCar) =>
+                setCars((prev) => prev.map((c) => (c.id === updatedCar.id ? { ...c, ...updatedCar } : c)))
+              }
             />
           )}
 
