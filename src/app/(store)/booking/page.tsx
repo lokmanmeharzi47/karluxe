@@ -49,14 +49,18 @@ function BookingPageContent() {
           if (matched) {
             setSelectedCar(matched);
             setStep(2);
+            return;
           }
-        } else if (carList.length > 0 && !selectedCar) {
+        }
+
+        const currentCar = useBookingStore.getState().selectedCar;
+        if (!currentCar && carList.length > 0) {
           setSelectedCar(carList[0]);
         }
       }
     }
     loadCars();
-  }, [carIdParam, selectedCar, setSelectedCar, setStep]);
+  }, [carIdParam, setSelectedCar, setStep]);
 
   useEffect(() => {
     if (daysParam) {

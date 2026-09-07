@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useBookingStore } from '@/store/useBookingStore';
-import { useCurrencyStore } from '@/store/useCurrencyStore';
 import { createBookingAction } from '@/app/actions/bookingActions';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { CheckCircle2, Loader2, ArrowRight, DollarSign, CreditCard, MapPin } from 'lucide-react';
@@ -18,8 +17,6 @@ export const StepPayment: React.FC = () => {
     customerPhone,
     setCustomerInfo,
   } = useBookingStore();
-
-  const { formatPrice } = useCurrencyStore();
 
   const wilayaKeys = Object.keys(wilayaCommunesData);
   const defaultWilaya = wilayaKeys.find((w) => w.includes('16') || w.includes('الجزائر')) || wilayaKeys[0] || '16 ~ الجزائر';
@@ -58,12 +55,15 @@ export const StepPayment: React.FC = () => {
   };
 
   const days = calculateDays();
-  const carRate = selectedCar?.daily_rate || 2500;
-  const totalAmount = carRate * days;
+  const dailyRateDzd = selectedCar ? Math.round(selectedCar.daily_rate * 240) : 15000;
+  const totalAmountDzd = dailyRateDzd * days;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedCar) return;
+    if (!selectedCar) {
+      setErrorMsg('Veuillez sélectionner un véhicule avant de confirmer la réservation.');
+      return;
+    }
 
     setLoading(true);
     setErrorMsg('');
@@ -79,7 +79,7 @@ export const StepPayment: React.FC = () => {
       commune: selectedCommune,
       notes,
       paymentMethod,
-      totalAmount,
+      totalAmount: totalAmountDzd,
     });
 
     setLoading(false);
@@ -156,6 +156,20 @@ export const StepPayment: React.FC = () => {
             value={customerPhone}
             onChange={(e) => setCustomerInfo(customerName, customerEmail, e.target.value)}
             placeholder="0555555555"
+            className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-[#D4AF37]"
+          />
+        </div>
+
+        {/* Adresse Email (Optionnel) */}
+        <div>
+          <label className="text-xs uppercase text-[#B6B6B6] font-semibold block mb-1.5 text-right sm:text-left">
+            Adresse Email (Optionnel)
+          </label>
+          <input
+            type="email"
+            value={customerEmail}
+            onChange={(e) => setCustomerInfo(customerName, e.target.value, customerPhone)}
+            placeholder="contact@exemple.com"
             className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-[#D4AF37]"
           />
         </div>
@@ -256,7 +270,7 @@ export const StepPayment: React.FC = () => {
         disabled={loading}
         icon={loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
       >
-        {loading ? 'Traitement de la Réservation...' : `Payer & Confirmer la Réservation (${formatPrice(totalAmount)})`}
+        {loading ? 'Traitement de la Réservation...' : `Payer & Confirmer la Réservation (${totalAmountDzd.toLocaleString('fr-DZ')} DA)`}
       </LuxuryButton>
     </form>
   );

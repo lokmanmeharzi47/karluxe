@@ -22,6 +22,7 @@ export const sendTelegramNotification = (message: string): Promise<boolean> => {
       path: `/bot${token}/sendMessage`,
       method: 'POST',
       family: 4, // Force IPv4 to prevent timeouts on networks that drop IPv6 packets
+      timeout: 4000,
       headers: {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(payload),
@@ -44,8 +45,14 @@ export const sendTelegramNotification = (message: string): Promise<boolean> => {
       });
     });
 
+    req.on('timeout', () => {
+      console.warn('Telegram request timed out after 4000ms');
+      req.destroy();
+      resolve(false);
+    });
+
     req.on('error', (error) => {
-      console.error('Error sending telegram message:', error);
+      console.error('Error sending telegram message:', error.message);
       resolve(false);
     });
 
