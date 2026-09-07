@@ -57,7 +57,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${inter.variable} ${spaceGrotesk.variable} dark scroll-smooth`}>
+    <html
+      lang="fr"
+      suppressHydrationWarning
+      className={`${inter.variable} ${spaceGrotesk.variable} dark scroll-smooth`}
+    >
       <head>
         {/* Marks that scripting is available before first paint, which gates the
             scroll-reveal starting state. Inline and synchronous on purpose: if it
