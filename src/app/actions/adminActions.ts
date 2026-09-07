@@ -387,3 +387,85 @@ export async function updateBrandAction(input: z.infer<typeof updateBrandSchema>
     return { success: false, error: err?.message || 'Échec de la modification de la marque' };
   }
 }
+
+// ─── UPDATE CAR ACTION ─────────────────────────────────────────────────────
+
+const updateCarSchema = z.object({
+  id: z.string(),
+  title: z.string().min(2),
+  brandId: z.string(),
+  categoryId: z.string(),
+  year: z.number().int().min(1990),
+  dailyRate: z.number().positive(),
+  securityDeposit: z.number().positive(),
+  transmission: z.enum(['Automatic', 'Dual-Clutch', 'Manual']),
+  seats: z.number().int().min(1).max(9),
+  fuelType: z.string().default('Gasoline'),
+  horsepower: z.number().int().nonnegative().default(0),
+  acceleration: z.string().default('N/A'),
+  topSpeed: z.string().default('N/A'),
+  engine: z.string().default('N/A'),
+  location: z.string(),
+  description: z.string(),
+  isFeatured: z.boolean().default(false),
+  isAvailable: z.boolean().default(true),
+  agentName: z.string().optional().nullable(),
+  featuredImage: z.string().url(),
+  additionalImages: z.array(z.string().url()).optional(),
+});
+
+export async function updateCarAction(input: z.infer<typeof updateCarSchema>) {
+  try {
+    const validated = updateCarSchema.parse(input);
+    const supabase = createAdminClient();
+    const slug = validated.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+    const { data: updatedCar, error } = await (supabase.from('cars') as any)
+      .update({
+        title: validated.title,
+        slug: `${slug}-${validated.id.slice(0, 4)}`,
+        brand_id: validated.brandId,
+        category_id: validated.categoryId,
+        year: validated.year,
+        daily_rate: validated.dailyRate,
+        security_deposit: validated.securityDeposit,
+        transmission: validated.transmission,
+        fuel_type: validated.fuelType,
+        seats: validated.seats,
+        acceleration: validated.acceleration,
+        top_speed: validated.topSpeed,
+        horsepower: validated.horsepower,
+        engine: validated.engine,
+        location: validated.location,
+        description: validated.description,
+        featured_image: validated.featuredImage,
+        is_featured: validated.isFeatured,
+        is_available: validated.isAvailable,
+        agent_name: validated.agentName || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', validated.id)
+      .select('*, brands(*), categories(*)')
+      .single();
+
+    if (error) return { success: false, error: error.message };
+
+    // Synchronize vehicle_images
+    await (supabase.from('vehicle_images') as any).delete().eq('car_id', validated.id);
+
+    if (validated.additionalImages && validated.additionalImages.length > 0) {
+      const imagesToInsert = validated.additionalImages.map((url, idx) => ({
+        car_id: validated.id,
+        url: url,
+        is_primary: false,
+        display_order: idx + 1,
+      }));
+      await (supabase.from('vehicle_images') as any).insert(imagesToInsert);
+    }
+
+    return { success: true, car: updatedCar };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Échec de la modification du véhicule' };
+  }
+}
+
