@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface LuxuryButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   children: React.ReactNode;
@@ -7,6 +8,7 @@ interface LuxuryButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonEl
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
   className?: string;
+  href?: string;
 }
 
 export const LuxuryButton: React.FC<LuxuryButtonProps> = ({
@@ -16,6 +18,8 @@ export const LuxuryButton: React.FC<LuxuryButtonProps> = ({
   icon,
   iconPosition = 'right',
   className = '',
+  href,
+  onClick,
   ...props
 }) => {
   // The hover lift / tap press used to come from framer-motion. As CSS they cost
@@ -36,9 +40,22 @@ export const LuxuryButton: React.FC<LuxuryButtonProps> = ({
     ghost: 'text-[#B6B6B6] hover:text-[#D4AF37] hover:bg-white/5',
   };
 
+  const combinedClasses = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`;
+
+  if (href) {
+    return (
+      <Link href={href} className={combinedClasses} onClick={onClick as any}>
+        {icon && iconPosition === 'left' && <span className="shrink-0">{icon}</span>}
+        <span className="relative z-10">{children}</span>
+        {icon && iconPosition === 'right' && <span className="shrink-0">{icon}</span>}
+      </Link>
+    );
+  }
+
   return (
     <button
-      className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
+      className={combinedClasses}
+      onClick={onClick}
       {...props}
     >
       {icon && iconPosition === 'left' && <span className="shrink-0">{icon}</span>}
@@ -47,3 +64,4 @@ export const LuxuryButton: React.FC<LuxuryButtonProps> = ({
     </button>
   );
 };
+

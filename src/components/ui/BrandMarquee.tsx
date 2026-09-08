@@ -1,18 +1,9 @@
 import React from 'react';
-import { getBrandLogoUrl } from './CarLogos';
+import { getBrandLogoUrl, normalizeLogoUrl } from './CarLogos';
 
 interface BrandMarqueeProps {
   brands: { id: string; name: string; logo_url?: string | null }[];
 }
-
-const normalizeLogoUrl = (url: string | null | undefined): string | null => {
-  if (!url) return null;
-  if (url.includes('ik.imagekit.io') && url.includes('.svg') && !url.includes('tr=')) {
-    const sep = url.includes('?') ? '&' : '?';
-    return `${url}${sep}tr=orig-true`;
-  }
-  return url;
-};
 
 export const BrandMarquee: React.FC<BrandMarqueeProps> = ({ brands }) => {
   // Seamless loop with exactly two passes

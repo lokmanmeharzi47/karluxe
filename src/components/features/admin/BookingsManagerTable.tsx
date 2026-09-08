@@ -17,7 +17,7 @@ export const BookingsManagerTable: React.FC<BookingsManagerTableProps> = ({ book
     'demo-2': 'Agent Yassine',
   });
 
-  const { formatPrice } = useCurrencyStore();
+  const { formatPrice, formatDzdPrice } = useCurrencyStore();
 
   const handleStatusChange = async (bookingId: string, newStatus: string) => {
     const res = await updateBookingStatusAction(bookingId, newStatus);
@@ -64,7 +64,7 @@ export const BookingsManagerTable: React.FC<BookingsManagerTableProps> = ({ book
                 </td>
                 <td className="py-4 px-4 text-white font-semibold">{b.cars?.title || 'Supercar'}</td>
                 <td className="py-4 px-4 text-[#B6B6B6]">{b.pickup_date} → {b.dropoff_date}</td>
-                <td className="py-4 px-4 font-bold text-[#D4AF37]">{formatPrice(b.total_price)}</td>
+                <td className="py-4 px-4 font-bold text-[#D4AF37]">{formatDzdPrice(b.total_price)}</td>
                 <td className="py-4 px-4">
                   <select
                     value={b.status}

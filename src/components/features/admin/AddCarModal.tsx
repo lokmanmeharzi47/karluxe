@@ -7,6 +7,7 @@ import { addCarAction } from '@/app/actions/adminActions';
 import { LuxuryModal } from '@/components/ui/LuxuryModal';
 import { LuxuryButton } from '@/components/ui/LuxuryButton';
 import { Loader2, Coins, ImagePlus, X } from 'lucide-react';
+import { formatDzdInMillions } from '@/store/useCurrencyStore';
 
 interface AddCarModalProps {
   isOpen: boolean;
@@ -220,7 +221,12 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
           {/* Daily Rate */}
           <div className="space-y-1.5">
             <label className="text-xs uppercase text-[#B6B6B6] font-semibold flex items-center justify-between mb-1">
-              <span>Tarif Journalier (DA)</span>
+              <span className="flex items-center gap-1.5">
+                Tarif Journalier (DA)
+                <span className="text-[#D4AF37] font-bold lowercase">
+                  ({formatDzdInMillions(dailyRateDzd)})
+                </span>
+              </span>
               <Coins className="w-3.5 h-3.5 text-[#D4AF37]" />
             </label>
             <input
@@ -231,14 +237,22 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
               className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-xl py-2.5 px-3 text-xs font-bold text-white focus:outline-none focus:border-[#D4AF37]"
             />
             <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-[11px]">
-              <span className="text-[#D4AF37] font-semibold">€{dailyRateEur.toLocaleString('de-DE', { maximumFractionDigits: 0 })}</span>
-              <span className="text-emerald-400 font-semibold">${dailyRateUsd.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+              <span className="text-[#D4AF37] font-bold">{formatDzdInMillions(dailyRateDzd)}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-white/80">€{dailyRateEur.toLocaleString('de-DE', { maximumFractionDigits: 0 })}</span>
+                <span className="text-emerald-400">${dailyRateUsd.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+              </div>
             </div>
           </div>
 
           {/* Security Deposit */}
-          <div>
-            <label className="text-xs uppercase text-[#B6B6B6] font-semibold block mb-1">Caution (DA)</label>
+          <div className="space-y-1.5">
+            <label className="text-xs uppercase text-[#B6B6B6] font-semibold flex items-center justify-between mb-1">
+              <span>Caution (DA)</span>
+              <span className="text-[#D4AF37] font-bold lowercase">
+                ({formatDzdInMillions(deposit * 240)})
+              </span>
+            </label>
             <input
               type="number"
               required
@@ -246,6 +260,10 @@ export const AddCarModal: React.FC<AddCarModalProps> = ({
               onChange={(e) => setDeposit(Number(e.target.value) / 240)}
               className="w-full bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
             />
+            <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-[11px] text-[#B6B6B6]">
+              <span className="text-[#D4AF37] font-bold">{formatDzdInMillions(deposit * 240)}</span>
+              <span>Équivalent : <span className="ml-1 text-white font-semibold">€{deposit.toLocaleString('de-DE')}</span></span>
+            </div>
           </div>
 
           {/* Model Year */}

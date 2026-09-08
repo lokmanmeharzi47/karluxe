@@ -5,6 +5,7 @@ import { useInView, motion } from 'framer-motion';
 
 interface AnimatedCounterProps {
   value: number;
+  decimals?: number;
   prefix?: string;
   suffix?: string;
   duration?: number;
@@ -13,6 +14,7 @@ interface AnimatedCounterProps {
 
 export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value,
+  decimals = 0,
   prefix = '',
   suffix = '',
   duration = 2,
@@ -25,7 +27,6 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   useEffect(() => {
     if (!isInView) return;
 
-    let start = 0;
     const end = value;
     const totalFrames = duration * 60;
     let frame = 0;
@@ -33,8 +34,8 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     const timer = setInterval(() => {
       frame++;
       const progress = frame / totalFrames;
-      const currentCount = Math.floor(end * Math.min(progress, 1));
-      setCount(currentCount);
+      const currentCount = end * Math.min(progress, 1);
+      setCount(decimals > 0 ? currentCount : Math.floor(currentCount));
 
       if (frame >= totalFrames) {
         clearInterval(timer);
@@ -42,12 +43,15 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     }, 1000 / 60);
 
     return () => clearInterval(timer);
-  }, [isInView, value, duration]);
+  }, [isInView, value, duration, decimals]);
 
   return (
     <motion.span ref={ref} className={`font-bold font-heading ${className}`}>
       {prefix}
-      {count.toLocaleString()}
+      {count.toLocaleString('fr-FR', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      })}
       {suffix}
     </motion.span>
   );

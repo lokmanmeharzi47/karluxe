@@ -39,13 +39,36 @@ export const defaultLogos: Record<string, string> = {
   'škoda': 'https://ik.imagekit.io/e555n7nqt/brands/skoda-logo.svg?tr=orig-true',
 };
 
+// Normalizes and secures an ImageKit logo URL using robust URL parsing
+export const normalizeLogoUrl = (url: string | null | undefined): string | null => {
+  if (!url || typeof url !== 'string') return null;
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+
+  try {
+    const parsed = new URL(trimmed);
+    const hostname = parsed.hostname.toLowerCase();
+    const isImageKitHost = hostname === 'ik.imagekit.io' || hostname.endsWith('.imagekit.io');
+
+    if (
+      isImageKitHost &&
+      parsed.pathname.toLowerCase().endsWith('.svg') &&
+      !parsed.searchParams.has('tr')
+    ) {
+      parsed.searchParams.set('tr', 'orig-true');
+      return parsed.toString();
+    }
+    return trimmed;
+  } catch {
+    return trimmed;
+  }
+};
+
 // Normalized helper to get logo URL for any brand name
 export const getBrandLogoUrl = (name: string): string | null => {
   if (!name) return null;
   const key = name.toLowerCase().trim();
   const url = defaultLogos[key] || null;
-  if (url && url.includes('ik.imagekit.io') && url.includes('.svg') && !url.includes('tr=')) {
-    return `${url}?tr=orig-true`;
-  }
-  return url;
+  return normalizeLogoUrl(url);
 };
+

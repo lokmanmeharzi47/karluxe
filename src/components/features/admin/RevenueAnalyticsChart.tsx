@@ -4,6 +4,8 @@ import React from 'react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { DollarSign, TrendingUp, Calendar } from 'lucide-react';
 
+import { formatDzdInMillions } from '@/store/useCurrencyStore';
+
 export const RevenueAnalyticsChart: React.FC = () => {
   const months = [
     { month: 'Jan', revenue: 95000, height: '55%' },
@@ -21,7 +23,7 @@ export const RevenueAnalyticsChart: React.FC = () => {
           <h3 className="text-xl font-bold font-heading uppercase text-white flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-[#D4AF37]" /> Revenue & Booking Analytics
           </h3>
-          <p className="text-xs text-[#B6B6B6] mt-1">Monthly gross rental revenue performance growth (DA).</p>
+          <p className="text-xs text-[#B6B6B6] mt-1">Performance et croissance des revenus locatifs mensuels.</p>
         </div>
 
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-[#D4AF37]">
@@ -33,8 +35,8 @@ export const RevenueAnalyticsChart: React.FC = () => {
       <div className="h-64 flex items-end justify-between gap-4 pt-8 px-4 border-b border-white/10">
         {months.map((m) => (
           <div key={m.month} className="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
-            <span className="text-[10px] font-bold text-[#D4AF37] opacity-0 group-hover:opacity-100 transition-opacity">
-              {(m.revenue / 1000).toFixed(0)}k DA
+            <span className="text-[10px] font-bold text-[#D4AF37] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+              {formatDzdInMillions(m.revenue)}
             </span>
             <div
               style={{ height: m.height }}

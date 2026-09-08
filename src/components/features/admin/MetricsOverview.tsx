@@ -18,8 +18,11 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
   activeFleet,
   occupancyRate,
 }) => {
-  const metrics: { label: string; value: number; prefix?: string; suffix?: string; icon: any }[] = [
-    { label: 'Gross Revenue', value: totalRevenue, suffix: ' DA', icon: DollarSign },
+  const revenueInMillions = Math.round((totalRevenue / 10000) * 10) / 10;
+  const revenueUnit = revenueInMillions >= 2 ? ' millions' : ' million';
+
+  const metrics: { label: string; value: number; decimals?: number; prefix?: string; suffix?: string; icon: any }[] = [
+    { label: 'Gross Revenue', value: revenueInMillions, decimals: 1, suffix: revenueUnit, icon: DollarSign },
     { label: 'Total Reservations', value: totalBookings, icon: Calendar },
     { label: 'Active Fleet Vehicles', value: activeFleet, icon: Car },
     { label: 'Fleet Occupancy Rate', value: occupancyRate, suffix: '%', icon: TrendingUp },
@@ -40,6 +43,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
 
             <AnimatedCounter
               value={m.value}
+              decimals={m.decimals}
               prefix={m.prefix}
               suffix={m.suffix}
               className="text-3xl font-extrabold font-heading text-white"

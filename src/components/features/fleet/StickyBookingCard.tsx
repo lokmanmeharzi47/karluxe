@@ -44,6 +44,15 @@ const formatFrenchDate = (dateStr: string): string => {
   }
 };
 
+const DATE_FORMAT_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
+const sanitizeDateInput = (val: string, fallback: string): string => {
+  if (typeof val === 'string' && DATE_FORMAT_REGEX.test(val.trim())) {
+    return encodeURIComponent(val.trim());
+  }
+  return encodeURIComponent(fallback);
+};
+
 export const StickyBookingCard: React.FC<StickyBookingCardProps> = ({ car }) => {
   const today = new Date();
   const initialPickup = formatDateToYMD(today);
@@ -55,19 +64,23 @@ export const StickyBookingCard: React.FC<StickyBookingCardProps> = ({ car }) => 
   const { formatPrice } = useCurrencyStore();
 
   const handlePickupChange = (newPickup: string) => {
-    setPickupDate(newPickup);
-    if (dropoffDate <= newPickup) {
-      const [y, m, d] = newPickup.split('-').map(Number);
+    const sanitized = (newPickup || '').trim();
+    if (!DATE_FORMAT_REGEX.test(sanitized)) return;
+    setPickupDate(sanitized);
+    if (dropoffDate <= sanitized) {
+      const [y, m, d] = sanitized.split('-').map(Number);
       const nextDay = new Date(y, m - 1, d + 1);
       setDropoffDate(formatDateToYMD(nextDay));
     }
   };
 
   const handleDropoffChange = (newDropoff: string) => {
-    if (newDropoff <= pickupDate) {
+    const sanitized = (newDropoff || '').trim();
+    if (!DATE_FORMAT_REGEX.test(sanitized)) return;
+    if (sanitized <= pickupDate) {
       return;
     }
-    setDropoffDate(newDropoff);
+    setDropoffDate(sanitized);
   };
 
   const applyPresetDays = (numDays: number) => {
@@ -80,7 +93,7 @@ export const StickyBookingCard: React.FC<StickyBookingCardProps> = ({ car }) => 
   const totalAmount = car.daily_rate * days;
 
   return (
-    <div className="glass-panel rounded-3xl p-6 border border-[rgba(212,175,55,0.3)] bg-[#111111]/95 space-y-6 shadow-[0_0_50px_rgba(0,0,0,0.8)] sticky top-28">
+    <div className="glass-panel rounded-3xl p-6 border border-[rgba(212,175,55,0.3)] bg-[#111111]/95 space-y-6 shadow-[0_0_50px_rgba(0,0,0,0.8)] lg:sticky lg:top-28">
       {/* Price Header */}
       <div className="pb-4 border-b border-white/10 flex items-end justify-between">
         <div>
@@ -210,19 +223,29 @@ export const StickyBookingCard: React.FC<StickyBookingCardProps> = ({ car }) => 
       </ul>
 
       {/* CTA Button */}
-      <Link
-        href={`/booking?carId=${car.id}&pickup=${pickupDate}&dropoff=${dropoffDate}`}
-        className="block"
-      >
-        <LuxuryButton
-          variant="gold"
-          size="lg"
-          className="w-full uppercase font-bold tracking-wider"
-          icon={<ArrowRight className="w-5 h-5" />}
-        >
-          Réserver ce Véhicule
-        </LuxuryButton>
-      </Link>
+      {(() => {
+        const safeCarId = encodeURIComponent(String(car.id || ''));
+        const safePickup = sanitizeDateInput(pickupDate, initialPickup);
+        const safeDropoff = sanitizeDateInput(dropoffDate, initialDropoff);
+        const bookingHref = `/booking?carId=${safeCarId}&pickup=${safePickup}&dropoff=${safeDropoff}`;
+
+        return (
+          <Link
+            href={bookingHref}
+            className="block"
+          >
+            <LuxuryButton
+              variant="gold"
+              size="lg"
+              className="w-full uppercase font-bold tracking-wider"
+              icon={<ArrowRight className="w-5 h-5" />}
+            >
+              Réserver ce Véhicule
+            </LuxuryButton>
+          </Link>
+        );
+      })()}
+
     </div>
   );
 };

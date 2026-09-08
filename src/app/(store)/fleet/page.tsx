@@ -42,7 +42,7 @@ export default async function FleetPage() {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-          <div className="lg:col-span-1 sticky top-28">
+          <div className="lg:col-span-1 lg:sticky lg:top-28 z-20">
             <FleetFilters brands={brandList} categories={categoryList} />
           </div>
 

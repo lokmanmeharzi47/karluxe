@@ -30,9 +30,13 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
           subtitle="Des supercars de piste aux SUV blindés et berlines cérémoniales."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex flex-wrap justify-center gap-8">
           {categories.map((cat, index) => (
-            <Reveal key={cat.id} delay={index * 100}>
+            <Reveal
+              key={cat.id}
+              delay={index * 100}
+              className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.35rem)] max-w-md"
+            >
               <Link href={`/fleet?category=${cat.id}`} className="group block relative h-80 rounded-3xl overflow-hidden glass-panel border border-[rgba(212,175,55,0.2)]">
                 <Image
                   src={(cat as any).image_url || categoryImages[cat.name] || defaultImage}

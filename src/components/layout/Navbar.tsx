@@ -32,7 +32,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${scrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
         ? 'bg-[#050505]/80 backdrop-blur-xl border-b border-[rgba(212,175,55,0.2)] py-4 shadow-[0_10px_30px_rgba(0,0,0,0.8)]'
         : 'bg-transparent py-6'
         }`}
@@ -77,21 +77,36 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Right Action Controls */}
+          {/* Desktop Right Action Controls */}
           <div className="hidden lg:flex items-center gap-4">
             {/* Currency Switcher Dropdown */}
             <CurrencySwitcher />
 
-            <Link href="/booking">
-              <LuxuryButton variant="gold" size="sm" icon={<Shield className="w-4 h-4" />}>
-                Réserver
-              </LuxuryButton>
-            </Link>
+            <LuxuryButton
+              href="/fleet"
+              variant="gold"
+              size="sm"
+              icon={<Shield className="w-4 h-4" />}
+            >
+              Réserver
+            </LuxuryButton>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex lg:hidden items-center gap-3">
+          {/* Mobile Action Controls */}
+          <div className="flex lg:hidden items-center gap-2 sm:gap-3">
             <CurrencySwitcher />
+
+            {/* Quick direct Réserver CTA on mobile header */}
+            <LuxuryButton
+              href="/fleet"
+              variant="gold"
+              size="sm"
+              className="!px-3.5 !py-2 !text-[11px] font-bold"
+              icon={<Shield className="w-3.5 h-3.5" />}
+            >
+              Réserver
+            </LuxuryButton>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
@@ -105,11 +120,10 @@ export const Navbar: React.FC = () => {
       </div>
 
       {/*
-        Mobile drawer. The 0fr -> 1fr grid row is the CSS equivalent of animating
-        to height:auto, which is the only thing AnimatePresence was doing here.
+        Mobile drawer. Matches lg:hidden so tablet and mobile screens can open it.
       */}
       <div
-        className={`md:hidden grid transition-all duration-300 ease-out motion-reduce:transition-none ${mobileMenuOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        className={`lg:hidden grid transition-all duration-300 ease-out motion-reduce:transition-none ${mobileMenuOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
           }`}
       >
         <div className="overflow-hidden">
@@ -127,11 +141,16 @@ export const Navbar: React.FC = () => {
               ))}
 
               <div className="pt-2">
-                <Link href="/booking" onClick={() => setMobileMenuOpen(false)}>
-                  <LuxuryButton variant="gold" size="md" className="w-full">
-                    Réserver un Véhicule
-                  </LuxuryButton>
-                </Link>
+                <LuxuryButton
+                  href="/fleet"
+                  onClick={() => setMobileMenuOpen(false)}
+                  variant="gold"
+                  size="md"
+                  className="w-full"
+                  icon={<Shield className="w-4 h-4" />}
+                >
+                  Réserver un Véhicule
+                </LuxuryButton>
               </div>
             </div>
           </div>

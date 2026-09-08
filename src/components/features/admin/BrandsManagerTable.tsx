@@ -10,14 +10,7 @@ import { deleteBrandAction, updateBrandAction } from '@/app/actions/adminActions
 
 const AddBrandModal = dynamic(() => import('./AddBrandModal').then((m) => m.AddBrandModal));
 
-const normalizeLogoUrl = (url: string | null | undefined): string | null => {
-  if (!url) return null;
-  if (url.includes('ik.imagekit.io') && url.includes('.svg') && !url.includes('tr=')) {
-    const sep = url.includes('?') ? '&' : '?';
-    return `${url}${sep}tr=orig-true`;
-  }
-  return url;
-};
+import { normalizeLogoUrl } from '@/components/ui/CarLogos';
 
 interface BrandsManagerTableProps {
   brands: Brand[];
